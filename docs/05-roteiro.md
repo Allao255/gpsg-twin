@@ -82,6 +82,19 @@ Decisões tomadas na implementação (2026-10-22):
 
 Aceite: um cenário exportado, importado no equipamento e exportado de volta produz settings XML e rota equivalentes (comparação semântica).
 
+Decisões tomadas na implementação (2026-10-22):
+
+- Aceite pendente de bancada: sem a sessão 1, não há golden files nem equipamento para a ida e volta. Implementado e testado contra os exemplos do manual (OP D-1 a D-8): rota, settings, waypoints, GDT, NMEA e Yuma lidos sem diagnóstico; rota e settings regravados com a mesma árvore XML (`settings-xml.test.ts`, `route-xml.test.ts`). Fechar o aceite com o pacote de S01 G1 e com um cenário exportado pelo twin, importado, exportado de volta e reaberto.
+- Settings XML só com os tokens do exemplo OP D-7. Com algum valor sem token observado, o arquivo não é gerado e o aviso lista os campos (D31). Hoje isso exclui o cenário padrão (porta DIRECT, ruído ON, alocação de canais indefinida). A leitura aceita tokens inferidos com aviso.
+- Script do pacote configura tudo por comandos por padrão; rota, waypoints e settings vão como registro. Opção por arquivo troca os comandos por `IMP` e `LOAD`. Almanaque e trajetória anexados pelo operador são sempre importados.
+- Números de rota e settings gravados como `%.16g`, o formato do exemplo do manual.
+- Limites de fábrica de D27 corrigidos para os valores exatos do settings XML (24, 200, 100, 500, 1000 e 1150 mph); antes estavam arredondados a 0,01 m/s.
+- Novas discrepâncias de formato: D29 (rota com 0), D30 (unidade da altitude em waypoints), D31 (tokens de settings).
+- Logs CSV dos runners voltam como script: comandos aceitos, rejeitados comentados, `@run`/`@stop` e `@at` com os instantes reais. Integração: o log de cada runner contra o mock reconstrói a configuração e a sequência de ações do cenário emitido.
+- ZIP próprio, sem dependência: escrita sem compressão e determinística; leitura de deflate pelo `DecompressionStream` do navegador.
+- Anexos (almanaque e trajetória) ficam na sessão da réplica e no `localStorage` quando cabem; o pacote `.zip` é o registro versionável.
+- A folha de sessão do pacote cobre conexões, perdas, nível previsto (D17), arquivos, ordem de operações e linha do tempo. A folha de bancada genérica está em `docs/guia/06-folha-de-bancada.md`.
+
 ## M5. Aba Análise, camada declarada
 
 Especificação em `00-visao-geral.md`, seção "Aba Análise".

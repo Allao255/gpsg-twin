@@ -4,7 +4,13 @@ import { makePasteable } from '../runner/pasteable';
 import { h } from './dom';
 import { downloadText } from './download';
 
-export function pasteableView(current: () => { name: string; text: string }): HTMLElement {
+export interface PasteableView {
+  el: HTMLElement;
+  /** Endereço e porta informados, usados também no pacote USB. */
+  target: () => { address: string; port: number };
+}
+
+export function pasteableView(current: () => { name: string; text: string }): PasteableView {
   const address = h('input', {
     type: 'text',
     value: '192.168.0.10',
@@ -35,7 +41,7 @@ export function pasteableView(current: () => { name: string; text: string }): HT
       msg.textContent = `Não gerado: ${(e as Error).message}`;
     }
   };
-  return h(
+  const el = h(
     'div',
     { class: 'pasteable' },
     h('h3', {}, 'Runner PowerShell colável'),
@@ -53,4 +59,5 @@ export function pasteableView(current: () => { name: string; text: string }): HT
     ),
     msg,
   );
+  return { el, target: () => ({ address: address.value.trim(), port: Number(port.value) }) };
 }

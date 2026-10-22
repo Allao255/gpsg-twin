@@ -597,3 +597,37 @@ main:has(.replica-app) {
 .dlg .btn.primary {
   font-weight: bold;
 }
+
+/* ---------------------------------------------------------------- pacote USB */
+
+.dlg .chk {
+  display: block;
+  margin: 4px 0;
+}
+
+.dlg .report h4 {
+  margin: 12px 0 4px;
+}
+
+.dlg .report ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.dlg .report li {
+  margin: 2px 0;
+  overflow-wrap: anywhere;
+}
+
+.gpsg .attach {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 8px 0;
+}
+
+.gpsg .attach-info {
+  flex: 1 1 100%;
+  overflow-wrap: anywhere;
+}

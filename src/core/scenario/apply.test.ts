@@ -54,7 +54,7 @@ describe('redutor', () => {
     expect(s.motion.custom).toEqual({
       maxLateral_mps2: 5,
       maxLongitudinal_mps2: 98,
-      maxVelocity_mps: 514.1,
+      maxVelocity_mps: 514.096,
     });
     expect(s.channels).toMatchObject({ gnss: 6, dualGps: 3 });
     const s2 = apply(['GPS:SET:MMDE', 'GPS:SET:CHAN:DUAL:DEF', 'GPS:SET:RSRC INT'], s);

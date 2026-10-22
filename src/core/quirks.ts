@@ -325,8 +325,8 @@ export function d11CarrierLabel(gnss: Gnss, c: Carrier): string {
 // D26: a réplica valida pelas faixas do RP (modelo); as faixas da UI (OP 3-3, 3-21) não são aplicadas.
 // D28: o quinto parâmetro de WAYP:NEW/EDIT (`state`) aparece na réplica como Country/State.
 
-// D27: limites de fábrica dos modelos de movimento, SI, do settings XML (OP D-7, 01-equipamento.md
-// seção 4). A UI (OP 3-12) cita máximo de 100 m/s² e 1150,782 mph; não adotado.
+// D27: limites de fábrica dos modelos de movimento, SI, exatos como no settings XML (OP D-7,
+// 01-equipamento.md seção 4): velocidades de 24, 200, 100, 500, 1000 e 1150 mph. A UI (OP 3-12) cita máximo de 100 m/s² e 1150,782 mph; não adotado.
 export interface MotionLimits {
   maxLateral_mps2: number;
   maxLongitudinal_mps2: number;
@@ -336,9 +336,9 @@ export interface MotionLimits {
 export const D27_FACTORY_LIMITS: Readonly<
   Record<EnumValue<'GPS:SET:CuRrentMotionModel', 'model'>, MotionLimits>
 > = {
-  PEDESTRIAN: { maxLateral_mps2: 2.94, maxLongitudinal_mps2: 2.94, maxVelocity_mps: 10.73 },
-  AUTOMOTIVE: { maxLateral_mps2: 9.8, maxLongitudinal_mps2: 9.8, maxVelocity_mps: 89.41 },
-  MARINE: { maxLateral_mps2: 6.86, maxLongitudinal_mps2: 6.86, maxVelocity_mps: 44.7 },
+  PEDESTRIAN: { maxLateral_mps2: 2.94, maxLongitudinal_mps2: 2.94, maxVelocity_mps: 10.72896 },
+  AUTOMOTIVE: { maxLateral_mps2: 9.8, maxLongitudinal_mps2: 9.8, maxVelocity_mps: 89.408 },
+  MARINE: { maxLateral_mps2: 6.86, maxLongitudinal_mps2: 6.86, maxVelocity_mps: 44.704 },
   LOW_PERFORMANCE_AIRCRAFT: {
     maxLateral_mps2: 19.6,
     maxLongitudinal_mps2: 9.8,
@@ -349,8 +349,8 @@ export const D27_FACTORY_LIMITS: Readonly<
     maxLongitudinal_mps2: 49,
     maxVelocity_mps: 447.04,
   },
-  CUSTOM: { maxLateral_mps2: 98, maxLongitudinal_mps2: 98, maxVelocity_mps: 514.1 },
-  UNLIMITED: { maxLateral_mps2: 98, maxLongitudinal_mps2: 98, maxVelocity_mps: 514.1 },
+  CUSTOM: { maxLateral_mps2: 98, maxLongitudinal_mps2: 98, maxVelocity_mps: 514.096 },
+  UNLIMITED: { maxLateral_mps2: 98, maxLongitudinal_mps2: 98, maxVelocity_mps: 514.096 },
 };
 
 // D09: alocação de canais não emitida na v1.
@@ -398,3 +398,33 @@ export function d19CleanResponse(resp: string): string {
 // ---------------------------------------------------------------------------------------------
 // D24: almanaque reprodutível só quando carregado de arquivo (LOAD) ou o padrão (DEF).
 export const D24_DREFS = ['D24'];
+
+// ---------------------------------------------------------------------------------------------
+// D29: rota `.rte` (OP D-5): MaxAcceleration e MaxClimbRate iguais a 0 sem semântica documentada
+// (provavelmente o limite do modelo de movimento). Lidos e gravados como estão.
+
+// D30: waypoints `.csv` (OP D-8): altitude em ft no exemplo, sem dizer se segue o modo de unidades;
+// nome do arquivo não documentado. Provisório: ft, arquivo `twin_<cenário>.csv`.
+export const D30_WAYPOINT_CSV_ALT_UNIT = 'ft';
+
+// D31: settings XML (OP D-7). Só os tokens do exemplo do manual estão documentados; o twin grava
+// o arquivo apenas quando todos os valores do cenário têm token observado. Os tokens abaixo são
+// inferidos dos rótulos da UI e do padrão do exemplo: aceitos na leitura com aviso, nunca gravados.
+// Também inferidos: o atributo `type` de MotionModel usa os nomes dos elementos filhos; ChannelsSetup
+// mapeia Gnss e SingleSbas para a alocação simples e Gps, Galileo e Sbas para a dupla (D09);
+// extensão `.set` e codificação UTF-8.
+export const D31_SETTINGS_INFERRED: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  SimulationMode: { GALILEO: 'Galileo' },
+  Carrier: { L1C: 'L1C', L2: 'L2', L2C: 'L2C', 'L5/E5': 'L5_E5' },
+  SbasMode: { OFF: 'Off' },
+  SimulationType: { DYNAMIC: 'Dynamic', TRAJECTORY: 'Trajectory' },
+  DigitalNoiseMode: { ON: 'On' },
+  PrnSignalType: { VARIABLE: 'Variable' },
+  PositionSource: { GPS: 'Gps' },
+  RfPortSelection: { DIRECT: 'Direct' },
+  RouteLooping: { ON: '1' },
+  ExternalRefOutMode: { ON: 'On' },
+  ReferenceSource: { EXTERNAL: 'External' },
+  TriggerMode: { EXTERNAL: 'External' },
+};
+export const D31_DREFS = ['D31'];

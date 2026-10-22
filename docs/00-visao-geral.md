@@ -125,7 +125,7 @@ GitHub Pages publica o site como público mesmo a partir de repositório privado
 
 ## Estado atual do repositório
 
-Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 não iniciado.
+Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 implementado (2026-10-22), com aceite pendente da sessão de bancada. M5 não iniciado.
 
 - `model/commands.json`: 233 comandos transcritos do manual remoto, com faixas, aliases, travas e referências de página. Nenhum verificado em hardware. `model/commands.schema.json` valida o modelo no início dos testes e gera os tipos TypeScript (`npm run gen`).
 - `src/core/`: core puro em TypeScript (M1).
@@ -135,13 +135,14 @@ Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 nã
   - `scenario/`: `Scenario` versionado (`scenario_version` 2, com migração da 1), redutor `applyCommand`, emissor canônico, caminho reverso script para cenário, JSON, limites de movimento.
   - `script/correct.ts`: correções de grafias conhecidas do manual (D05, D06, D25) e `TRUN` trocado por `@run`/`@stop`.
   - `quirks.ts`: tratamentos provisórios de `04-discrepancias.md`, por ID.
-- `src/replica/`: lógica pura da réplica (M3): catálogo de campos ligado ao modelo (travas, faixas, validação), unidades e formatos de exibição, sessão (RUN/STOP, instante Elapsed, ações por SV, rota, waypoints, arquivos), formulários de rota e waypoint. Aceite do M3 em `procedures.test.ts`.
+  - `files/`: formatos do pacote USB (M4): rota `.rte`, settings `.set`, waypoints `.csv`, trajetórias GDT e NMEA, almanaque Yuma, XML e ZIP mínimos, log dos runners para script, montagem do pacote e folha de sessão.
+- `src/replica/`: lógica pura da réplica (M3): catálogo de campos ligado ao modelo (travas, faixas, validação), unidades e formatos de exibição, sessão (RUN/STOP, instante Elapsed, ações por SV, rota, waypoints, arquivos), formulários de rota e waypoint, anexos do pacote e importação de arquivos (`import.ts`). Aceite do M3 em `procedures.test.ts`.
 - `src/docs/`: referência de comandos gerada do modelo e de `04-discrepancias.md`.
 - `src/mock/`: instrumento simulado (`npm run mock`), TCP na porta 5025, usando o core (M2). Ver `02-interface-remota.md` seção 7.1.
 - `src/runner/`: gerador do runner PowerShell colável, usado pelo site e por `npm run pasteable`.
-- `test/integration/`: runners Python e PowerShell contra o mock com S01 e com scripts emitidos pelo twin (`npm run test:integration`).
+- `test/integration/`: runners Python e PowerShell contra o mock com S01 e com scripts emitidos pelo twin, incluindo a reconstrução do cenário pelo log (`npm run test:integration`).
 - `src/ui/`: shell com as abas Equipamento, Análise (vazia até o M5) e Ajuda (referência de comandos com busca e filtros).
-  - `replica/`: réplica das janelas do capítulo 3 do manual de operação, teclado e seletores, editor de script CodeMirror 6 sincronizado com a réplica, linha do tempo das ações em execução, cenário salvo no navegador.
+  - `replica/`: réplica das janelas do capítulo 3 do manual de operação, teclado e seletores, editor de script CodeMirror 6 sincronizado com a réplica, linha do tempo das ações em execução, cenário salvo no navegador, exportação do pacote USB e abertura de pacotes, arquivos do equipamento e logs (`files-view.ts`).
   - `pasteable-view.ts`: gerador do runner colável, abaixo do editor.
 - Builds: `dist/site/` (Pages) e `dist/gpsg-twin.html` (autocontido, abre por `file://`). CI em `.github/workflows/ci.yml`.
 - `docs/`: esta documentação. `docs/guia/`: guia de uso.

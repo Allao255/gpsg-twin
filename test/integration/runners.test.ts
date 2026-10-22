@@ -8,7 +8,10 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { degToRad } from '../../src/core/geo';
 import { D04_FORCED_UNITS } from '../../src/core/quirks';
 import { defaultScenario } from '../../src/core/scenario/defaults';
+import { logToScript } from '../../src/core/files/session-log';
 import { emitScenario } from '../../src/core/scenario/emit';
+import { scenarioFromScript } from '../../src/core/scenario/from-script';
+import { parseScript } from '../../src/core/script/parse';
 import type { Scenario } from '../../src/core/scenario/types';
 import { startMock, type MockServer } from '../../src/mock/server';
 import { makePasteable } from '../../src/runner/pasteable';
@@ -301,6 +304,17 @@ for (const { runner, enabled } of RUNNERS) {
             step: a.stepError_m,
           });
         }
+        // Caminho reverso pelo log: mesma configuração e mesma sequência de ações. Os instantes do
+        // log são reais (encolhidos pelo timeScale), não os nominais do script.
+        const back = scenarioFromScript(parseScript(logToScript(r.log).text)).scenario;
+        expect(back.io).toEqual(sc.io);
+        expect(back.motion).toEqual(sc.motion);
+        expect(back.setup.rfLevel_dBm).toBe(sc.setup.rfLevel_dBm);
+        expect(back.route.points.length).toBe(sc.route.points.length);
+        expect(back.actions.map(({ t_s: _t, ...a }) => a)).toEqual(
+          sc.actions.map(({ t_s: _t, ...a }) => a),
+        );
+        expect(back.run.stopAt_s).not.toBeNull();
       });
     }
   });

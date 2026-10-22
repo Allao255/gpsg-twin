@@ -80,13 +80,13 @@ Limites dos modelos de movimento (valores de fábrica, settings XML em OP D-7, S
 
 | Modelo | Acel. lateral (m/s²) | Acel. longitudinal (m/s²) | Velocidade (m/s) |
 |---|---|---|---|
-| Pedestrian | 2,94 | 2,94 | 10,73 |
-| Automobile | 9,8 | 9,8 | 89,41 |
-| Marine | 6,86 | 6,86 | 44,70 |
-| Low Performance Aircraft | 19,6 | 9,8 | 223,52 |
-| High Performance Aircraft | 88,2 | 49 | 447,04 |
+| Pedestrian | 2,94 | 2,94 | 10,72896 (24 mph) |
+| Automobile | 9,8 | 9,8 | 89,408 (200 mph) |
+| Marine | 6,86 | 6,86 | 44,704 (100 mph) |
+| Low Performance Aircraft | 19,6 | 9,8 | 223,52 (500 mph) |
+| High Performance Aircraft | 88,2 | 49 | 447,04 (1000 mph) |
 | Custom | editável | editável | editável |
-| Unlimited | 98 | 98 | 514,10 |
+| Unlimited | 98 | 98 | 514,096 (1150 mph) |
 
 Trajetórias (NMEA/GDT) usam sempre os limites de Unlimited (OP 3-8). Rotas são validadas contra o modelo corrente (`GPS:ROUT:VALD`, resultado em `GPS:STAT?`).
 

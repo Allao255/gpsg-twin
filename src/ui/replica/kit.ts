@@ -188,7 +188,7 @@ function runAndClose(action: () => string | null, err: HTMLElement): void {
   else if (overlay === mine) closeDialog();
 }
 
-function openDialog(title: string, body: HTMLElement, buttons: HTMLElement[]): HTMLElement {
+export function openDialog(title: string, body: HTMLElement, buttons: HTMLElement[]): HTMLElement {
   closeDialog();
   const dlg = h(
     'div',
@@ -319,4 +319,24 @@ export function confirmDialog(title: string, text: string, onYes: () => void): v
       { cls: 'primary' },
     ),
   ]);
+}
+
+/** Abre o seletor de arquivos do navegador. */
+export function pickFiles(
+  accept: string,
+  multiple: boolean,
+  onFiles: (files: File[]) => void,
+): void {
+  const input = h('input', {
+    type: 'file',
+    accept,
+    class: 'hidden',
+    onchange: () => {
+      onFiles([...(input.files ?? [])]);
+      input.remove();
+    },
+  });
+  if (multiple) input.multiple = true;
+  document.body.append(input);
+  input.click();
 }

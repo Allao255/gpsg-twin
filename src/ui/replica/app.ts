@@ -2,15 +2,17 @@
 // Réplica -> script: cada alteração regenera o script canônico do cenário.
 // Script -> réplica: a edição recarrega as telas; erros aparecem na linha e no campo.
 import type { Diagnostic } from '../../core/diagnostics';
+import type { PackageAttachments } from '../../core/files/package';
+import { describeAction } from '../../core/files/sheet';
 import type { CommandHeader } from '../../core/model/load';
 import { scenarioChecks, sortedActions } from '../../core/scenario/emit';
 import { parseScenarioJson, serializeScenario } from '../../core/scenario/json';
-import type { TimedAction } from '../../core/scenario/types';
 import type { ScriptDoc } from '../../core/script/ast';
 import { applyKnownCorrections } from '../../core/script/correct';
 import { formatScript } from '../../core/script/format';
 import { parseScript } from '../../core/script/parse';
 import { formatNumber } from '../../core/units';
+import { importFiles } from '../../replica/import';
 import {
   displayValue,
   field,
@@ -35,7 +37,8 @@ import { h } from '../dom';
 import { downloadText } from '../download';
 import { pasteableView } from '../pasteable-view';
 import { createEditor, type ScriptEditor } from './editor';
-import { button, confirmDialog, entryDialog, type AppApi } from './kit';
+import { exportPackageDialog, importReport, readInputFiles } from './files-view';
+import { button, confirmDialog, entryDialog, pickFiles, type AppApi } from './kit';
 import './replica.css';
 import { enumChooser, initialUi, windowBody, windowTitle, WINDOWS, type UiState } from './screens';
 
@@ -51,6 +54,7 @@ const HINTS: Record<string, string> = {
 interface Stored {
   scenario: string;
   svs: ReplicaSession['svs'];
+  attachments?: PackageAttachments;
 }
 
 function loadStored(): ReplicaSession {
@@ -59,30 +63,26 @@ function loadStored(): ReplicaSession {
     if (!raw) return newSession();
     const st = JSON.parse(raw) as Stored;
     const r = parseScenarioJson(st.scenario);
-    return r.scenario ? { ...newSession(r.scenario), svs: st.svs } : newSession();
+    return r.scenario
+      ? { ...newSession(r.scenario), svs: st.svs, attachments: st.attachments ?? {} }
+      : newSession();
   } catch {
     return newSession();
   }
 }
 
 function saveStored(s: ReplicaSession): void {
+  const st: Stored = { scenario: serializeScenario(s.scenario), svs: s.svs };
   try {
-    const st: Stored = { scenario: serializeScenario(s.scenario), svs: s.svs };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(st));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...st, attachments: s.attachments }));
   } catch {
-    /* armazenamento indisponível: sem persistência */
+    // Armazenamento cheio (anexos grandes): grava sem os anexos; indisponível: sem persistência.
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(st));
+    } catch {
+      /* sem persistência */
+    }
   }
-}
-
-function describeAction(a: TimedAction): string {
-  if (a.type === 'rfLevel') return `RF Level ${formatNumber(a.level_dBm, 1)} dBm`;
-  const parts = [`${a.constellation} ${a.sv}`, a.select, a.health];
-  if (a.doppler_Hz) parts.push(`Doppler ${formatNumber(a.doppler_Hz, 0)} Hz`);
-  if (a.incoherence_mps) parts.push(`coerência ${formatNumber(a.incoherence_mps, 3)} m/s`);
-  if (a.ampOffset_dB) parts.push(`offset ${formatNumber(a.ampOffset_dB, 1)} dB`);
-  if (a.stepError_m) parts.push(`step ${formatNumber(a.stepError_m, 3)} m`);
-  parts.push(`duração ${a.duration_s} s`);
-  return parts.join(', ');
 }
 
 export function createReplicaApp(): HTMLElement {
@@ -371,31 +371,31 @@ export function createReplicaApp(): HTMLElement {
     redraw();
   };
 
-  const fileInput = h('input', {
-    type: 'file',
-    accept: '.scpi,.txt,.json',
-    class: 'hidden',
-    onchange: (ev: Event) => {
-      const f = (ev.target as HTMLInputElement).files?.[0];
-      if (!f) return;
-      void f.text().then((t) => {
-        const base = f.name.replace(/\.[^.]*$/, '');
-        if (f.name.endsWith('.json')) {
-          const r = parseScenarioJson(t);
-          if (!r.scenario) {
-            message(r.diagnostics[0]?.message ?? 'JSON inválido', 'error');
-            return;
-          }
-          lostLines = [];
-          commit({ ...newSession(r.scenario), svs: session.svs });
-        } else {
-          loadText(t, base);
-        }
-        message(`Aberto: ${f.name}`);
+  const paste = pasteableView(() => ({
+    name: `${session.scenario.name}.scpi`,
+    text: editor?.getText() ?? '',
+  }));
+
+  const openFiles = (files: File[]): void => {
+    if (files.length === 0) return;
+    readInputFiles(files)
+      .then((inputs) => {
+        const r = importFiles(session, inputs);
+        lostLines = [];
+        if (r.script !== null) {
+          session = r.session;
+          editor?.setText(r.script);
+          analyze(r.script);
+          saveStored(session);
+          redraw();
+        } else commit(r.session);
+        message(`Aberto: ${files.map((f) => f.name).join(', ')}`);
+        if (inputs.length > 1 || r.diagnostics.length > 0) importReport(r.summary, r.diagnostics);
+      })
+      .catch((e: unknown) => {
+        message(`Não aberto: ${(e as Error).message}`, 'error');
       });
-      (ev.target as HTMLInputElement).value = '';
-    },
-  });
+  };
 
   const toolbar = h(
     'div',
@@ -407,13 +407,16 @@ export function createReplicaApp(): HTMLElement {
       });
     }),
     button('Abrir…', () => {
-      fileInput.click();
+      pickFiles('.scpi,.txt,.json,.zip,.csv,.rte,.set,.alm,.gdt,.nme,.nmea,.xml', true, openFiles);
     }),
     button('Baixar .scpi', () => {
       downloadText(
         `${session.scenario.name}.scpi`,
         editor?.getText() ?? sessionScript(session).text,
       );
+    }),
+    button('Exportar pacote .zip…', () => {
+      exportPackageDialog(api, paste.target);
     }),
     button('Baixar cenário .json', () => {
       downloadText(
@@ -433,7 +436,6 @@ export function createReplicaApp(): HTMLElement {
           : `${r.corrections.length} correção(ões): ${r.corrections.map((c) => `L${c.line} ${c.to}`).join('; ')}`,
       );
     }),
-    fileInput,
   );
 
   nameInput.addEventListener('change', () => {
@@ -462,10 +464,7 @@ export function createReplicaApp(): HTMLElement {
       h('h3', {}, 'Diagnósticos'),
       diagList,
       actionsBox,
-      pasteableView(() => ({
-        name: `${session.scenario.name}.scpi`,
-        text: editor?.getText() ?? '',
-      })),
+      paste.el,
     ),
   );
 

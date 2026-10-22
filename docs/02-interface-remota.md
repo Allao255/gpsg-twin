@@ -117,6 +117,14 @@ utc_iso,t_session_s,t_run_s,kind,text
 
 `kind` em `TX`, `RX`, `ERR`, `MARK`, `EXPECT_PASS`, `EXPECT_FAIL`, `INFO`, `WARN`. `RX` multilinha é gravado com quebras de linha escapadas como `\n`. `t_run_s` fica vazio antes do primeiro `@run`. Os logs alimentam o caminho reverso do twin (estado e linha do tempo reconstruídos na réplica). Logs não entram no repositório.
 
+Caminho reverso (`src/core/files/session-log.ts`): o log vira um script `.scpi` com o que o equipamento aceitou.
+
+- `TX` de comando vira linha do script; consultas e o controle de `TRUN` feito pelos runners não entram.
+- `TX` seguido de `ERR` antes do próximo `TX` foi rejeitado: entra comentado, com o erro.
+- `MARK t_run = 0` vira `@run`; `TRUN` enviado com a simulação rodando vira `@stop`.
+- Durante a execução, cada comando recebe `@at <t_run_s>` do log: instantes reais, não os nominais do script de origem.
+- Outras marcas viram `@mark`; pausas e entradas do operador (`INFO NOME=valor`) viram comentário.
+
 ## 7. Execução no PC da empresa
 
 - PowerShell: `runners/gpsg-run.ps1`. Usa apenas `System.Net.Sockets.TcpClient`, presente em qualquer Windows.

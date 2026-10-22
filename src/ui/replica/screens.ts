@@ -53,6 +53,7 @@ import {
   type WaypointForm,
 } from '../../replica/waypoint-form';
 import { h } from '../dom';
+import { attachmentRow } from './files-view';
 import {
   actionBox,
   button,
@@ -1252,6 +1253,7 @@ function fileWindow(app: AppApi, ui: UiState): HTMLElement {
         button('Clear', () => undefined, { disabled: DESTRUCTIVE }),
       ),
       note('Almanaque padrão: semana 574, 22/08/2010 (OP 3-32). O almanaque Galileo é fixo.'),
+      attachmentRow(app, 'almanac'),
       footer('ALM'),
     );
   } else if (tab === 'Routes') {
@@ -1350,6 +1352,7 @@ function fileWindow(app: AppApi, ui: UiState): HTMLElement {
       sc.setup.simulationType !== 'TRAJECTORY'
         ? note('A trajetória só é emitida com Simulation = Trajectory.')
         : null,
+      attachmentRow(app, 'trajectory'),
       footer('NMEA'),
     );
   } else if (tab === 'KML') {

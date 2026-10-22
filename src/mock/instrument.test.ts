@@ -193,9 +193,9 @@ describe('instrumento simulado: estado configurado', () => {
     send('GPS:SET:UNIT IMPERIAL');
     expect(send('GPS:SIM:ALT?')).toBe('1000');
     send('GPS:SET:CRMM PEDESTRIAN');
-    expect(send('GPS:SET:MVEL?')).toBe('24.0023');
+    expect(send('GPS:SET:MVEL?')).toBe('24');
     send('GPS:SET:UNIT SI');
-    expect(send('GPS:SET:MVEL?')).toBe('10.73');
+    expect(send('GPS:SET:MVEL?')).toBe('10.729');
     send('GPS:SET:MLAT 5');
     expect(send('GPS:SET:MLAT?')).toBe('5');
     expect(send('GPS:SET:MLON?')).toBe('98');

@@ -57,8 +57,9 @@ A aba Equipamento tem a réplica da interface do GPSG-1000 à esquerda e o scrip
 
 - Baixar .scpi: o script como está no editor.
 - Baixar cenário .json: o cenário completo, versionado (`scenario_version`).
-- Abrir…: `.scpi` ou `.json`.
+- Abrir…: `.scpi`, `.json`, pacote `.zip`, arquivos do equipamento e logs do runner ([05-pacote-usb.md](05-pacote-usb.md)).
+- Exportar pacote .zip…: arquivos para o pendrive, script, runner colável e folha de sessão ([05-pacote-usb.md](05-pacote-usb.md)).
 - Novo: volta ao cenário padrão, com confirmação.
-- O cenário corrente fica salvo no navegador e volta ao reabrir a página. Para guardar ou versionar, baixar o `.scpi` ou o `.json`.
+- O cenário corrente e os anexos ficam salvos no navegador e voltam ao reabrir a página (anexos grandes podem não caber; nesse caso só o cenário é salvo). Para guardar ou versionar, baixar o pacote, o `.scpi` ou o `.json`.
 
 Para executar o script, ver [03-ensaiar-com-o-mock.md](03-ensaiar-com-o-mock.md) (mock e runner colável).

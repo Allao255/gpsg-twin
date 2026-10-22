@@ -64,7 +64,12 @@ export type DiagCode =
   | 'route-unknown-row'
   | 'scenario-invalid'
   | 'scenario-consistency'
-  | 'almanac-not-fixed';
+  | 'almanac-not-fixed'
+  // arquivos do pacote USB e logs
+  | 'file-format'
+  | 'file-unverified'
+  | 'file-omitted'
+  | 'file-value';
 
 export interface Diagnostic {
   code: DiagCode;

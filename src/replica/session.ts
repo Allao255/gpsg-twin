@@ -2,6 +2,9 @@
 // SVs informada pelo operador (sem geometria até o M6). Funções puras: cada ação devolve uma nova
 // sessão ou um erro.
 import type { Diagnostic } from '../core/diagnostics';
+import { TWIN_PREFIX, type Attachment, type PackageAttachments } from '../core/files/package';
+import { parseTrajectory } from '../core/files/trajectory';
+import { parseYuma } from '../core/files/yuma';
 import { defaultScenario } from '../core/scenario/defaults';
 import { emitScenario, sortedActions } from '../core/scenario/emit';
 import { scenarioFromScript } from '../core/scenario/from-script';
@@ -33,6 +36,8 @@ export interface ReplicaSession {
   t_s: number;
   /** SVs na tabela SV PRN: informados pelo operador ou importados de log. */
   svs: Record<Constellation, SvInfo[]>;
+  /** Arquivos anexados para o pacote USB (almanaque e trajetória), com nome twin_ no equipamento. */
+  attachments: PackageAttachments;
 }
 
 export type Result = { ok: true; session: ReplicaSession } | { ok: false; error: string };
@@ -41,7 +46,7 @@ const ok = (session: ReplicaSession): Result => ({ ok: true, session });
 const fail = (error: string): Result => ({ ok: false, error });
 
 export function newSession(scenario: Scenario = defaultScenario()): ReplicaSession {
-  return { scenario, running: false, t_s: 0, svs: { GPS: [], GAL: [] } };
+  return { scenario, running: false, t_s: 0, svs: { GPS: [], GAL: [] }, attachments: {} };
 }
 
 function withScenario(s: ReplicaSession, mutate: (sc: Scenario) => void): ReplicaSession {
@@ -342,7 +347,7 @@ export function routeLoop(s: ReplicaSession, on: boolean): Result {
   );
 }
 
-export const TWIN_PREFIX = 'twin_';
+export { TWIN_PREFIX };
 
 /** Nome de arquivo criado no equipamento pelo twin: prefixo twin_ obrigatório. */
 export function twinFileName(name: string): string {
@@ -460,6 +465,69 @@ export function toggleImport(
   );
 }
 
+export type AttachmentKind = keyof PackageAttachments;
+
+const baseName = (fileName: string): string => fileName.replace(/^.*[\\/]/, '').trim();
+
+/**
+ * Anexa o almanaque Yuma ao pacote: o cenário passa a importar e carregar o arquivo com nome twin_
+ * (almanaque fixado). Arquivo sem bloco de PRN válido é recusado.
+ */
+export function attachAlmanac(s: ReplicaSession, fileName: string, text: string): Result {
+  const lock = configOnly(s);
+  if (lock) return fail(lock);
+  const a = parseYuma(text);
+  if (a.entries.length === 0)
+    return fail(`${baseName(fileName)}: ${a.diagnostics.at(-1)?.message ?? ''}`);
+  const name = twinFileName(baseName(fileName).replace(/\.[^.]*$/, '') + '.alm');
+  const att: Attachment = { name, text };
+  return ok({
+    ...withScenario(s, (sc) => {
+      sc.files.almanac = { kind: 'file', name };
+      if (!sc.files.imports.includes('ALM')) sc.files.imports = [...sc.files.imports, 'ALM'];
+    }),
+    attachments: { ...s.attachments, almanac: att },
+  });
+}
+
+/**
+ * Anexa a trajetória (`.gdt` ou NMEA) ao pacote: o cenário passa a importar e carregar o arquivo.
+ * NMEA de outros receptores (`.nmea`, `.txt`) recebe a extensão `.nme` (03-formatos-de-arquivo.md).
+ */
+export function attachTrajectory(s: ReplicaSession, fileName: string, text: string): Result {
+  const lock = configOnly(s);
+  if (lock) return fail(lock);
+  const t = parseTrajectory(text);
+  if (t.points.length === 0)
+    return fail(`${baseName(fileName)}: ${t.diagnostics.at(-1)?.message ?? ''}`);
+  const ext = t.format === 'GDT' ? '.gdt' : '.nme';
+  const name = twinFileName(baseName(fileName).replace(/\.[^.]*$/, '') + ext);
+  return ok({
+    ...withScenario(s, (sc) => {
+      sc.files.nmea = name;
+      if (!sc.files.imports.includes('NMEA')) sc.files.imports = [...sc.files.imports, 'NMEA'];
+    }),
+    attachments: { ...s.attachments, trajectory: { name, text } },
+  });
+}
+
+/** Remove o anexo e a importação correspondente; o nome do arquivo continua no cenário. */
+export function detach(s: ReplicaSession, kind: AttachmentKind): Result {
+  const lock = configOnly(s);
+  if (lock) return fail(lock);
+  if (!s.attachments[kind]) return fail('nada anexado');
+  const k = kind === 'almanac' ? 'ALM' : 'NMEA';
+  const attachments = Object.fromEntries(
+    Object.entries(s.attachments).filter(([k]) => k !== kind),
+  ) as PackageAttachments;
+  return ok({
+    ...withScenario(s, (sc) => {
+      sc.files.imports = sc.files.imports.filter((x) => x !== k);
+    }),
+    attachments,
+  });
+}
+
 /** Setup Motion, Defaults: volta aos limites de fábrica do modelo (MMDE). */
 export function motionDefaults(s: ReplicaSession): Result {
   const lock = configOnly(s);
@@ -510,7 +578,7 @@ export interface LoadedScript {
   lostLines: number[];
 }
 
-/** Carrega um script na réplica, mantendo a lista de SVs da sessão anterior. */
+/** Carrega um script na réplica, mantendo a lista de SVs e os anexos da sessão anterior. */
 export function loadScript(prev: ReplicaSession, text: string, name?: string): LoadedScript {
   const doc = parseScript(text);
   const r = scenarioFromScript(doc, name ? { name } : {});
@@ -532,7 +600,7 @@ export function loadScript(prev: ReplicaSession, text: string, name?: string): L
         lost.add(l.lineNo);
   }
   return {
-    session: { ...newSession(r.scenario), svs: prev.svs },
+    session: { ...newSession(r.scenario), svs: prev.svs, attachments: prev.attachments },
     diagnostics: [...doc.diagnostics, ...r.diagnostics],
     lostLines: [...lost].sort((a, b) => a - b),
   };
