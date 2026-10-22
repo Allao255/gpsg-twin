@@ -18,12 +18,12 @@ O receptor de referência transforma perguntas sem resposta pela interface remot
 
 ## Antes do dia
 
-1. Rodar o script contra o mock na mesma máquina que irá à bancada:
+1. Rodar o script contra o mock. O mock exige Node (`npm run mock`); se o PC que irá à bancada não tiver Node, subir o mock em outra máquina da mesma rede e apontar o runner para o IP dela (`npm run mock -- --host 0.0.0.0`):
    ```
-   python tools/mock_minimal.py
+   npm run mock
    powershell -ExecutionPolicy Bypass -File runners/gpsg-run.ps1 -Address 127.0.0.1 -Script sessions/S01-sonda.scpi
    ```
-   Se a política de execução bloquear, usar a variante colável (seção 7 de `02-interface-remota.md`).
+   Resultado esperado contra o mock: `ERR=10 WARN=3`, todos provocados pela sonda. Se a política de execução bloquear, usar a variante colável (seção 7 de `02-interface-remota.md`).
 2. Confirmar quem usou o equipamento por último e se há configuração que precisa ser preservada. O script salva e restaura, mas a pessoa deve saber.
 3. Levar o IP do equipamento (System, System Configuration, Network) ou planejar ligação direta com IP estático nos dois lados.
 

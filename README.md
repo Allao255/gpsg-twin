@@ -18,11 +18,12 @@ model/commands.schema.json  schema do modelo (validação e tipos gerados)
 src/core/                core TypeScript: parser SCPI, validação, script .scpi, cenário, quirks
 src/docs/                referência de comandos gerada do modelo
 src/ui/                  site (abas Equipamento, Análise, Ajuda)
+src/mock/                mock TCP do instrumento (npm run mock)
+src/runner/              gerador do runner PowerShell colável
 docs/                    visão geral, equipamento, interface remota, formatos, discrepâncias, roteiro, sessão 1
 docs/guia/               guia de uso
 sessions/                scripts .scpi de sessão
 runners/                 gpsg-run.ps1, gpsg_run.py
-tools/                   mock mínimo do instrumento, gerador do bloco colável PowerShell
 refs/                    manuais do fabricante, somente local (ver refs/README.md)
 ```
 
@@ -47,8 +48,10 @@ npm run lint
 npm run build         # dist/site/ para GitHub Pages
 npm run build:single  # dist/gpsg-twin.html autocontido
 npm run gen           # regenera tipos após mudar o modelo ou o schema
+npm run mock          # instrumento simulado na porta 5025
+npm run test:integration  # runners Python e PowerShell contra o mock
 ```
 
 ## Estado
 
-M0 e M1 concluídos: base do projeto, core (modelo, parser, validação, emissor, cenário), referência de comandos gerada. Próximo marco: M2 (mock do instrumento em Node e testes de integração dos runners). Nenhum comando verificado em hardware. Plano em `docs/05-roteiro.md`.
+M0, M1 e M2 concluídos: base do projeto, core (modelo, parser, validação, emissor, cenário), referência de comandos gerada, mock do instrumento em Node, testes de integração dos runners e runner PowerShell colável gerado pelo site. Próximo marco: M3 (réplica da interface). Nenhum comando verificado em hardware. Plano em `docs/05-roteiro.md`.

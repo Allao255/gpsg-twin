@@ -125,7 +125,7 @@ GitHub Pages publica o site como público mesmo a partir de repositório privado
 
 ## Estado atual do repositório
 
-Marcos M0 e M1 concluídos (2026-10-21). M2 não iniciado.
+Marcos M0, M1 e M2 concluídos (2026-10-21). M3 não iniciado.
 
 - `model/commands.json`: 233 comandos transcritos do manual remoto, com faixas, aliases, travas e referências de página. Nenhum verificado em hardware. `model/commands.schema.json` valida o modelo no início dos testes e gera os tipos TypeScript (`npm run gen`).
 - `src/core/`: core puro em TypeScript (M1).
@@ -135,9 +135,11 @@ Marcos M0 e M1 concluídos (2026-10-21). M2 não iniciado.
   - `scenario/`: `Scenario` versionado (`scenario_version` 1), redutor `applyCommand`, emissor canônico, caminho reverso script para cenário, JSON.
   - `quirks.ts`: tratamentos provisórios de `04-discrepancias.md`, por ID.
 - `src/docs/`: referência de comandos gerada do modelo e de `04-discrepancias.md`.
-- `src/ui/`: shell com as abas Equipamento (verificador de script provisório até o M3), Análise (vazia até o M5) e Ajuda (referência de comandos com busca e filtros).
+- `src/mock/`: instrumento simulado (`npm run mock`), TCP na porta 5025, usando o core (M2). Ver `02-interface-remota.md` seção 7.1.
+- `src/runner/`: gerador do runner PowerShell colável, usado pelo site e por `npm run pasteable`.
+- `test/integration/`: runners Python e PowerShell contra o mock com S01 e com scripts emitidos pelo twin (`npm run test:integration`).
+- `src/ui/`: shell com as abas Equipamento (verificador de script e gerador do runner colável, provisórios até o M3), Análise (vazia até o M5) e Ajuda (referência de comandos com busca e filtros).
 - Builds: `dist/site/` (Pages) e `dist/gpsg-twin.html` (autocontido, abre por `file://`). CI em `.github/workflows/ci.yml`.
 - `docs/`: esta documentação. `docs/guia/`: guia de uso.
 - `runners/`: runner PowerShell e runner Python do formato `.scpi`.
-- `tools/mock_minimal.py`: mock TCP mínimo usado para testar os runners. Será substituído pelo mock completo em Node (marco M2).
 - `sessions/S01-sonda.scpi`: script da primeira sessão de bancada.

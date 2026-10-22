@@ -41,6 +41,14 @@ Decisões tomadas na implementação (2026-10-21):
 
 Aceite: S01 roda completo contra o mock nos dois runners, com log conforme a especificação.
 
+Decisões tomadas na implementação (2026-10-21):
+
+- Códigos de erro SCPI padrão no mock, com o diagnóstico do twin no texto; a tabela real do equipamento fica para os logs (D16).
+- Sem geometria: lista fixa de PRNs com a simulação rodando; elevação e azimute são marcadores.
+- Além de S01, os testes de integração rodam scripts emitidos pelo twin e conferem que o estado final do mock coincide com o cenário.
+- `tools/mock_minimal.py` e `tools/make_pasteable.py` removidos; substituídos por `npm run mock` e `npm run pasteable`. O mock exige Node; sem Node no PC da bancada, o mock roda em outra máquina da rede.
+- S01 C passou a usar valores de rota válidos em SI e IMPERIAL; a sonda da unidade de subida ficou isolada em C2.
+
 ## M3. Réplica da interface (marco central)
 
 - Telas conforme o manual de operação, capítulo 3: Simulation (abas GPS, Galileo, SBAS), Setup (Simulation, Channels, I/O, Motion), SV PRN (tabelas e janela de edição), Route (lista e edição), Waypoint (lista e edição), File (Almanacs, Routes, Settings, Trajectory, Kml, Waypoints), GPS RX (somente leitura), Diagnostics.

@@ -8,6 +8,7 @@ import {
   EMIT_HEADER_OVERRIDE,
   d04Quantity,
   d04System,
+  type UnitsMode,
 } from '../quirks';
 import { decimalsOfStep, findUnit, formatNumber } from '../units';
 import { quoteString } from './lexer';
@@ -29,16 +30,21 @@ export function emitDecimals(p: Param): number {
   return DEFAULT_DECIMALS;
 }
 
-/** Valor SI na unidade de emissão do parâmetro (modo SI forçado, D04). */
-export function siToEmitUnit(p: Param, si: number): number {
+/** Valor SI na unidade do parâmetro para um modo de unidades (padrão: SI forçado, D04). */
+export function siToEmitUnit(p: Param, si: number, mode: UnitsMode = D04_FORCED_UNITS): number {
   if (p.type === 'lat' || p.type === 'lon') return radToDeg(si);
   const q = d04Quantity(p);
   if (q) {
-    const unit = D04_MODE_UNITS[d04System(D04_FORCED_UNITS).system][q];
+    const unit = D04_MODE_UNITS[d04System(mode).system][q];
     return si / (findUnit(unit)?.factor ?? 1);
   }
   const u = p.unit ? findUnit(p.unit) : null;
   return u ? si / u.factor : si;
+}
+
+/** Número SI formatado na unidade do parâmetro para o modo de unidades dado. */
+export function formatNumberInMode(p: Param, si: number, mode: UnitsMode): string {
+  return formatNumber(siToEmitUnit(p, si, mode), emitDecimals(p));
 }
 
 export function formatArg(p: Param, a: EmitArg): string {

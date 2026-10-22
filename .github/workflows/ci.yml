@@ -28,6 +28,11 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm run test:cov
+      - name: Runners Python e PowerShell contra o mock
+        run: |
+          python3 --version
+          pwsh -NoProfile -Command '$PSVersionTable.PSVersion.ToString()'
+          npm run test:integration
       - run: npm run build
       - run: npm run build:single
       - name: HTML único

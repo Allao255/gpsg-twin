@@ -40,25 +40,35 @@ Os PDFs dos manuais ficam em `refs/` (ignorado pelo git). Se um detalhe não est
 
 ## Comandos
 
-Até o M0 existir, o repositório tem apenas ferramentas Python e PowerShell:
+Node 22 (`.nvmrc`). Testes, lint e builds:
 
 ```
-python tools/mock_minimal.py --port 5025
+npm test                  # unitários; valida o modelo contra o schema antes
+npm run test:cov          # com cobertura (limiar 90%)
+npm run test:integration  # runners Python e PowerShell contra o mock (precisa de python3 e pwsh)
+npm run lint
+npm run build             # dist/site/ (Pages)
+npm run build:single      # dist/gpsg-twin.html
+npm run gen               # tipos do modelo, após mudar model/commands.json ou o schema
+```
+
+Mock e runners:
+
+```
+npm run mock -- --port 5025
 python runners/gpsg_run.py --script sessions/S01-sonda.scpi
 pwsh runners/gpsg-run.ps1 -Script sessions/S01-sonda.scpi
-python tools/make_pasteable.py --script sessions/S01-sonda.scpi --address <ip>
+npm run pasteable -- --script sessions/S01-sonda.scpi --address <ip>
 ```
 
-Teste rápido dos runners contra o mock (pausas e entrada do PRN alimentadas por stdin):
+Teste rápido de um runner contra o mock (pausas e entrada do PRN alimentadas por stdin):
 
 ```
-python tools/mock_minimal.py --port 5525 &
+npm run mock -- --port 5525 &
 printf '\n\n5\n\n' | python runners/gpsg_run.py --port 5525 --script sessions/S01-sonda.scpi --time-scale 0.01 --quiet-ms 120
 ```
 
-Resultado esperado hoje: `ERR=7 WARN=6`, todos provocados de propósito pela sonda (grafias alternativas e parâmetro travado).
-
-Depois do M0: `npm test`, `npm run test:cov`, `npm run lint`, `npm run build`, `npm run build:single`, `npm run gen` (após mudar o modelo ou o schema). `npm run mock` a partir do M2.
+Resultado esperado hoje: `ERR=10 WARN=3`, todos provocados de propósito pela sonda (grafias alternativas, tokens só de UI, faixas e parâmetro travado). Os 3 `WARN` são as consultas com cabeçalho rejeitado, que ficam sem resposta.
 
 ## Ao terminar uma tarefa
 

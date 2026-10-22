@@ -17,7 +17,10 @@
     "test:cov": "vitest run --coverage",
     "build": "tsc --noEmit && vite build",
     "build:single": "tsc --noEmit && vite build --mode single && tsx scripts/check-single.ts",
-    "preview": "vite preview --outDir dist/site"
+    "preview": "vite preview --outDir dist/site",
+    "mock": "tsx scripts/mock.ts",
+    "pasteable": "tsx scripts/make-pasteable.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

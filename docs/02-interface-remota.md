@@ -120,9 +120,23 @@ utc_iso,t_session_s,t_run_s,kind,text
 ## 7. Execução no PC da empresa
 
 - PowerShell: `runners/gpsg-run.ps1`. Usa apenas `System.Net.Sockets.TcpClient`, presente em qualquer Windows.
-- Se a política de execução bloquear scripts (`Get-ExecutionPolicy`), há duas saídas sem pedir exceção: `powershell -ExecutionPolicy Bypass -File gpsg-run.ps1 ...` (bloqueado se a política vier por GPO) ou colar o conteúdo da função no console interativo, que não é afetado pela política de scripts. O twin deve gerar também uma versão "colável" do runner com o script embutido.
+- Se a política de execução bloquear scripts (`Get-ExecutionPolicy`), há duas saídas sem pedir exceção: `powershell -ExecutionPolicy Bypass -File gpsg-run.ps1 ...` (bloqueado se a política vier por GPO) ou colar o conteúdo da função no console interativo, que não é afetado pela política de scripts. A versão colável, com o script embutido, é gerada pelo site (aba Equipamento, "Baixar bloco colável") ou por `npm run pasteable -- --script <arquivo> --address <ip>`. O script não pode ter linha começando com `'@`, que encerraria a here-string.
 - Python: `runners/gpsg_run.py`, mesma semântica, para máquinas que tenham Python.
 - Sem PC ou sem rede até o equipamento: usar somente o pacote USB para configuração e operar a execução pela tela.
+
+## 7.1 Mock do instrumento
+
+`npm run mock -- [--port 5025] [--host 127.0.0.1] [--split-ms 50] [--prns 1,5,9] [--gal-prns 2,7] [--channels 12] [--verbose]`
+
+Servidor TCP que usa o core do twin: resolve e valida cada comando com o modelo, mantém o estado pelo mesmo redutor do cenário e responde às consultas com o estado configurado. Não simula sinal nem geometria.
+
+- Fila de erros com códigos SCPI padrão (`-113` cabeçalho, `-222` faixa, `-224` valor, `-221` parâmetro travado em execução, `-256` arquivo inexistente, entre outros). O texto traz o diagnóstico do twin. Os códigos reais do equipamento são desconhecidos (D16).
+- Consulta com cabeçalho rejeitado não tem resposta, como no equipamento.
+- `TRUN` alterna o estado; tempo decorrido e hora simulada avançam com o relógio real.
+- Arquivos salvos (`SAV`) ficam em memória e podem ser carregados, listados e removidos. O almanaque padrão existe como `default.alm`.
+- PRNs simulados: lista fixa (`--prns`), presente só com a simulação rodando. Elevação e azimute em `SVPR:LIST?` são marcadores, não geometria.
+- `--split-ms` envia cada resposta em duas partes para exercitar a leitura por silêncio (seção 8).
+- `STAT?` informa a última operação; `ROUT:VALD` só confere o número de pontos.
 
 ## 8. Leitura de resposta
 
