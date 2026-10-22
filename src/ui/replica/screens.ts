@@ -1416,32 +1416,33 @@ function fileWindow(app: AppApi, ui: UiState): HTMLElement {
 // ---------------------------------------------------------------- Diagnostics (OP 3-31)
 
 function diagnosticsWindow(): HTMLElement {
+  const pll = (label: string): HTMLElement => h('span', { class: 'led' }, label);
   return h(
     'div',
-    { class: 'r split' },
-    h(
-      'div',
-      { class: 'col' },
-      infoBox('Mode', 'Off'),
-      infoBox('Frequency', '1176.45 MHz'),
-      infoBox('Amplitude', '', 'dBm'),
-      infoBox('Doppler Error', '', 'Hz'),
-      infoBox('EXT REF OUT', 'OFF'),
-      infoBox('Reference Source', 'INT'),
+    {},
+    group(
+      'Diagnostics',
+      row(infoBox('Mode', 'Off'), infoBox('Frequency', '1176.45 MHz')),
+      row(infoBox('Amplitude', '', 'dBm'), infoBox('Doppler Error', '', 'Hz')),
+      row(infoBox('EXT REF OUT', 'OFF'), infoBox('Reference Source', 'INT')),
     ),
-    h(
-      'div',
-      { class: 'col' },
-      group('Log Amp.', infoBox('', '')),
+    row(
+      group('Log Amp.', infoBox('', '', 'dB')),
       group(
         'PLL Lock Status',
-        infoBox('LO', ''),
-        infoBox('800 MHz', ''),
-        infoBox('EXT. REF', ''),
-        infoBox('EXT. REF DET', ''),
+        h(
+          'div',
+          { class: 'leds' },
+          pll('LO'),
+          pll('800 MHz'),
+          pll('EXT. REF'),
+          pll('EXT. REF DET'),
+        ),
       ),
     ),
-    note('Diagnóstico não faz parte do cenário (portadora única, exclui a simulação; D21).'),
+    note(
+      'Função de manutenção (OP 5-9): Mode CW ou Modulated gera sinal de teste e trava a simulação. Não faz parte do cenário; Log Amp e PLL são leituras do hardware.',
+    ),
   );
 }
 

@@ -180,6 +180,18 @@ main:has(.replica-app) {
   gap: 6px;
 }
 
+/* Em coluna, a base flex do campo viraria altura. */
+.gpsg .col > .fld {
+  flex: none;
+}
+
+.gpsg .leds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding: 4px 2px;
+}
+
 .gpsg .fld {
   display: flex;
   flex-direction: column;
@@ -330,7 +342,8 @@ main:has(.replica-app) {
 
   .gpsg .launch button {
     padding: 8px 3px;
-    font-size: 12px;
+    font-size: 11px;
+    overflow-wrap: anywhere;
   }
 
   .gpsg .foot .title {
