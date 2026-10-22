@@ -2,7 +2,7 @@
 // Faixas e consistência são verificadas pelo emissor (emitScenario relê o script gerado).
 import { diag, type Diagnostic } from '../diagnostics';
 import { enumValues, type CommandHeader } from '../model/load';
-import { SCENARIO_VERSION, type Scenario } from './types';
+import { LATLON_FORMATS, SCENARIO_VERSION, type Scenario } from './types';
 
 const FIRST_KEYS = ['scenario_version', 'name', 'description'];
 
@@ -83,14 +83,32 @@ const CARRIER_HEADERS = [
   'GPS:SET:CaRrierGG',
 ] as const;
 
-function readScenario(x: unknown): Scenario {
+/**
+ * Migração entre versões, sobre o objeto cru. Cada passo leva da versão n para n + 1.
+ * v1 -> v2: `route.saveAs` (null) e `display.latLonFormat` (padrão da tela).
+ */
+export function migrate(x: unknown): Obj {
   const o = obj(x, '$');
   const version = o.scenario_version;
+  if (version === 1) {
+    const route = obj(o.route, 'route');
+    return {
+      ...o,
+      scenario_version: 2,
+      route: { ...route, saveAs: null },
+      display: { latLonFormat: 'DDMMSS.SS' },
+    };
+  }
   if (version !== SCENARIO_VERSION) {
     throw new Invalid(
       `scenario_version ${String(version)} não suportada (esperado ${SCENARIO_VERSION})`,
     );
   }
+  return o;
+}
+
+function readScenario(x: unknown): Scenario {
+  const o = migrate(x);
   const s = obj(o.setup, 'setup');
   const car = obj(s.carrier, 'setup.carrier');
   const carCmd = oneOf(car, 'command', 'setup.carrier', CARRIER_HEADERS);
@@ -165,6 +183,7 @@ function readScenario(x: unknown): Scenario {
     },
     route: {
       loop: token(route, 'loop', 'route', 'GPS:ROUT:LOOP', 'loop'),
+      saveAs: nullableString(route, 'saveAs', 'route'),
       points: arrayAt(route, 'points', 'route').map((x, i) => {
         const path = `route.points[${i}]`;
         const p = obj(x, path);
@@ -215,6 +234,9 @@ function readScenario(x: unknown): Scenario {
       kml: nullableString(files, 'kml', 'files'),
     },
     run: { stopAt_s: nullableNumber(run, 'stopAt_s', 'run') },
+    display: {
+      latLonFormat: oneOf(obj(o.display, 'display'), 'latLonFormat', 'display', LATLON_FORMATS),
+    },
     actions: arrayAt(o, 'actions', '$').map((x, i) => {
       const path = `actions[${i}]`;
       const a = obj(x, path);

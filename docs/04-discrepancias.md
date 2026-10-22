@@ -29,6 +29,9 @@ Divergências entre o manual remoto (RP), o manual de operação (OP) e o datash
 | D23 | Modelo de movimento: remoto `AUTOMOTIVE`, UI e settings XML `Automobile` | RP 10-5, OP D-7 | Token do RP no SCPI, token do XML no XML | S01 D3 |
 | D24 | Almanaque: não há `GPS:FIL:ALM:SAVe` remoto. Almanaque obtido por `GPS:GPSR:REL` e `GPS:FIL:ALM:REL` fica em memória; salvar em arquivo só pela UI (Manage Almanacs). Formato de retorno de `GPS:FIL:ALM:FNAM?` para almanaque em memória não salvo não documentado | RP 7-1 a 7-3, OP 3-32 | Cenário de ensaio sempre carrega almanaque de arquivo por `LOAD` | S01 A2, G1; teste manual com almanaque do receptor interno |
 | D25 | Exemplo de `GPS:FILe:KML:SamplingTIMe` escrito `GPS:FILE:KML:STIME 4 Hz`: `STIME` não é a forma curta (`STIM`) nem a longa (`SAMPLINGTIME`) | RP 7-11 | Emitir `STIM`; `STIME` rejeitado pelo parser com referência a D25 | `GPS:? FILE` em S01 A3 |
+| D26 | Faixas de posição e rota na UI diferem do RP: altitude 0 a 100.000 ft ou 0 a 18.288 m (valores não equivalentes; RP -3.281 a 100.000 ft); raio de curva 3,281 a 328.084 ft ou 1 a 100.000 m (RP a partir de 0); velocidade 0 a 1.150 mph ou 0 a 1.850,745 km/h (RP 1.150,003 mph); razão de subida ±1.800 m/min | OP 3-3, 3-21, 3-22; RP 9-1 | Réplica valida pelas faixas do RP (modelo) | Teste manual na tela Route Edit e S01 C |
+| D27 | Limites de movimento: UI com máximo de 328,083 ft/s² (100 m/s²) e 1.150,782 mph, 1.852 km/h ou 999 kt; settings XML com Unlimited em 98 m/s² e 514,10 m/s | OP 3-12, OP D-7 | Valores do settings XML como limites de fábrica (`01-equipamento.md` seção 4); entrada do CUSTOM sem faixa | S01 A4, B3, B4 (`MLAT?`, `MVEL?`) |
+| D28 | Waypoint: UI tem o campo Country; remoto tem `state` (`WAYP:NEW`, `WAYP:EDIT`, `WAYP:DISP?`) | OP 3-26, RP 13-2 a 13-4 | Campo único rotulado Country/State, emitido como quinto parâmetro | Teste manual: criar pela UI e ler por `WAYP:DISP?` |
 
 ## Observações sem impacto direto
 

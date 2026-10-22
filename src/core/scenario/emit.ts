@@ -16,6 +16,7 @@ import { NAME_RE, type FileKind, type Scenario, type TimedAction } from './types
 export const META_NAME = 'twin-scenario:';
 export const META_DESCRIPTION = 'twin-description:';
 export const META_CHANNELS = 'twin-channels:';
+export const META_DISPLAY = 'twin-display:';
 
 export interface EmitResult {
   text: string;
@@ -139,6 +140,8 @@ export function emitLines(sc: Scenario): string[] {
   comment(`${META_NAME} ${sc.name}`);
   if (sc.description.trim() !== '')
     comment(`${META_DESCRIPTION} ${sc.description.replace(/\s+/g, ' ').trim()}`);
+  // Preferências de exibição: sem comando remoto (o script usa sempre SI, D04).
+  comment(`${META_DISPLAY} units=${sc.setup.units} latlon=${sc.display.latLonFormat}`);
   comment(`gerado pelo gpsg-twin, scenario_version ${sc.scenario_version}`);
   L.push('@errcheck on');
   L.push(`@mark ${sc.name} inicio`);
@@ -252,6 +255,7 @@ export function emitLines(sc: Scenario): string[] {
     L.push(c('GPS:ROUT:LOOP', sc.route.loop));
     L.push(c('GPS:ROUT:VALiDate'));
     L.push(c('GPS:STAT?'));
+    if (sc.route.saveAs !== null) L.push(c('GPS:ROUT:SAVe', sc.route.saveAs));
   } else {
     comment('trajetória');
     if (sc.files.nmea !== null) L.push(c('GPS:FILe:NMEA:LOAD', sc.files.nmea));

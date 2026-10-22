@@ -1,0 +1,578 @@
+/* Réplica do GPSG-1000: estilo das figuras do manual (fundo preto, contorno azul arredondado,
+   abas em pílula, barra de lançamento). A tela do equipamento é escura nos dois temas. */
+
+:root {
+  --ed-comment: #6a737d;
+  --ed-directive: #8250df;
+  --ed-header: #0550ae;
+  --ed-string: #0a3069;
+  --ed-number: #953800;
+  --ed-var: #1a7f37;
+  --ed-active: rgba(31, 111, 235, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ed-comment: #8b949e;
+    --ed-directive: #d2a8ff;
+    --ed-header: #79c0ff;
+    --ed-string: #a5d6ff;
+    --ed-number: #ffa657;
+    --ed-var: #7ee787;
+    --ed-active: rgba(88, 166, 255, 0.1);
+  }
+}
+
+.replica-app {
+  display: grid;
+  grid-template-columns: minmax(0, 780px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+main:has(.replica-app) {
+  max-width: 1600px;
+}
+
+@media (max-width: 1180px) {
+  .replica-app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- tela do equipamento */
+
+.gpsg {
+  --dev-bg: #000;
+  --dev-fg: #f2f2f2;
+  --dev-blue: #2f9bff;
+  --dev-blue-dk: #0b5fb8;
+  --dev-label: #d8d8d8;
+  --dev-launch: #5b605d;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  background: var(--dev-bg);
+  color: var(--dev-fg);
+  border-radius: 10px;
+  border: 3px solid #222;
+  min-height: 520px;
+  font-family: 'DejaVu Sans', Verdana, system-ui, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+.gpsg .launch {
+  background: var(--dev-launch);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 6px;
+}
+
+.gpsg .launch button {
+  background: #000;
+  color: #ffe94d;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  padding: 10px 4px;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.gpsg .launch button.on {
+  border-color: var(--dev-blue);
+  box-shadow: 0 0 0 2px var(--dev-blue) inset;
+}
+
+.gpsg .screen {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-left: 3px solid #ddd;
+  border-radius: 0 8px 8px 0;
+}
+
+.gpsg .body {
+  flex: 1;
+  padding: 8px 10px;
+  overflow-x: auto;
+}
+
+.gpsg .foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-top: 1px solid #333;
+}
+
+.gpsg .foot .title {
+  font-size: 18px;
+  flex: 1;
+}
+
+.gpsg .pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.gpsg .pill {
+  border-radius: 999px;
+  border: 1px solid #9cd0ff;
+  background: linear-gradient(#3ea6ff, var(--dev-blue-dk));
+  color: #fff;
+  padding: 3px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.gpsg .pill.on {
+  background: #fff;
+  color: #000;
+}
+
+.gpsg .grp {
+  border: 2px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 6px 8px 8px;
+  margin: 0 0 8px;
+  min-width: 0;
+}
+
+.gpsg .grp legend {
+  background: #fff;
+  color: #000;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 0 14px 0 6px;
+  border-radius: 6px 14px 0 0;
+}
+
+.gpsg .r {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-end;
+  margin-bottom: 4px;
+}
+
+.gpsg .r.split {
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.gpsg .r.split > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.gpsg .col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gpsg .fld {
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+  flex: 1 1 110px;
+}
+
+.gpsg .fld.wide {
+  flex: 2 1 220px;
+}
+
+.gpsg .fld .lbl {
+  color: var(--dev-label);
+  font-size: 11px;
+  margin-left: 4px;
+  min-height: 14px;
+}
+
+.gpsg .fld .line {
+  display: flex;
+}
+
+.gpsg .box {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000;
+  color: var(--dev-fg);
+  border: 2px solid var(--dev-blue);
+  border-radius: 8px;
+  padding: 3px 6px;
+  font: inherit;
+  text-align: left;
+  min-height: 26px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.gpsg button.box {
+  cursor: pointer;
+}
+
+.gpsg button.box:hover,
+.gpsg button.box:focus-visible {
+  border-color: #9cd0ff;
+  outline: none;
+}
+
+.gpsg .fld.ro .box {
+  border-color: #6a9cc9;
+}
+
+.gpsg .fld .unit {
+  border: 2px solid var(--dev-blue);
+  border-radius: 8px;
+  margin-left: 2px;
+  padding: 3px 6px;
+  min-width: 34px;
+  text-align: center;
+}
+
+.gpsg .fld.locked .box {
+  color: #aaa;
+  border-color: #5c7894;
+}
+
+.gpsg .fld.err .box {
+  border-color: #ff5a5a;
+  box-shadow: 0 0 0 1px #ff5a5a;
+}
+
+.gpsg .fld.warn .box {
+  border-color: #e3b341;
+}
+
+.gpsg .lock {
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+.gpsg input.box,
+.gpsg select.box {
+  display: block;
+  width: 100%;
+}
+
+.gpsg .btn {
+  background: linear-gradient(#3ea6ff, var(--dev-blue-dk));
+  color: #fff;
+  border: 1px solid #9cd0ff;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  min-width: 92px;
+}
+
+.gpsg .btn:disabled {
+  background: #1e2a36;
+  color: #7d8a96;
+  border-color: #33475a;
+  cursor: not-allowed;
+}
+
+.gpsg .btn.toggle.on {
+  box-shadow: inset 0 -6px 0 #29d05a;
+}
+
+.gpsg .runbtn {
+  background: linear-gradient(#3ea6ff, var(--dev-blue-dk));
+  color: #fff;
+  border: 1px solid #9cd0ff;
+  border-radius: 8px;
+  padding: 6px 28px;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.gpsg .runbtn.stop {
+  background: linear-gradient(#ff7b6b, #b3261e);
+}
+
+.gpsg .led::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #333;
+  margin-right: 6px;
+  vertical-align: -1px;
+}
+
+.gpsg .led.on::before,
+.gpsg .led.run::before {
+  background: #29d05a;
+}
+
+.gpsg .rf-bar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.gpsg .rf-bar .grp {
+  flex: 0 1 220px;
+}
+
+.gpsg .note {
+  color: #b9c4cf;
+  font-size: 11px;
+  margin: 4px 0 6px;
+}
+
+.gpsg .tbl-wrap {
+  overflow: auto;
+  max-height: 260px;
+  border: 1px solid #333;
+  margin-bottom: 6px;
+}
+
+.gpsg .tbl {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 11px;
+}
+
+.gpsg .tbl th {
+  background: #1ba1e2;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  padding: 2px 6px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.gpsg .tbl td {
+  border-bottom: 1px solid #8b1d1d;
+  border-right: 1px solid #8b1d1d;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.gpsg .tbl tr.sim td {
+  color: #29d05a;
+}
+
+.gpsg .tbl tr.sel td {
+  background: #0d4f86;
+}
+
+.gpsg .tbl tbody tr {
+  cursor: pointer;
+}
+
+.gpsg .tbl td.empty {
+  color: #777;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- mensagens e painel lateral */
+
+.msg {
+  min-height: 1.4em;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.msg.error {
+  color: var(--danger);
+}
+
+.side h3 {
+  margin: 12px 0 6px;
+  font-size: 14px;
+}
+
+.side .scen {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.side .scen .grow {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.side .scen input {
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.side .scen input.desc {
+  flex: 1;
+  min-width: 0;
+}
+
+.side .toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.side .toolbar .btn,
+.side .actions .btn {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.side .banner p {
+  border-left: 3px solid var(--warn);
+  background: var(--surface);
+  padding: 6px 10px;
+  margin: 0 0 8px;
+  font-size: 13px;
+}
+
+.side .editor {
+  height: 460px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.side .editor .cm-editor {
+  height: 100%;
+}
+
+.side .diags li {
+  cursor: pointer;
+}
+
+.sev-ok {
+  color: var(--ok);
+}
+
+/* ---------------------------------------------------------------- diálogos */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 16px;
+}
+
+.dlg {
+  background: #000;
+  color: #f2f2f2;
+  border: 2px solid #2f9bff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  width: min(440px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.dlg h3 {
+  margin: 0 0 8px;
+}
+
+.dlg .dlg-in {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  border: 2px solid #2f9bff;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font: inherit;
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.dlg .dlg-hint {
+  color: #b9c4cf;
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+.dlg .dlg-err {
+  color: #ff7b7b;
+  min-height: 1.2em;
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+.dlg .keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.dlg .key,
+.dlg .btn,
+.dlg .choice {
+  background: linear-gradient(#3ea6ff, #0b5fb8);
+  color: #fff;
+  border: 1px solid #9cd0ff;
+  border-radius: 8px;
+  padding: 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.dlg .choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dlg .choice {
+  text-align: left;
+}
+
+.dlg .choice.on {
+  background: #fff;
+  color: #000;
+}
+
+.dlg .choice:disabled {
+  background: #1e2a36;
+  color: #7d8a96;
+  border-color: #33475a;
+  cursor: not-allowed;
+}
+
+.dlg .dlg-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dlg .btn.primary {
+  font-weight: bold;
+}

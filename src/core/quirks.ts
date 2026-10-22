@@ -7,6 +7,9 @@
 // Itens cujo efeito só aparece em marcos posteriores estão em DEFERRED.
 import type { CommandHeader, EnumValue, Param } from './model/load';
 import type { Range } from './model/types.gen';
+import type { Carrier } from './scenario/types';
+
+type Gnss = EnumValue<'GPS:SET:GNSS', 'gnss'>;
 
 export type UnitsMode = EnumValue<'GPS:SET:UNITs', 'units'>;
 export type Port = EnumValue<'GPS:SET:RFPoRt', 'port'>;
@@ -279,6 +282,76 @@ export const ENUM_HINTS: readonly EnumHint[] = [
 // D11: portadora emitida por CARR com os tokens do RP, salvo quando o cenário veio de CRGP, CRGA ou
 // CRGG (o comando de origem é preservado).
 export const D11_DEFAULT_CARRIER_HEADER: CommandHeader = 'GPS:SET:CARRier';
+
+// D11: portadoras oferecidas pela UI por GNSS (OP 3-5) e o comando remoto emitido para cada uma.
+// `carrier: null`: opção só da UI, sem equivalente remoto.
+export interface UiCarrier {
+  label: string;
+  carrier: Carrier | null;
+  dRefs: string[];
+}
+
+export const D11_UI_CARRIERS: Readonly<Record<Gnss, readonly UiCarrier[]>> = {
+  GPS: [
+    { label: 'L1', carrier: { command: 'GPS:SET:CARRier', token: 'L1/E1' }, dRefs: ['D11'] },
+    { label: 'L1C', carrier: { command: 'GPS:SET:CARRier', token: 'L1C' }, dRefs: [] },
+    { label: 'L2', carrier: { command: 'GPS:SET:CARRier', token: 'L2' }, dRefs: [] },
+    { label: 'L2C', carrier: { command: 'GPS:SET:CARRier', token: 'L2C' }, dRefs: [] },
+    { label: 'L5', carrier: { command: 'GPS:SET:CARRier', token: 'L5/E5' }, dRefs: ['D11'] },
+    { label: 'L1 no P(y)', carrier: null, dRefs: ['D11'] },
+  ],
+  GALILEO: [
+    { label: 'E1', carrier: { command: 'GPS:SET:CARRier', token: 'L1/E1' }, dRefs: ['D11'] },
+    { label: 'E5', carrier: { command: 'GPS:SET:CARRier', token: 'L5/E5' }, dRefs: ['D11'] },
+    { label: 'E5A', carrier: { command: 'GPS:SET:CaRrierGAl', token: 'E5a' }, dRefs: ['D11'] },
+  ],
+  'GAL+GPS': [
+    { label: 'L1/E1', carrier: { command: 'GPS:SET:CARRier', token: 'L1/E1' }, dRefs: [] },
+    { label: 'L5/E5', carrier: { command: 'GPS:SET:CARRier', token: 'L5/E5' }, dRefs: [] },
+  ],
+};
+
+/** Rótulo da UI para a portadora do cenário; o token remoto quando não há correspondência. */
+export function d11CarrierLabel(gnss: Gnss, c: Carrier): string {
+  const hit = D11_UI_CARRIERS[gnss].find(
+    (u) => u.carrier?.command === c.command && u.carrier.token === c.token,
+  );
+  return hit?.label ?? c.token.toUpperCase();
+}
+
+// D12, D13: opções só da UI (Clock = Internal, PRN Signal = Traj File) aparecem na réplica
+// desabilitadas, com a referência; o tratamento remoto está em ENUM_HINTS.
+
+// D26: a réplica valida pelas faixas do RP (modelo); as faixas da UI (OP 3-3, 3-21) não são aplicadas.
+// D28: o quinto parâmetro de WAYP:NEW/EDIT (`state`) aparece na réplica como Country/State.
+
+// D27: limites de fábrica dos modelos de movimento, SI, do settings XML (OP D-7, 01-equipamento.md
+// seção 4). A UI (OP 3-12) cita máximo de 100 m/s² e 1150,782 mph; não adotado.
+export interface MotionLimits {
+  maxLateral_mps2: number;
+  maxLongitudinal_mps2: number;
+  maxVelocity_mps: number;
+}
+
+export const D27_FACTORY_LIMITS: Readonly<
+  Record<EnumValue<'GPS:SET:CuRrentMotionModel', 'model'>, MotionLimits>
+> = {
+  PEDESTRIAN: { maxLateral_mps2: 2.94, maxLongitudinal_mps2: 2.94, maxVelocity_mps: 10.73 },
+  AUTOMOTIVE: { maxLateral_mps2: 9.8, maxLongitudinal_mps2: 9.8, maxVelocity_mps: 89.41 },
+  MARINE: { maxLateral_mps2: 6.86, maxLongitudinal_mps2: 6.86, maxVelocity_mps: 44.7 },
+  LOW_PERFORMANCE_AIRCRAFT: {
+    maxLateral_mps2: 19.6,
+    maxLongitudinal_mps2: 9.8,
+    maxVelocity_mps: 223.52,
+  },
+  HIGH_PERFORMANCE_AIRCRAFT: {
+    maxLateral_mps2: 88.2,
+    maxLongitudinal_mps2: 49,
+    maxVelocity_mps: 447.04,
+  },
+  CUSTOM: { maxLateral_mps2: 98, maxLongitudinal_mps2: 98, maxVelocity_mps: 514.1 },
+  UNLIMITED: { maxLateral_mps2: 98, maxLongitudinal_mps2: 98, maxVelocity_mps: 514.1 },
+};
 
 // D09: alocação de canais não emitida na v1.
 export const D09_NOT_EMITTED: readonly CommandHeader[] = [

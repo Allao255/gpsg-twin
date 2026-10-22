@@ -12,12 +12,14 @@ export default defineConfig(({ mode }) => {
       build: {
         outDir: 'dist/single',
         emptyOutDir: true,
+        // Tudo num arquivo: CodeMirror e core inline.
+        chunkSizeWarningLimit: 1000,
         rollupOptions: { input: 'index.html' },
       },
     };
   }
   return {
     base: './',
-    build: { outDir: 'dist/site', emptyOutDir: true },
+    build: { outDir: 'dist/site', emptyOutDir: true, chunkSizeWarningLimit: 1000 },
   };
 });

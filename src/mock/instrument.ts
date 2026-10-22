@@ -15,6 +15,7 @@ import {
 } from '../core/model/load';
 import { applyCommand } from '../core/scenario/apply';
 import { defaultScenario } from '../core/scenario/defaults';
+import { motionLimits } from '../core/scenario/motion';
 import type { RoutePoint, Scenario } from '../core/scenario/types';
 import { formatNumberInMode } from '../core/scpi/format';
 import { quoteString } from '../core/scpi/lexer';
@@ -72,17 +73,6 @@ function errorFor(d: Diagnostic): ErrorKey | null {
   return ERROR_BY_DIAG[d.code] ?? null;
 }
 
-// Limites de fábrica dos modelos de movimento (01-equipamento.md seção 4, OP D-7), SI.
-const MOTION_LIMITS: Readonly<Record<string, readonly [number, number, number]>> = {
-  PEDESTRIAN: [2.94, 2.94, 10.73],
-  AUTOMOTIVE: [9.8, 9.8, 89.41],
-  MARINE: [6.86, 6.86, 44.7],
-  LOW_PERFORMANCE_AIRCRAFT: [19.6, 9.8, 223.52],
-  HIGH_PERFORMANCE_AIRCRAFT: [88.2, 49, 447.04],
-  CUSTOM: [98, 98, 514.1],
-  UNLIMITED: [98, 98, 514.1],
-};
-
 type FileKind = 'SET' | 'ROUT' | 'ALM' | 'NMEA' | 'KML';
 
 export const DEFAULT_ALMANAC = 'default.alm';
@@ -115,8 +105,15 @@ function hms(totalSeconds: number): string {
   return `${p2(Math.floor(t / 3600))}:${p2(Math.floor((t % 3600) / 60))}:${p2(t % 60)}`;
 }
 
+/** Estado ao ligar: padrão do twin com unidades SI (a sessão remota começa em SI, RP 1-10; D04). */
+export function powerUpState(): Scenario {
+  const s = defaultScenario();
+  s.setup.units = 'SI';
+  return s;
+}
+
 export class Instrument {
-  state: Scenario = defaultScenario();
+  state: Scenario = powerUpState();
   running = false;
   errors: string[] = [];
   status = 'Ready';
@@ -348,10 +345,8 @@ export class Instrument {
   }
 
   motionLimits(): readonly [number, number, number] {
-    const m = this.state.motion;
-    if (m.custom)
-      return [m.custom.maxLateral_mps2, m.custom.maxLongitudinal_mps2, m.custom.maxVelocity_mps];
-    return MOTION_LIMITS[m.model] ?? [98, 98, 514.1];
+    const l = motionLimits(this.state.motion);
+    return [l.maxLateral_mps2, l.maxLongitudinal_mps2, l.maxVelocity_mps];
   }
 
   userDate(): Date {
@@ -419,7 +414,7 @@ export class Instrument {
   }
 
   reset(): void {
-    this.state = defaultScenario();
+    this.state = powerUpState();
     this.running = false;
     this.runStartMs = null;
     this.elapsedMs = 0;
@@ -777,7 +772,7 @@ const COMMANDS: Partial<Record<CommandHeader, Action>> = {
   'GPS:FILe:SET:EXPort': must(SET_OPS.EXP),
   'GPS:FILe:SET:DEFault': (m) => {
     const units = m.state.setup.units;
-    m.state = defaultScenario();
+    m.state = powerUpState();
     m.state.setup.units = units;
     m.loaded.SET = '';
     m.status = 'Default settings loaded';

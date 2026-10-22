@@ -25,6 +25,9 @@ export function dynamicScenario(): Scenario {
   sc.files.settings = 'twin_rota_manual.set';
   sc.files.almanac = { kind: 'file', name: 'twin_w0574.alm' };
   sc.route.loop = 'ON';
+  sc.route.saveAs = 'twin_rota_manual.rte';
+  sc.display.latLonFormat = 'DDMM.MM';
+  sc.setup.units = 'AERO/SI';
   const leg = { climbRate_mps: 5.08, speed_mps: 44.704, accel_mps2: 9.8, turnRadius_m: 100 };
   sc.route.points = [
     {

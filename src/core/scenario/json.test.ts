@@ -14,8 +14,20 @@ describe('JSON do cenário', () => {
     }
     const text = serializeScenario(defaultScenario());
     expect(
-      text.startsWith('{\n  "scenario_version": 1,\n  "name": "cenario",\n  "description": ""'),
+      text.startsWith('{\n  "scenario_version": 2,\n  "name": "cenario",\n  "description": ""'),
     ).toBe(true);
+  });
+
+  it('migra a versão 1 (sem saveAs e sem display)', () => {
+    const o = JSON.parse(serializeScenario(dynamicScenario())) as Record<string, unknown>;
+    o.scenario_version = 1;
+    delete (o.route as Record<string, unknown>).saveAs;
+    delete o.display;
+    const r = parseScenarioJson(JSON.stringify(o));
+    expect(r.diagnostics).toEqual([]);
+    expect(r.scenario?.scenario_version).toBe(2);
+    expect(r.scenario?.route.saveAs).toBeNull();
+    expect(r.scenario?.display).toEqual({ latLonFormat: 'DDMMSS.SS' });
   });
 
   it('almanaque padrão e por equipamento', () => {
@@ -34,7 +46,7 @@ describe('JSON do cenário', () => {
 
   it('rejeita JSON inválido e versões desconhecidas', () => {
     expect(parseScenarioJson('{').diagnostics[0]?.message).toMatch(/JSON inválido/);
-    expect(broken((o) => (o.scenario_version = 2))).toMatch(/não suportada/);
+    expect(broken((o) => (o.scenario_version = 3))).toMatch(/não suportada/);
     expect(parseScenarioJson('[]').diagnostics[0]?.message).toMatch(/objeto/);
   });
 

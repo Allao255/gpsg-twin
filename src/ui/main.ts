@@ -2,7 +2,10 @@
 import './styles.css';
 import { h } from './dom';
 import { referenceView } from './reference-view';
-import { scriptCheckView } from './script-check-view';
+import { createReplicaApp } from './replica/app';
+
+// A réplica é criada uma vez e reaproveitada ao trocar de aba (mantém o estado e o editor).
+let replica: HTMLElement | null = null;
 
 type TabId = 'equipamento' | 'analise' | 'ajuda';
 
@@ -10,17 +13,10 @@ const TABS: { id: TabId; label: string; render: () => HTMLElement }[] = [
   {
     id: 'equipamento',
     label: 'Equipamento',
-    render: () =>
-      h(
-        'section',
-        {},
-        h(
-          'p',
-          { class: 'notice' },
-          'Réplica da interface do equipamento: marco M3. Enquanto isso, o verificador abaixo lê um script .scpi com o core do twin.',
-        ),
-        scriptCheckView(),
-      ),
+    render: () => {
+      replica ??= createReplicaApp();
+      return replica;
+    },
   },
   {
     id: 'analise',

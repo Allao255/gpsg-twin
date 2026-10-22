@@ -10,8 +10,17 @@ import type { CheckedCommand } from '../scpi/validate';
 import type { ScriptDoc, ScriptLine } from '../script/ast';
 import { applyCommand } from './apply';
 import { defaultScenario } from './defaults';
-import { META_CHANNELS, META_DESCRIPTION, META_NAME } from './emit';
-import { NAME_RE, type Channels, type Scenario, type SvAction } from './types';
+import { META_CHANNELS, META_DESCRIPTION, META_DISPLAY, META_NAME } from './emit';
+import {
+  LATLON_FORMATS,
+  NAME_RE,
+  type Channels,
+  type LatLonFormat,
+  type Scenario,
+  type SvAction,
+  type UnitsMode,
+} from './types';
+import { enumValues } from '../model/load';
 
 export interface FromScriptOptions {
   /** Nome do cenário quando o script não tiver metadado (por exemplo, nome do arquivo). */
@@ -23,6 +32,8 @@ export interface FromScriptResult {
   diagnostics: Diagnostic[];
   /** Campos de configuração que o script não define (ficam com o padrão do twin). */
   unset: string[];
+  /** Caminhos do cenário definidos pelo script (comandos, metadados e ações). */
+  assigned: string[];
 }
 
 /** Campos de configuração que um cenário completo define. */
@@ -109,6 +120,16 @@ function readChannels(text: string, ch: Channels): void {
   }
 }
 
+function readDisplay(text: string): { units?: UnitsMode; latLonFormat?: LatLonFormat } {
+  const out: { units?: UnitsMode; latLonFormat?: LatLonFormat } = {};
+  const units = /units=(\S+)/.exec(text)?.[1];
+  if (units && enumValues('GPS:SET:UNITs', 'units').includes(units)) out.units = units as UnitsMode;
+  const ll = /latlon=(\S+)/.exec(text)?.[1];
+  const f = LATLON_FORMATS.find((x) => x === ll);
+  if (f) out.latLonFormat = f;
+  return out;
+}
+
 export function sanitizeName(s: string): string {
   const n = s
     .toLowerCase()
@@ -126,6 +147,7 @@ export function scenarioFromScript(doc: ScriptDoc, opts: FromScriptOptions = {})
   sc.files.almanac = { kind: 'equipment' };
   sc.name = sanitizeName(opts.name ?? 'cenario');
   const known = new Set<string>();
+  let display: { units?: UnitsMode; latLonFormat?: LatLonFormat } = {};
   const out: Diagnostic[] = [];
   const note = (l: ScriptLine, d: Diagnostic): void => {
     d.line = l.lineNo;
@@ -138,7 +160,12 @@ export function scenarioFromScript(doc: ScriptDoc, opts: FromScriptOptions = {})
     const desc = meta(l, META_DESCRIPTION);
     if (desc !== null) sc.description = desc;
     const channels = meta(l, META_CHANNELS);
-    if (channels !== null) readChannels(channels, sc.channels);
+    if (channels !== null) {
+      readChannels(channels, sc.channels);
+      known.add('channels');
+    }
+    const shown = meta(l, META_DISPLAY);
+    if (shown !== null) display = readDisplay(shown);
 
     const run = l.time.runIndex;
     if (l.type === 'directive' && l.directive?.name === 'run' && run >= 1) {
@@ -253,6 +280,17 @@ export function scenarioFromScript(doc: ScriptDoc, opts: FromScriptOptions = {})
       ),
     );
   }
+  // Metadados de exibição prevalecem sobre o UNIT SI que todo script gerado emite (D04).
+  if (display.units) {
+    sc.setup.units = display.units;
+    known.add('setup.units');
+  }
+  if (display.latLonFormat) {
+    sc.display.latLonFormat = display.latLonFormat;
+    known.add('display.latLonFormat');
+  }
+  if (sc.actions.length > 0) known.add('actions');
+  if (sc.run.stopAt_s !== null) known.add('run.stopAt_s');
   const unset = CONFIG_FIELDS.filter((f) => !known.has(f));
-  return { scenario: sc, diagnostics: out, unset };
+  return { scenario: sc, diagnostics: out, unset, assigned: [...known].sort() };
 }

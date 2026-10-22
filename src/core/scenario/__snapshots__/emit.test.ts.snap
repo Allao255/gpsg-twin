@@ -3,7 +3,8 @@
 exports[`emissor de cenário > cenário dinâmico completo: sem erro e com ordem canônica 1`] = `
 "# twin-scenario: rota_manual
 # twin-description: Rota de 3 pontos do exemplo do manual, com SV manipulado
-# gerado pelo gpsg-twin, scenario_version 1
+# twin-display: units=AERO/SI latlon=DDMM.MM
+# gerado pelo gpsg-twin, scenario_version 2
 @errcheck on
 @mark rota_manual inicio
 @expect GPS:SIM:TRUN? Stopped
@@ -65,6 +66,7 @@ GPS:ROUT:ADD:POIN "twin_p3",37.6499,-97.4331,406,5.08,44.704,9.8,100
 GPS:ROUT:LOOP ON
 GPS:ROUT:VALD
 GPS:STAT?
+GPS:ROUT:SAV "twin_rota_manual.rte"
 
 # nível de RF
 GPS:SET:RFLV -115
@@ -90,7 +92,8 @@ GPS:SET:RFLV -120
 
 exports[`emissor de cenário > cenário padrão: sem diagnóstico, determinístico 1`] = `
 "# twin-scenario: cenario
-# gerado pelo gpsg-twin, scenario_version 1
+# twin-display: units=IMPERIAL latlon=DDMMSS.SS
+# gerado pelo gpsg-twin, scenario_version 2
 @errcheck on
 @mark cenario inicio
 @expect GPS:SIM:TRUN? Stopped

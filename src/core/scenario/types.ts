@@ -8,7 +8,7 @@ import type { Port, UnitsMode } from '../quirks';
 
 export type { Port, UnitsMode };
 
-export const SCENARIO_VERSION = 1;
+export const SCENARIO_VERSION = 2;
 export type OnOff = EnumValue<'GPS:SET:DigitalNOiSe', 'state'>;
 
 /** Comando de portadora de origem e token correspondente (D11). */
@@ -80,6 +80,18 @@ export type RoutePoint =
 export interface Route {
   points: RoutePoint[];
   loop: OnOff;
+  /** Nome com que a rota é gravada no equipamento depois de montada (`ROUT:SAV`); null não grava. */
+  saveAs: string | null;
+}
+
+/** Formato de latitude e longitude na tela (Setup, Lat/Long Format; OP 3-8). */
+export type LatLonFormat = 'DD.DD' | 'DDMM.MM' | 'DDMMSS.SS';
+
+export const LATLON_FORMATS: readonly LatLonFormat[] = ['DD.DD', 'DDMM.MM', 'DDMMSS.SS'];
+
+/** Preferências de exibição da réplica. Sem comando remoto; vão no settings XML (M4). */
+export interface Display {
+  latLonFormat: LatLonFormat;
 }
 
 export interface UserWaypoint extends Position {
@@ -149,6 +161,7 @@ export interface Scenario {
   };
   /** Ações em execução, em ordem de tempo (estável). */
   actions: TimedAction[];
+  display: Display;
 }
 
 export const NAME_RE = /^[a-z0-9_]{1,40}$/;

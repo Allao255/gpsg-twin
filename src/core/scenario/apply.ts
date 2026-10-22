@@ -4,6 +4,7 @@ import { diag, type Diagnostic } from '../diagnostics';
 import type { CommandHeader } from '../model/load';
 import type { ParamValue } from '../scpi/params';
 import type { CheckedCommand } from '../scpi/validate';
+import { MOTION_LIMITS, type MotionLimits } from './motion';
 import type { FileKind, Scenario, UserWaypoint } from './types';
 
 export type ApplyOutcome =
@@ -17,9 +18,6 @@ export type ApplyOutcome =
 
 type Vals = readonly (ParamValue | undefined)[];
 type Handler = (s: Scenario, v: Vals) => string[] | Diagnostic | null;
-
-// Limites do modelo Unlimited (01-equipamento.md seção 4, OP D-7): ponto de partida de CUSTOM.
-const UNLIMITED_LIMITS = { maxLateral_mps2: 98, maxLongitudinal_mps2: 98, maxVelocity_mps: 514.1 };
 
 const num = (v: ParamValue | undefined): number | undefined =>
   v?.kind === 'number' || v?.kind === 'angle' ? v.value : undefined;
@@ -60,9 +58,10 @@ function lossSetter(key: keyof Scenario['io']): Handler {
   };
 }
 
-function customSetter(key: keyof typeof UNLIMITED_LIMITS): Handler {
+function customSetter(key: keyof MotionLimits): Handler {
   return (s, v) => {
-    s.motion.custom ??= { ...UNLIMITED_LIMITS };
+    // Ponto de partida de CUSTOM: limites do modelo Unlimited.
+    s.motion.custom ??= { ...MOTION_LIMITS.UNLIMITED };
     s.motion.custom[key] = need(num(v[0]));
     return ['motion.custom'];
   };
@@ -253,6 +252,10 @@ const HANDLERS: Partial<Record<CommandHeader, Handler>> = {
     s.route.points.splice(row - 1, 1);
     return ['route.points'];
   },
+  'GPS:ROUT:SAVe': (s, v) => {
+    s.route.saveAs = need(txt(v[0]));
+    return ['route.saveAs'];
+  },
   'GPS:ROUT:LOOP': (s, v) => {
     s.route.loop = need(txt(v[0])) as typeof s.route.loop;
     return ['route.loop'];
@@ -328,7 +331,6 @@ const IGNORED = new Set<CommandHeader>([
   '*OPC',
   'GPS:FILe:SET:SAVe',
   'GPS:FILe:ROUT:SAVe',
-  'GPS:ROUT:SAVe',
   'GPS:ROUT:VALiDate',
   'GPS:FILe:SET:EXPort',
   'GPS:FILe:ROUT:EXPort',

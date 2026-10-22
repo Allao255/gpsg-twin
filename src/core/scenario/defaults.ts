@@ -1,7 +1,7 @@
 // Cenário padrão. Valores com `default` no modelo vêm de lá; os demais estão justificados ao lado.
 import { degToRad } from '../geo';
 import { info, type CommandHeader, type EnumValue, type ModelEnums } from '../model/load';
-import { D02_DEFAULT_DURATION_S, D04_FORCED_UNITS } from '../quirks';
+import { D02_DEFAULT_DURATION_S } from '../quirks';
 import { SCENARIO_VERSION, type Scenario } from './types';
 
 function modelDefault<
@@ -18,7 +18,9 @@ export function defaultScenario(): Scenario {
     name: 'cenario',
     description: '',
     setup: {
-      units: D04_FORCED_UNITS,
+      // Unidades de exibição como na figura e nos procedimentos do manual (OP 3-5, 4.1.2). Os
+      // scripts gerados usam SI de qualquer forma (D04).
+      units: 'IMPERIAL',
       gnss: modelDefault('GPS:SET:GNSS', 'gnss', 'GPS'),
       // Exemplo S00 de 02-interface-remota.md.
       carrier: { command: 'GPS:SET:CARRier', token: 'L1/E1' },
@@ -47,7 +49,7 @@ export function defaultScenario(): Scenario {
     channels: { gnss: null, sbas: null, dualGps: null, dualGal: null, dualSbas: null },
     // Kansas City Intl, exemplo do manual (RP 9-1), altitude do exemplo S00.
     position: { lat_rad: degToRad(39.2976), lon_rad: degToRad(-94.7139), alt_m: 300 },
-    route: { points: [], loop: 'OFF' },
+    route: { points: [], loop: 'OFF', saveAs: null },
     userWaypoints: [],
     // Almanaque padrão do equipamento: cenário fixado (semana 574).
     files: {
@@ -60,6 +62,7 @@ export function defaultScenario(): Scenario {
     },
     run: { stopAt_s: null },
     actions: [],
+    display: { latLonFormat: 'DDMMSS.SS' },
   };
 }
 
