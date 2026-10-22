@@ -16,6 +16,7 @@ Projeto independente, sem vínculo com a VIAVI Solutions. GPSG-1000 é marca do 
 model/commands.json      modelo de comandos do manual de programação remota
 model/commands.schema.json  schema do modelo (validação e tipos gerados)
 src/core/                core TypeScript: parser SCPI, validação, script .scpi, cenário, quirks
+src/replica/             lógica da réplica da interface: campos, travas, sessão, rota, waypoints
 src/docs/                referência de comandos gerada do modelo
 src/ui/                  site (abas Equipamento, Análise, Ajuda)
 src/mock/                mock TCP do instrumento (npm run mock)
@@ -54,4 +55,4 @@ npm run test:integration  # runners Python e PowerShell contra o mock
 
 ## Estado
 
-M0, M1 e M2 concluídos: base do projeto, core (modelo, parser, validação, emissor, cenário), referência de comandos gerada, mock do instrumento em Node, testes de integração dos runners e runner PowerShell colável gerado pelo site. Próximo marco: M3 (réplica da interface). Nenhum comando verificado em hardware. Plano em `docs/05-roteiro.md`.
+M0 a M3 concluídos: base do projeto, core (modelo, parser, validação, emissor, cenário), referência de comandos gerada, mock do instrumento em Node, testes de integração dos runners, runner PowerShell colável gerado pelo site e réplica da interface sincronizada com o editor de script. Próximo marco: M4 (pacote USB e caminho reverso). Nenhum comando verificado em hardware. Plano em `docs/05-roteiro.md`.

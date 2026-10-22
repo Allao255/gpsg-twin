@@ -105,6 +105,7 @@ main:has(.replica-app) {
 
 .gpsg .foot {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   padding: 6px 10px;
@@ -319,6 +320,26 @@ main:has(.replica-app) {
 .gpsg .led.on::before,
 .gpsg .led.run::before {
   background: #29d05a;
+}
+
+/* Largura de celular: barra lateral e rodapé mais estreitos, sem transbordar a moldura. */
+@media (max-width: 520px) {
+  .gpsg {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+
+  .gpsg .launch button {
+    padding: 8px 3px;
+    font-size: 12px;
+  }
+
+  .gpsg .foot .title {
+    font-size: 15px;
+  }
+
+  .gpsg .runbtn {
+    padding: 6px 16px;
+  }
 }
 
 .gpsg .rf-bar {

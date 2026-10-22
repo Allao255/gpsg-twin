@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { degToRad } from '../../src/core/geo';
+import { D04_FORCED_UNITS } from '../../src/core/quirks';
 import { defaultScenario } from '../../src/core/scenario/defaults';
 import { emitScenario } from '../../src/core/scenario/emit';
 import type { Scenario } from '../../src/core/scenario/types';
@@ -266,8 +267,10 @@ for (const { runner, enabled } of RUNNERS) {
         expect(summary(rows)).toEqual({ ERR: 0, WARN: 0, EXPECT_FAIL: 0, EXPECT_PASS: 2 });
         const st = mock.instrument.state;
         const lastRf = sc.actions.findLast((a) => a.type === 'rfLevel');
+        // setup.units do cenário é só exibição; o script deixa o equipamento em SI (D04).
         expect(st.setup).toEqual({
           ...sc.setup,
+          units: D04_FORCED_UNITS,
           rfLevel_dBm: lastRf?.type === 'rfLevel' ? lastRf.level_dBm : sc.setup.rfLevel_dBm,
         });
         expect(st.io).toEqual(sc.io);

@@ -125,20 +125,24 @@ GitHub Pages publica o site como público mesmo a partir de repositório privado
 
 ## Estado atual do repositório
 
-Marcos M0, M1 e M2 concluídos (2026-10-21). M3 não iniciado.
+Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 não iniciado.
 
 - `model/commands.json`: 233 comandos transcritos do manual remoto, com faixas, aliases, travas e referências de página. Nenhum verificado em hardware. `model/commands.schema.json` valida o modelo no início dos testes e gera os tipos TypeScript (`npm run gen`).
 - `src/core/`: core puro em TypeScript (M1).
   - `model/`: carga do modelo, árvore de cabeçalhos (nós irmãos com a mesma forma curta fundidos: `SET` e `SETup`).
   - `scpi/`: tokenizador, resolução de cabeçalho com sugestão, conversão tipada dos parâmetros para SI, validação (faixa, `range_by_port`, `range_by_units`, enum, número de parâmetros, trava em execução, `emit_allowed`, `TRUN` direto, destrutivos), emissão de comando.
   - `script/`: parser do formato `.scpi` (diretivas, variáveis, linha do tempo nominal), formatação `preserve` e `canonical`.
-  - `scenario/`: `Scenario` versionado (`scenario_version` 1), redutor `applyCommand`, emissor canônico, caminho reverso script para cenário, JSON.
+  - `scenario/`: `Scenario` versionado (`scenario_version` 2, com migração da 1), redutor `applyCommand`, emissor canônico, caminho reverso script para cenário, JSON, limites de movimento.
+  - `script/correct.ts`: correções de grafias conhecidas do manual (D05, D06, D25) e `TRUN` trocado por `@run`/`@stop`.
   - `quirks.ts`: tratamentos provisórios de `04-discrepancias.md`, por ID.
+- `src/replica/`: lógica pura da réplica (M3): catálogo de campos ligado ao modelo (travas, faixas, validação), unidades e formatos de exibição, sessão (RUN/STOP, instante Elapsed, ações por SV, rota, waypoints, arquivos), formulários de rota e waypoint. Aceite do M3 em `procedures.test.ts`.
 - `src/docs/`: referência de comandos gerada do modelo e de `04-discrepancias.md`.
 - `src/mock/`: instrumento simulado (`npm run mock`), TCP na porta 5025, usando o core (M2). Ver `02-interface-remota.md` seção 7.1.
 - `src/runner/`: gerador do runner PowerShell colável, usado pelo site e por `npm run pasteable`.
 - `test/integration/`: runners Python e PowerShell contra o mock com S01 e com scripts emitidos pelo twin (`npm run test:integration`).
-- `src/ui/`: shell com as abas Equipamento (verificador de script e gerador do runner colável, provisórios até o M3), Análise (vazia até o M5) e Ajuda (referência de comandos com busca e filtros).
+- `src/ui/`: shell com as abas Equipamento, Análise (vazia até o M5) e Ajuda (referência de comandos com busca e filtros).
+  - `replica/`: réplica das janelas do capítulo 3 do manual de operação, teclado e seletores, editor de script CodeMirror 6 sincronizado com a réplica, linha do tempo das ações em execução, cenário salvo no navegador.
+  - `pasteable-view.ts`: gerador do runner colável, abaixo do editor.
 - Builds: `dist/site/` (Pages) e `dist/gpsg-twin.html` (autocontido, abre por `file://`). CI em `.github/workflows/ci.yml`.
 - `docs/`: esta documentação. `docs/guia/`: guia de uso.
 - `runners/`: runner PowerShell e runner Python do formato `.scpi`.

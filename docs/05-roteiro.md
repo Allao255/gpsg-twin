@@ -60,6 +60,20 @@ Decisões tomadas na implementação (2026-10-21):
 
 Aceite: os procedimentos 4.1.2, 4.1.3 e 4.1.4 do manual de operação podem ser executados na réplica e geram scripts equivalentes aos do capítulo 14 do manual remoto, com as correções de `quirks.ts`; carregar esses scripts de volta reproduz as mesmas telas.
 
+Decisões tomadas na implementação (2026-10-22):
+
+- Aceite em `src/replica/procedures.test.ts`. Os exemplos do capítulo 14 não definem o modo de unidades e são lidos em IMPERIAL; em SI os valores de 14.3 ficariam fora de faixa (D04). No 4.1.2, Clock Internal não tem comando remoto (D12) e é substituído por User setting, como em 14.1. No 4.1.4, a gravação de trajetória pelo GPS RX não tem comando de parada documentado (D15) e fica fora do script.
+- Cenário v2: `route.saveAs` (gravação da rota com `ROUT:SAV`) e `display.latLonFormat`. Unidades e formato de exibição vão no metadado `# twin-display:` do script; o script é sempre SI (D04). Exibição padrão IMPERIAL, como nas figuras do manual. Migração v1 para v2 na leitura do JSON.
+- Sincronização: alterar a réplica regenera o script canônico do cenário; editar o script recarrega a réplica. Linhas que o cenário não representa (segunda execução, comandos fora do cenário, linhas com erro) são listadas e só se perdem após confirmação.
+- Em execução, só RF Level e edições de SV entram na linha do tempo (`@at`); os demais campos travam. O instante é o campo Elapsed, ajustado à mão; não há relógio real. STOP encerra no maior entre o instante e a última ação.
+- Opções só da UI aparecem desabilitadas com a referência: Clock Internal (D12), PRN Signal Traj File (D13), portadora L1 no P(y) (D11). Botões sem comando remoto ou destrutivos (Export, Clear, Manage de almanaque) também.
+- Validação dos campos pelas faixas do manual remoto, não pelas da UI (D26). Limites de fábrica dos modelos de movimento do settings XML (D27). Country da tela de waypoint é o parâmetro remoto `state` (D28).
+- O banco de waypoints do equipamento não está no twin: Route Add aceita código do banco (`ROUT:ADD:WAYP`) ou ponto livre (`ROUT:ADD:POIN`). Waypoints de usuário com código único.
+- Arquivos criados no equipamento recebem o prefixo `twin_` (`ROUT:SAV`).
+- SV PRN sem geometria: PRNs informados pelo operador ou importados de uma resposta `SVPR:LIST?` de log (SV, elevação e azimute; D03). A camada calculada fica no M6.
+- O verificador provisório do M1 foi substituído pelo editor CodeMirror 6 com diagnósticos na linha e no campo. O cenário corrente fica salvo no `localStorage` do navegador; arquivos versionáveis são o `.scpi` e o `.json` baixados.
+- Pendentes da seção "Documentação de uso": publicar `docs/guia/` na aba Ajuda e a referência rápida do GPSG-1000. A aba Ajuda tem só a referência de comandos.
+
 ## M4. Pacote USB e caminho reverso
 
 - Exportação em `.zip` da árvore `/Instrument/...` com settings XML, `.rte`, `.gdt` ou `.nme`, `.csv` de waypoints e almanaque fornecido pelo usuário, mais `session.scpi`, runner colável e folha de sessão.

@@ -268,10 +268,12 @@ export function routeInsert(s: ReplicaSession, p: RoutePoint, index?: number): R
   if (lock) return fail(lock);
   const err = checkPoint(p, s);
   if (err) return fail(err);
-  if (s.scenario.route.points.length >= 9999) return fail('rota com 9999 pontos (D08)');
+  const n = s.scenario.route.points.length;
+  if (n >= 9999) return fail('rota com 9999 pontos (D08)');
+  const i = index ?? n;
+  if (!Number.isInteger(i) || i < 0 || i > n) return fail('posição de inserção fora da lista');
   return ok(
     withScenario(s, (sc) => {
-      const i = index ?? sc.route.points.length;
       sc.route.points.splice(i, 0, p);
     }),
   );
@@ -366,6 +368,8 @@ export function waypointUpsert(s: ReplicaSession, w: UserWaypoint, previousCode?
   const lock = configOnly(s);
   if (lock) return fail(lock);
   if (w.code.trim() === '') return fail('código vazio');
+  if (w.code !== previousCode && s.scenario.userWaypoints.some((x) => x.code === w.code))
+    return fail(`waypoint ${w.code} já existe`);
   const line = formatCommand('GPS:WAYP:NEW', [
     w.code,
     w.icao,

@@ -50,6 +50,7 @@ export function parseLatLon(text: string, axis: Axis): { rad: number } | { error
   if (letters.length > 1) return { error: 'mais de um hemisfério' };
   const nums = t.match(/[+-]?\d+(?:\.\d+)?/g) ?? [];
   if (nums.length === 0 || nums.length > 3) return { error: 'formato não reconhecido' };
+  if (nums.slice(1).some((n) => /^[+-]/.test(n))) return { error: 'sinal só nos graus' };
   const values = nums.map(Number);
   const first = values[0] ?? 0;
   const negSign = first < 0 || (nums[0] ?? '').startsWith('-');
