@@ -1,11 +1,63 @@
-// Editor de script (CodeMirror 6) com destaque do formato .scpi e diagnósticos do core na linha.
+// Editor de script (CodeMirror 6) com destaque do formato .scpi, diagnósticos do core na linha,
+// sugestões (Ctrl+Espaço ou ao digitar) e dica ao passar o mouse, tiradas do modelo de comandos.
+import {
+  autocompletion,
+  completionKeymap,
+  type CompletionContext,
+  type CompletionResult,
+} from '@codemirror/autocomplete';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { HighlightStyle, StreamLanguage, syntaxHighlighting } from '@codemirror/language';
 import { lintGutter, setDiagnostics, type Diagnostic as CmDiagnostic } from '@codemirror/lint';
 import { EditorState } from '@codemirror/state';
-import { EditorView, highlightActiveLine, keymap, lineNumbers } from '@codemirror/view';
+import {
+  EditorView,
+  highlightActiveLine,
+  hoverTooltip,
+  keymap,
+  lineNumbers,
+} from '@codemirror/view';
 import { tags } from '@lezer/highlight';
 import type { Diagnostic } from '../../core/diagnostics';
+import { completeAt, hoverAt } from '../../replica/assist';
+
+function docNode(text: string): HTMLElement {
+  const el = document.createElement('div');
+  el.className = 'cm-doc';
+  el.textContent = text;
+  return el;
+}
+
+function complete(ctx: CompletionContext): CompletionResult | null {
+  const line = ctx.state.doc.lineAt(ctx.pos);
+  const word = ctx.matchBefore(/[^\s,]*/);
+  // Sem texto digitado, só por pedido explícito (Ctrl+Espaço) ou logo após espaço ou vírgula.
+  if (
+    !ctx.explicit &&
+    word?.from === word?.to &&
+    !/[\s,]$/.test(line.text.slice(0, ctx.pos - line.from))
+  )
+    return null;
+  const r = completeAt(line.text, ctx.pos - line.from);
+  if (!r) return null;
+  return {
+    from: line.from + r.from,
+    options: r.options.map((o) => ({
+      label: o.label,
+      detail: o.detail,
+      type: o.type,
+      info: o.info === '' ? undefined : () => docNode(o.info),
+    })),
+    validFor: /^[^\s,]*$/,
+  };
+}
+
+const hover = hoverTooltip((view, pos) => {
+  const line = view.state.doc.lineAt(pos);
+  const text = hoverAt(line.text, pos - line.from);
+  if (text === null) return null;
+  return { pos, above: true, create: () => ({ dom: docNode(text) }) };
+});
 
 /** Modo de destaque: comentários, diretivas, cabeçalho, strings, números, variáveis. */
 const scpi = StreamLanguage.define<{ header: boolean }>({
@@ -60,6 +112,18 @@ const theme = EditorView.theme({
   '.cm-activeLine': { backgroundColor: 'var(--ed-active)' },
   '.cm-activeLineGutter': { backgroundColor: 'var(--ed-active)' },
   '&.cm-focused': { outline: '1px solid var(--accent)' },
+  '.cm-doc': {
+    whiteSpace: 'pre-wrap',
+    fontFamily: "ui-monospace, 'Cascadia Mono', Consolas, monospace",
+    fontSize: '12px',
+    padding: '4px 6px',
+    maxWidth: '520px',
+  },
+  '.cm-tooltip': {
+    backgroundColor: 'var(--surface)',
+    color: 'var(--text)',
+    border: '1px solid var(--border)',
+  },
 });
 
 export interface ScriptEditor {
@@ -86,7 +150,9 @@ export function createEditor(
         history(),
         highlightActiveLine(),
         lintGutter(),
-        keymap.of([...defaultKeymap, ...historyKeymap]),
+        keymap.of([...completionKeymap, ...defaultKeymap, ...historyKeymap]),
+        autocompletion({ override: [complete], activateOnTyping: true }),
+        hover,
         scpi,
         syntaxHighlighting(highlight),
         theme,

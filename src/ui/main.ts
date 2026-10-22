@@ -1,11 +1,12 @@
-// Shell da aplicação: abas Equipamento, Análise e Ajuda.
+// Shell da aplicação: abas Equipamento, Análise e Ajuda (guia de uso e referência de comandos).
 import './styles.css';
 import { h } from './dom';
-import { referenceView } from './reference-view';
+import { helpView } from './help-view';
 import { createReplicaApp } from './replica/app';
 
-// A réplica é criada uma vez e reaproveitada ao trocar de aba (mantém o estado e o editor).
+// Réplica e ajuda são criadas uma vez e reaproveitadas ao trocar de aba (mantêm estado e posição).
 let replica: HTMLElement | null = null;
+let help: HTMLElement | null = null;
 
 type TabId = 'equipamento' | 'analise' | 'ajuda';
 
@@ -32,7 +33,14 @@ const TABS: { id: TabId; label: string; render: () => HTMLElement }[] = [
         ),
       ),
   },
-  { id: 'ajuda', label: 'Ajuda', render: () => referenceView() },
+  {
+    id: 'ajuda',
+    label: 'Ajuda',
+    render: () => {
+      help ??= helpView();
+      return help;
+    },
+  },
 ];
 
 function initialTab(): TabId {

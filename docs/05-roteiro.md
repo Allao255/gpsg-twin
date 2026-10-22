@@ -72,7 +72,7 @@ Decisões tomadas na implementação (2026-10-22):
 - Arquivos criados no equipamento recebem o prefixo `twin_` (`ROUT:SAV`).
 - SV PRN sem geometria: PRNs informados pelo operador ou importados de uma resposta `SVPR:LIST?` de log (SV, elevação e azimute; D03). A camada calculada fica no M6.
 - O verificador provisório do M1 foi substituído pelo editor CodeMirror 6 com diagnósticos na linha e no campo. O cenário corrente fica salvo no `localStorage` do navegador; arquivos versionáveis são o `.scpi` e o `.json` baixados.
-- Pendentes da seção "Documentação de uso": publicar `docs/guia/` na aba Ajuda e a referência rápida do GPSG-1000. A aba Ajuda tem só a referência de comandos.
+- Pendentes da seção "Documentação de uso" resolvidos depois do M4 (2026-10-22): `docs/guia/` publicado na aba Ajuda (Markdown convertido no build, sem dependência), referência rápida em `docs/guia/07-referencia-rapida.md`, sugestões e dica ao passar o mouse no editor tiradas do modelo.
 
 ## M4. Pacote USB e caminho reverso
 

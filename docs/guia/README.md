@@ -1,6 +1,6 @@
 # Guia de uso
 
-Uma página por tarefa, para quem opera o twin e o equipamento. A referência de comandos é gerada do modelo e fica na aba Ajuda do site; não é editada à mão.
+Uma página por tarefa, para quem opera o twin e o equipamento. Publicado na aba Ajuda do site e do HTML único, ao lado da referência de comandos, que é gerada do modelo e não é editada à mão. No editor de script, as sugestões (ao digitar ou com Ctrl+Espaço) e a dica ao passar o mouse sobre um comando vêm do mesmo modelo.
 
 | Página | Tarefa | Desde |
 |---|---|---|
@@ -10,5 +10,6 @@ Uma página por tarefa, para quem opera o twin e o equipamento. A referência de
 | [04-montar-cenario.md](04-montar-cenario.md) | Montar um cenário na réplica, com rota, waypoints, arquivos e linha do tempo | M3 |
 | [05-pacote-usb.md](05-pacote-usb.md) | Anexar almanaque e trajetória, exportar o pacote USB, abrir pacotes, arquivos do equipamento e logs | M4 |
 | [06-folha-de-bancada.md](06-folha-de-bancada.md) | Folha de uma página para a bancada: conexões, ordem, regras, recuperação | M4 |
+| [07-referencia-rapida.md](07-referencia-rapida.md) | Níveis, perdas, manipulações por SV, limites de movimento, conector Aux, arquivos | M4 |
 
 Páginas previstas (`docs/05-roteiro.md`, seção "Documentação de uso"): conferir na aba Análise (M5), executar na bancada com o runner, ler o log (relatório, M7).

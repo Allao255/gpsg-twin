@@ -66,7 +66,7 @@ function rangeText(inf: CommandInfo, p: Param): string {
   return '';
 }
 
-function paramOf(inf: CommandInfo, p: Param): ReferenceParam {
+export function paramOf(inf: CommandInfo, p: Param): ReferenceParam {
   const unit = p.unit ?? (p.unit_suffix ? 'conforme modo de unidades' : '');
   const notes = [p.notes ?? '', p.step !== undefined ? `passo ${p.step}` : '', p.default !== undefined ? `padrão ${p.default}` : '']
     .filter((x) => x !== '')
