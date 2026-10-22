@@ -1,0 +1,304 @@
+# S01: sonda da interface remota do GPSG-1000
+# Objetivo: capturar a lista oficial de comandos do firmware, o estado do usuário anterior,
+# resolver as discrepâncias D01 a D23 do manual e coletar golden files.
+# Tempo estimado: 25 a 35 min. Partes A, B, C, D e G sem RF. Parte E com RF em carga ou receptor de referência.
+# Execução: runners/gpsg-run.ps1 -Address <ip> -Script sessions/S01-sonda.scpi
+# Todo arquivo criado no equipamento tem prefixo twin_. A parte F restaura o estado anterior.
+
+@errcheck on
+@mark S01 inicio
+
+# ---------------- A: identificação e estado do usuário anterior ----------------
+@mark A1 identificacao
+*IDN?
+:SYST:ERR?
+GPS:STAT?
+GPS:SIM:TRUN?
+@pause Se TRUN? retornou Running, a simulacao de outro usuario esta ativa. Interrompa o script (Ctrl+C) e combine antes de parar.
+
+@mark A2 backup
+GPS:FIL:SET:FNAM?
+GPS:FIL:ROUT:FNAM?
+GPS:FIL:ALM:FNAM?
+GPS:FIL:NMEA:FNAM?
+GPS:FIL:SET:SAV "twin_bkp_s01"
+GPS:FIL:ROUT:SAV "twin_bkp_s01.rte"
+
+@mark A3 lista oficial de comandos (resolve a maior parte das discrepancias)
+GPS:? ALL
+GPS:SET:CHAN:AVAL?
+
+@mark A4 snapshot de parametros
+GPS:SET:UNIT?
+GPS:SET:GNSS?
+GPS:SET:CARR?
+GPS:SET:STYP?
+GPS:SET:SBAS?
+GPS:SET:DNOS?
+GPS:SET:FAD?
+GPS:SET:PRNS?
+GPS:SET:PSRC?
+GPS:SET:CLOC?
+GPS:SET:DAT?
+GPS:SET:TIM?
+GPS:SET:RFPR?
+GPS:SET:RFLV?
+GPS:SET:CRMM?
+GPS:SET:MLAT?
+GPS:SET:MLON?
+GPS:SET:MVEL?
+GPS:SET:CLOS?
+GPS:SET:CCAB?
+GPS:SET:DCAB?
+GPS:SET:SLOS?
+GPS:SET:EREF?
+GPS:SET:RSRC?
+GPS:SET:TSRC?
+GPS:SET:CHAN:GNSS?
+GPS:SET:CHAN:SBAS?
+GPS:SET:CHAN:DUAL:GPS?
+GPS:SET:CHAN:DUAL:GAL?
+GPS:SET:CHAN:DUAL:SBAS?
+GPS:SIM:LAT?
+GPS:SIM:LONG?
+GPS:SIM:ALT?
+GPS:FIL:ALM:FLST?
+GPS:FIL:ROUT:FLST?
+GPS:FIL:SET:FLST?
+GPS:FIL:NMEA:FLST?
+GPS:FIL:KML:FLST?
+GPS:ROUT:LIST?
+GPS:WAYP:LIST?
+GPS:GPSR:FIX?
+GPS:GPSR:AST?
+GPS:GPSR:CTIM?
+
+# ---------------- B: sintaxe ----------------
+@mark B1 D05 grafias da porta de RF
+GPS:SET:RFPR?
+GPS:SET:RFPORT?
+GPS:SETUP:RFPORT?
+GPS:SET:PORT?
+
+@mark B2 D06 STYP e STYPE, PSRC com e sem aspas
+GPS:SET:STYP?
+GPS:SET:STYPE?
+GPS:SET:PSRC USER
+GPS:SET:PSRC "USER"
+
+@mark B3 D04 unidades em SI e sintaxe do sufixo
+GPS:SET:UNIT SI
+GPS:SET:UNIT?
+GPS:SIM:ALT 300
+GPS:SIM:ALT?
+GPS:SIM:ALT? FT
+GPS:SIM:ALT? M
+GPS:SIM:ALT 1000 FT
+GPS:SIM:ALT?
+GPS:SIM:ALT 1000FT
+GPS:SIM:ALT?
+GPS:SET:MVEL?
+GPS:SET:MLAT?
+
+@mark B4 D04 unidades em IMPERIAL
+GPS:SET:UNIT IMPERIAL
+GPS:SIM:ALT?
+GPS:SET:MVEL?
+GPS:SET:MLAT?
+GPS:SET:UNIT SI
+
+@mark B5 D07 formatos de latitude e longitude
+GPS:SIM:LAT -12.5
+GPS:SIM:LAT?
+GPS:SIM:LAT 12,30.0000,S
+GPS:SIM:LAT?
+GPS:SIM:LONG -45.25
+GPS:SIM:LONG?
+GPS:SIM:LONG 045,15.0000,W
+GPS:SIM:LONG?
+
+@mark B6 D20 cabecalho SIMU
+GPS:SIMU:SPD?
+GPS:SIM:SPD?
+
+@mark B7 D09 CHAN SINGLE nao documentado
+GPS:SET:CHAN:SINGLE?
+
+@mark B8 D12 D13 opcoes so de UI
+GPS:SET:CLOC INTERNAL
+GPS:SET:CLOC?
+GPS:SET:PRNS TRAJ
+GPS:SET:PRNS?
+GPS:SET:PRNS FIXED
+
+# ---------------- C: rota ----------------
+@mark C1 D04 D08 rota de 3 pontos (exemplo do manual), unidades de entrada e de retorno
+GPS:SET:CRMM UNLIMITED
+GPS:ROUT:CLR
+GPS:ROUT:ADD:POIN "twin_p1",39.2976,-94.7139,312,500,500,100,25
+GPS:ROUT:ADD:POIN "twin_p2",38.4081,-96.0000,1869,500,500,100,25
+GPS:ROUT:ADD:POIN "twin_p3",37.6499,-97.4331,406,500,500,100,25
+GPS:ROUT:LIST?
+GPS:ROUT:DISP? 1
+GPS:ROUT:VALD
+GPS:STAT?
+GPS:ROUT:EDIT 3,"twin_p3",37.6499,-97.4331,406,500,400,100,25
+GPS:ROUT:DISP? 3
+GPS:ROUT:LOOP OFF
+GPS:ROUT:SAV "twin_probe.rte"
+GPS:ROUT:FIL?
+
+# ---------------- D: tokens do settings XML ----------------
+@mark D1 combinacao 1
+GPS:SET:GNSS GALILEO
+GPS:SET:CRGA E5
+GPS:SET:SBAS OFF
+GPS:SET:STYP DYNAMIC
+GPS:SET:DNOS ON
+GPS:SET:FAD AIRCRAFT
+GPS:SET:PRNS VARIABLE
+GPS:SET:PSRC GPS
+GPS:SET:CLOC GPSRX
+GPS:SET:UNIT AERO/SI
+GPS:SET:RFPR DIRECT
+GPS:SET:CRMM HIGH_PERFORMANCE_AIRCRAFT
+GPS:SET:EREF ON
+GPS:SET:TSRC EXTERNAL
+GPS:FIL:SET:SAV "twin_tok_1"
+@mark D2 combinacao 2
+GPS:SET:GNSS GAL+GPS
+GPS:SET:CRGG L5/E5
+GPS:SET:STYP TRAJECTORY
+GPS:SET:FAD PEDESTRIAN
+GPS:SET:UNIT AERO/IMPERIAL
+GPS:SET:CRMM MARINE
+GPS:SET:EREF OFF
+GPS:SET:TSRC AUTO
+GPS:FIL:SET:SAV "twin_tok_2"
+@mark D3 combinacao 3
+GPS:SET:GNSS GPS
+GPS:SET:CARR L2C
+GPS:SET:STYP STATIC
+GPS:SET:FAD VEHICLE
+GPS:SET:PSRC USER
+GPS:SET:CLOC USER
+GPS:SET:UNIT IMPERIAL
+GPS:SET:CRMM AUTOMOTIVE
+GPS:SET:PRNS FIXED
+GPS:SET:RFPR COUPLER
+GPS:FIL:SET:SAV "twin_tok_3"
+GPS:SET:UNIT SI
+
+# ---------------- E: execução com RF ----------------
+@mark E0 preparacao de RF
+@pause Porta DIRECT em carga de 50 ohm, atenuador para o receptor de referencia, ou DUT em bancada. Nada irradiando. Enter para continuar.
+GPS:SET:GNSS GPS
+GPS:SET:CARR L1/E1
+GPS:SET:SBAS OFF
+GPS:SET:STYP STATIC
+GPS:SET:RFPR DIRECT
+GPS:SET:DNOS ON
+GPS:SET:FAD NONE
+GPS:SET:PRNS FIXED
+GPS:SET:PSRC USER
+GPS:SET:CLOC USER
+GPS:SET:DAT "04/14/2013"
+GPS:SET:TIM "11:11:11"
+GPS:SET:TSRC AUTO
+GPS:FIL:ALM:DEF
+GPS:SIM:LAT 37.6499
+GPS:SIM:LONG -97.4331
+GPS:SIM:ALT 400
+GPS:SET:RFLV -130
+@run
+@wait 10
+GPS:SIM:TRUN?
+GPS:SIM:GPS:PRN?
+GPS:SIM:GPS:VSVS?
+@mark E1 D03 formato de LIST
+GPS:SVPR:GPS:LIST?
+@input PRN Digite um PRN que aparece em GPS:SIM:GPS:PRN?
+GPS:SVPR:GPS:SAT? ${PRN}
+
+@mark E2 D02 sete parametros
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,0
+GPS:SVPR:GPS:SAT? ${PRN}
+@mark E3 D02 oito parametros
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,0,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+
+@mark E4 D01 limites do step error
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,100,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,1000,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,1000.5,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,10000,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+
+@mark E5 D18 reenvio do mesmo valor (com receptor de referencia, observar se o degrau dobra)
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,100,3600
+@wait 5
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,100,3600
+@wait 5
+GPS:SVPR:GPS:SAT? ${PRN}
+
+@mark E6 D02 Doppler, coerencia, offset de amplitude, duracao curta
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,50,0,0,0,10
+GPS:SVPR:GPS:SAT? ${PRN}
+@wait 12
+GPS:SVPR:GPS:SAT? ${PRN}
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0.5,0,0,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,-6,0,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+GPS:SVPR:GPS:SAT ${PRN},ON,BAD,0,0,0,0,3600
+GPS:SVPR:GPS:SAT? ${PRN}
+GPS:SVPR:GPS:SAT ${PRN},ON,GOOD,0,0,0,0,3600
+
+@mark E7 D17 RF level durante execucao e parametro travado
+GPS:SET:RFLV -125
+GPS:SET:RFLV?
+GPS:SET:RFLV -130
+GPS:SET:CARR L2
+GPS:SET:CARR?
+
+@mark E8 verdade de referencia a 1 Hz
+@poll 1 30 GPS:SIM:TIM? GPS:SIM:ETIM? GPS:SIM:LAT? GPS:SIM:LONG? GPS:SIM:ALT?
+GPS:SVPR:GPS:LIST?
+@stop
+
+@mark E9 dinamico curto com a rota twin_probe (log de referencia do modo dinamico)
+GPS:SET:STYP DYNAMIC
+GPS:ROUT:LOAD "twin_probe.rte"
+GPS:ROUT:FIL?
+@run
+@poll 1 120 GPS:SIM:TIM? GPS:SIM:LAT? GPS:SIM:LONG? GPS:SIM:ALT? GPS:SIM:SPD? GPS:SIM:HEAD? GPS:SIM:ARAT? GPS:SIM:FROM? GPS:SIM:TO? GPS:SIM:DTG?
+@stop
+
+# ---------------- G: golden files ----------------
+@mark G1 exportacao
+@pause Insira pendrive FAT32 dedicado. Exporta todos os arquivos de cada tipo, inclusive de outros usuarios: nao publicar.
+GPS:FIL:SET:EXP
+GPS:FIL:ROUT:EXP
+GPS:FIL:ALM:EXP
+GPS:FIL:NMEA:EXP
+GPS:FIL:WAYP:EXP
+GPS:STAT?
+
+# ---------------- F: restauração ----------------
+@mark F1 restauracao
+GPS:FIL:SET:LOAD "twin_bkp_s01"
+GPS:ROUT:LOAD "twin_bkp_s01.rte"
+GPS:FIL:SET:FNAM?
+GPS:ROUT:FIL?
+GPS:STAT?
+@mark F2 limpeza dos arquivos de sonda (apenas twin_tok e twin_probe; backups ficam ate confirmar)
+GPS:FIL:SET:REM "twin_tok_1"
+GPS:FIL:SET:REM "twin_tok_2"
+GPS:FIL:SET:REM "twin_tok_3"
+GPS:FIL:ROUT:REM "twin_probe.rte"
+GPS:FIL:SET:FLST?
+GPS:FIL:ROUT:FLST?
+@mark S01 fim

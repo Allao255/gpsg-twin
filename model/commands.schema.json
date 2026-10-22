@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gpsg-twin/model/commands.schema.json",
+  "title": "CommandModel",
+  "description": "Modelo de comandos SCPI do GPSG-1000. Fonte única de comandos, parâmetros, faixas, aliases e travas.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema_version", "source", "transport", "conventions", "commands"],
+  "properties": {
+    "$schema_version": { "type": "integer", "const": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "transport": {
+      "type": "object",
+      "additionalProperties": { "type": ["string", "number", "boolean"] }
+    },
+    "conventions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "commands": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Command" }
+    }
+  },
+  "definitions": {
+    "Command": {
+      "title": "Command",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "header",
+        "kind",
+        "aliases",
+        "params",
+        "query_params",
+        "returns",
+        "example",
+        "locked_while_running",
+        "category",
+        "manual_page",
+        "notes",
+        "discrepancies",
+        "emit_allowed",
+        "verified_on_hw"
+      ],
+      "properties": {
+        "header": { "type": "string", "pattern": "^(\\*[A-Z]+\\??|:?[A-Za-z0-9]+(:([A-Za-z0-9]+|\\?))*\\??)$" },
+        "kind": { "$ref": "#/definitions/CommandKind" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "params": { "type": "array", "items": { "$ref": "#/definitions/Param" } },
+        "query_params": { "type": "array", "items": { "$ref": "#/definitions/Param" } },
+        "returns": { "oneOf": [{ "type": "null" }, { "$ref": "#/definitions/Returns" }] },
+        "example": { "type": ["string", "null"] },
+        "locked_while_running": { "type": ["boolean", "null"] },
+        "category": { "$ref": "#/definitions/Category" },
+        "manual_page": { "type": "string", "pattern": "^[0-9A-Z]+-[0-9]+$" },
+        "notes": { "type": ["string", "null"] },
+        "discrepancies": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^D[0-9]{2}$" }
+        },
+        "emit_allowed": { "type": "boolean" },
+        "verified_on_hw": { "type": "boolean" }
+      }
+    },
+    "CommandKind": {
+      "title": "CommandKind",
+      "type": "string",
+      "enum": ["set", "query", "action"]
+    },
+    "Category": {
+      "title": "Category",
+      "type": "string",
+      "enum": [
+        "calibration",
+        "channels",
+        "common",
+        "diagnostics",
+        "file",
+        "general",
+        "gpsrx",
+        "help",
+        "route",
+        "setup",
+        "simulation",
+        "svprn",
+        "waypoint"
+      ]
+    },
+    "ParamType": {
+      "title": "ParamType",
+      "type": "string",
+      "enum": ["int", "real", "string", "enum", "lat", "lon", "unit"]
+    },
+    "Range": {
+      "title": "Range",
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "Param": {
+      "title": "Param",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "$ref": "#/definitions/ParamType" },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "step": { "type": "number", "exclusiveMinimum": 0 },
+        "unit": { "type": "string" },
+        "unit_suffix": { "type": "boolean" },
+        "maxlen": { "type": "integer", "minimum": 1 },
+        "values": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "default": { "type": ["string", "number"] },
+        "notes": { "type": "string" },
+        "range_by_port": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["DIRECT", "COUPLER"],
+          "properties": {
+            "DIRECT": { "$ref": "#/definitions/Range" },
+            "COUPLER": { "$ref": "#/definitions/Range" }
+          }
+        },
+        "range_by_units": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/Range" }
+        },
+        "format": { "type": "string" },
+        "optional": { "type": "boolean" }
+      }
+    },
+    "Returns": {
+      "title": "Returns",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["string", "real", "int", "enum", "csv", "csv_multiline"] },
+        "values": { "type": "array", "items": { "type": ["string", "integer"] } },
+        "example": { "type": "string" },
+        "format": { "type": "string" },
+        "format_header": { "type": "string" },
+        "example_row": { "type": "string" },
+        "unit": { "type": "string" },
+        "range": { "$ref": "#/definitions/Range" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

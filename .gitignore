@@ -1,0 +1,22 @@
+# referências e dados de bancada: nunca versionar
+refs/*
+!refs/README.md
+logs/
+scenarios/private/
+golden/private/
+*.csv
+!golden/**/*.csv
+
+# build
+node_modules/
+dist/
+.vite/
+
+# python
+__pycache__/
+*.pyc
+
+# sistema
+.DS_Store
+Thumbs.db
+coverage/

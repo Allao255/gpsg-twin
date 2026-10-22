@@ -1,0 +1,5758 @@
+{
+  "$schema_version": 1,
+  "source": {
+    "document": "GPSG-1000 Remote Programming Manual",
+    "part_number": "22165259 Rev. 501",
+    "date": "2022-07",
+    "companion": "GPSG-1000 Operation Manual 22165258 Rev. 502 (2023-12)"
+  },
+  "transport": {
+    "protocol": "raw TCP (telnet-compatible)",
+    "port": 5025,
+    "terminator": "\\n",
+    "case_sensitive": false,
+    "query_returns_short_form": true,
+    "default_units_at_session_start": "SI (per 1.8) or IMPERIAL (per 10.1.52); see D04"
+  },
+  "conventions": {
+    "short_form": "Uppercase letters of the header are the short form; only long or short form accepted.",
+    "kinds": {
+      "set": "takes parameters",
+      "query": "ends with ?",
+      "action": "no parameters, not queryable"
+    },
+    "locked_while_running": "True when the manual states the parameter cannot be changed while a simulation is in progress.",
+    "emit_allowed": "False for commands the twin must never generate (calibration, password, *RST).",
+    "verified_on_hw": "Set to True only after confirmation on the physical unit, with session id in notes."
+  },
+  "commands": [
+    {
+      "header": "*CLS",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-1",
+      "notes": "Clears status registers and error queue.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*ESE",
+      "kind": "set",
+      "aliases": [],
+      "params": [
+        {
+          "name": "mask",
+          "type": "int",
+          "min": 0,
+          "max": 255
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-1",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*ESE?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "range": [
+          0,
+          255
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*ESR?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "range": [
+          0,
+          255
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*IDN?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "format": "Manufacturer,Model,Serial(10),SwIssue(n.n.n),Placeholder",
+        "example": "Aeroflex,GPSG-1000,1000372866,2.0.0,0"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*OPC",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-3",
+      "notes": "No overlapped commands in the instrument; completes immediately.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*OPC?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "example": "1"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*OPT?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "1-4",
+      "notes": "Listed as not supported.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*RST",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-3",
+      "notes": "Resets to power-on default state. Destroys the current setup of a shared unit.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*SRE",
+      "kind": "set",
+      "aliases": [],
+      "params": [
+        {
+          "name": "mask",
+          "type": "int",
+          "min": 0,
+          "max": 255
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*SRE?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "range": [
+          0,
+          255
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*STB?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "range": [
+          0,
+          255
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*TST?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "1-4",
+      "notes": "Listed as not supported.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "*WAI",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "2-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": ":SYSTem:ERRor?",
+      "kind": "query",
+      "aliases": [
+        ":SYST:ERR?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "format": "<code>,\"<text>\"",
+        "example": "0,\"No error\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "common",
+      "manual_page": "1-4",
+      "notes": "Reading removes the entry from the error queue.",
+      "discrepancies": [
+        "D16"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [
+        {
+          "name": "section",
+          "type": "enum",
+          "values": [
+            "ALL",
+            "GEN",
+            "CAL",
+            "DIAG",
+            "FILE",
+            "GPSR",
+            "ROUTE",
+            "SET",
+            "SIM",
+            "SVPRN",
+            "WAYP"
+          ]
+        }
+      ],
+      "returns": {
+        "type": "string",
+        "notes": "List of RCI commands for the section."
+      },
+      "example": "GPS:? ALL",
+      "locked_while_running": null,
+      "category": "help",
+      "manual_page": "3-1",
+      "notes": "Authoritative list of commands accepted by the installed firmware. First thing to capture on hardware.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SYST:CPAS",
+      "kind": "set",
+      "aliases": [],
+      "params": [
+        {
+          "name": "oldpassword",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "newpassword",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "general",
+      "manual_page": "4-1",
+      "notes": "Changes system password. Never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:STAT?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"Jan 4 22:12:03 2015, System clock set to GPS time\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "general",
+      "manual_page": "4-1",
+      "notes": "Status bar contents. Used to read results of GPS:ROUT:VALD and GPS:SET:CHAN:APPL.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RFCV:VALue?",
+      "kind": "query",
+      "aliases": [
+        "VAL?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "range": [
+          -1,
+          4095
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-1",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RFCV:VALue",
+      "kind": "set",
+      "aliases": [
+        "VAL"
+      ],
+      "params": [
+        {
+          "name": "value",
+          "type": "int",
+          "min": 0,
+          "max": 4095
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-1",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RFCV:ABORt",
+      "kind": "action",
+      "aliases": [
+        "ABOR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-2",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RFCV:DONE",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-2",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RFCV:STARt",
+      "kind": "set",
+      "aliases": [
+        "STAR"
+      ],
+      "params": [
+        {
+          "name": "password",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-2",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:ABORt",
+      "kind": "action",
+      "aliases": [
+        "ABOR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-3",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:DONE?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"Mon Mar 19 21:18:21 2013\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-3",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:DONE",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-3",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:STARt",
+      "kind": "set",
+      "aliases": [
+        "STAR"
+      ],
+      "params": [
+        {
+          "name": "password",
+          "type": "string",
+          "maxlen": 12
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-3",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:VALue?",
+      "kind": "query",
+      "aliases": [
+        "VAL?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "dB"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-4",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:VALue",
+      "kind": "set",
+      "aliases": [
+        "VAL"
+      ],
+      "params": [
+        {
+          "name": "value",
+          "type": "real",
+          "unit": "dB"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-4",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:NEXT",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-4",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:PREV",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-4",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": false,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:CAL:RLCV:STATus?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"Ready\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "calibration",
+      "manual_page": "5-4",
+      "notes": "Calibration subsystem. Set/action commands are never generated by the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:AMPLitude",
+      "kind": "set",
+      "aliases": [
+        "AMPL"
+      ],
+      "params": [
+        {
+          "name": "amplitude",
+          "type": "real",
+          "unit": "dBm",
+          "step": 1,
+          "range_by_port": {
+            "DIRECT": [
+              -155,
+              -93
+            ],
+            "COUPLER": [
+              -130,
+              -68
+            ]
+          },
+          "default": 0
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:DIAG:AMPL -71",
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-1",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:AMPLitude?",
+      "kind": "query",
+      "aliases": [
+        "AMPL?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "dBm"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-1",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:DOPPler",
+      "kind": "set",
+      "aliases": [
+        "DOPP"
+      ],
+      "params": [
+        {
+          "name": "doppler",
+          "type": "real",
+          "unit": "Hz",
+          "min": -5000,
+          "max": 5000,
+          "step": 1,
+          "default": 0
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:DIAG:DOPP 11",
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-2",
+      "notes": "Single stationary satellite in diagnostics mode; Doppler is static.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:DOPPler?",
+      "kind": "query",
+      "aliases": [
+        "DOPP?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "Hz"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:ExtREF",
+      "kind": "set",
+      "aliases": [
+        "EREF"
+      ],
+      "params": [
+        {
+          "name": "state",
+          "type": "enum",
+          "values": [
+            "OFF",
+            "ON"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:ExtREF?",
+      "kind": "query",
+      "aliases": [
+        "EREF?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "OFF",
+          "ON"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:FREQuency",
+      "kind": "set",
+      "aliases": [
+        "FREQ"
+      ],
+      "params": [
+        {
+          "name": "freq",
+          "type": "enum",
+          "values": [
+            "1176",
+            "1207",
+            "1227",
+            "1278",
+            "1575"
+          ],
+          "unit": "MHz"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:DIAG:FREQ 1207",
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-3",
+      "notes": null,
+      "discrepancies": [
+        "D21"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:FREQuency?",
+      "kind": "query",
+      "aliases": [
+        "FREQ?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:LogAMP?",
+      "kind": "query",
+      "aliases": [
+        "LAMP?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"-46.8 dBm\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-4",
+      "notes": "Intermediate log-amp detector reading; not the output level.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:MODe",
+      "kind": "set",
+      "aliases": [
+        "MOD"
+      ],
+      "params": [
+        {
+          "name": "mode",
+          "type": "enum",
+          "values": [
+            "OFF",
+            "CW",
+            "MODULATED"
+          ],
+          "default": "OFF"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-4",
+      "notes": "CW or single modulated SV on the diagnostic frequency. Mutually exclusive with a running simulation (single carrier).",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:MODe?",
+      "kind": "query",
+      "aliases": [
+        "MODE?",
+        "MOD?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "OFF",
+          "CW",
+          "MODULATED"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:PLLLockstatus?",
+      "kind": "query",
+      "aliases": [
+        "PLLL?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "values": [
+          0,
+          1
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:PLLlock800status?",
+      "kind": "query",
+      "aliases": [
+        "PLL8?",
+        "PLL800?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "values": [
+          0,
+          1
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:PLLlockeXternalstatus?",
+      "kind": "query",
+      "aliases": [
+        "PLLX?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "values": [
+          0,
+          1
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:PLllockeXternalRefdetec?",
+      "kind": "query",
+      "aliases": [
+        "PLXR?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "values": [
+          0,
+          1
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:RSRC",
+      "kind": "set",
+      "aliases": [
+        "RSRC"
+      ],
+      "params": [
+        {
+          "name": "source",
+          "type": "enum",
+          "values": [
+            "INT",
+            "EXT"
+          ],
+          "default": "INT"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:DIAG:RSRC?",
+      "kind": "query",
+      "aliases": [
+        "RSRC?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "INT",
+          "EXT"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "diagnostics",
+      "manual_page": "6-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:CLeaRall",
+      "kind": "action",
+      "aliases": [
+        "CLEARALL",
+        "CLR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-1",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:FileLiST?",
+      "kind": "query",
+      "aliases": [
+        "FLST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-1",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:FileNAMe?",
+      "kind": "query",
+      "aliases": [
+        "FNAM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:LOAD",
+      "kind": "set",
+      "aliases": [
+        "LOAD"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "file",
+      "manual_page": "7-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:REMove",
+      "kind": "set",
+      "aliases": [
+        "REM"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-2",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:RELoad",
+      "kind": "action",
+      "aliases": [
+        "REL"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:DEFault",
+      "kind": "action",
+      "aliases": [
+        "DEF"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:IMPort",
+      "kind": "action",
+      "aliases": [
+        "IMP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ALM:EXPort",
+      "kind": "action",
+      "aliases": [
+        "EXP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:CLeaRall",
+      "kind": "action",
+      "aliases": [
+        "CLEARALL",
+        "CLR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-4",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:DEFaults",
+      "kind": "action",
+      "aliases": [
+        "DEF"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:FileLiST?",
+      "kind": "query",
+      "aliases": [
+        "FLST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:FileNAMe?",
+      "kind": "query",
+      "aliases": [
+        "FNAM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:LOAD",
+      "kind": "set",
+      "aliases": [
+        "LOAD"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:REMove",
+      "kind": "set",
+      "aliases": [
+        "REM"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-5",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:SAVe",
+      "kind": "set",
+      "aliases": [
+        "SAV"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:IMPort",
+      "kind": "action",
+      "aliases": [
+        "IMP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:ROUT:EXPort",
+      "kind": "action",
+      "aliases": [
+        "EXP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:CLeaRall",
+      "kind": "action",
+      "aliases": [
+        "CLEARALL",
+        "CLR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-7",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:DEFault",
+      "kind": "action",
+      "aliases": [
+        "DEF"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:FileLiST?",
+      "kind": "query",
+      "aliases": [
+        "FLST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:FileNAMe?",
+      "kind": "query",
+      "aliases": [
+        "FNAM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:LOAD",
+      "kind": "set",
+      "aliases": [
+        "LOAD"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-8",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:REMove",
+      "kind": "set",
+      "aliases": [
+        "REM"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-8",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:SAVe",
+      "kind": "set",
+      "aliases": [
+        "SAV"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-8",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:IMPort",
+      "kind": "action",
+      "aliases": [
+        "IMP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-8",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:SET:EXPort",
+      "kind": "action",
+      "aliases": [
+        "EXP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:CLeaRall",
+      "kind": "action",
+      "aliases": [
+        "CLEARALL",
+        "CLR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-10",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:FileLiST?",
+      "kind": "query",
+      "aliases": [
+        "FLST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-10",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:FileNAMe?",
+      "kind": "query",
+      "aliases": [
+        "FNAM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-10",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:LOAD",
+      "kind": "set",
+      "aliases": [
+        "LOAD"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "file",
+      "manual_page": "7-10",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:REMove",
+      "kind": "set",
+      "aliases": [
+        "REM"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-12",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:MaxVELocity",
+      "kind": "set",
+      "aliases": [
+        "MVEL"
+      ],
+      "params": [
+        {
+          "name": "velocity",
+          "type": "int",
+          "range_by_units": {
+            "mph": [
+              0,
+              1118
+            ],
+            "km/h": [
+              0,
+              1800
+            ]
+          }
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:MaxVELocity?",
+      "kind": "query",
+      "aliases": [
+        "MVEL?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:SamplingTIMe",
+      "kind": "set",
+      "aliases": [
+        "STIM"
+      ],
+      "params": [
+        {
+          "name": "rate",
+          "type": "enum",
+          "values": [
+            "1 Hz",
+            "2 Hz",
+            "4 Hz",
+            "5 Hz"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:FILE:KML:STIME 4 Hz",
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-11",
+      "notes": null,
+      "discrepancies": [
+        "D25"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:SamplingTIMe?",
+      "kind": "query",
+      "aliases": [
+        "STIM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:MinTurnRadius",
+      "kind": "set",
+      "aliases": [
+        "MTR"
+      ],
+      "params": [
+        {
+          "name": "radius",
+          "type": "int",
+          "range_by_units": {
+            "ft": [
+              0,
+              328081
+            ],
+            "m": [
+              0,
+              99999
+            ]
+          }
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-12",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:KML:MinTurnRadius?",
+      "kind": "query",
+      "aliases": [
+        "MTR?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-12",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:NMEA:CLeaRall",
+      "kind": "action",
+      "aliases": [
+        "CLEARALL",
+        "CLR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-13",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:NMEA:FileLiST?",
+      "kind": "query",
+      "aliases": [
+        "FLST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-13",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:NMEA:FileNAMe?",
+      "kind": "query",
+      "aliases": [
+        "FNAM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-13",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:NMEA:LOAD",
+      "kind": "set",
+      "aliases": [
+        "LOAD"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-13",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:NMEA:IMPort",
+      "kind": "action",
+      "aliases": [
+        "IMP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-14",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:NMEA:EXPort",
+      "kind": "action",
+      "aliases": [
+        "EXP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-14",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:NMEA:DEFault",
+      "kind": "action",
+      "aliases": [
+        "DEF"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-14",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:WAYP:IMPort",
+      "kind": "action",
+      "aliases": [
+        "IMP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-15",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:WAYP:EXPort",
+      "kind": "action",
+      "aliases": [
+        "EXP"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-15",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:FILe:WAYP:CLeaR",
+      "kind": "action",
+      "aliases": [
+        "CLR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "file",
+      "manual_page": "7-15",
+      "notes": "Destructive on a shared unit; requires explicit confirmation in the twin.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:AlmanacSTatus?",
+      "kind": "query",
+      "aliases": [
+        "ALMANACSTATUS?",
+        "AST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"Not loaded\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-1",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:ActiveSATellite?",
+      "kind": "query",
+      "aliases": [
+        "ASATELLITE?",
+        "ASAT?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "csv",
+        "format": "N,prn1,pwr1,prn2,pwr2,...",
+        "example": "11,13,38,16,48,..."
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-1",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:ALTitude?",
+      "kind": "query",
+      "aliases": [
+        "ALT?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "unit",
+          "type": "unit",
+          "optional": true
+        }
+      ],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:FIX?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "values": [
+          "No position fix",
+          "2D solution",
+          "3D solution"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:CurrentTIMe?",
+      "kind": "query",
+      "aliases": [
+        "CTIM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"15-Feb-2009 01:40:29\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:LATitude?",
+      "kind": "query",
+      "aliases": [
+        "LAT?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "deg"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:LONGitude?",
+      "kind": "query",
+      "aliases": [
+        "LONG?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "deg"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:RECeiver",
+      "kind": "set",
+      "aliases": [
+        "REC"
+      ],
+      "params": [
+        {
+          "name": "receiver",
+          "type": "enum",
+          "values": [
+            "INTERNAL",
+            "UUT"
+          ],
+          "default": "INTERNAL"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-3",
+      "notes": "UUT currently disabled.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:RECeiver?",
+      "kind": "query",
+      "aliases": [
+        "REC?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:RELoad",
+      "kind": "action",
+      "aliases": [
+        "REL"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-3",
+      "notes": "Almanac download from sky; may take up to 30 min. Poll AST?.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:RESet",
+      "kind": "action",
+      "aliases": [
+        "RES"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-4",
+      "notes": "Cold boot of internal receiver.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:SPeeD?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:RTRJ",
+      "kind": "action",
+      "aliases": [
+        "RTRJ"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-4",
+      "notes": "Records NMEA at 1 Hz to MMDDYYYY_HHMMSS.nme. Requires 3D fix.",
+      "discrepancies": [
+        "D15"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:GPSR:RTRJ?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "values": [
+          "Recording",
+          "Not Recording"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "gpsrx",
+      "manual_page": "8-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:ADD:POINt",
+      "kind": "set",
+      "aliases": [
+        "POIN"
+      ],
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "latitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -90.0,
+          "max": 90.0
+        },
+        {
+          "name": "longitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -180.0,
+          "max": 180.0
+        },
+        {
+          "name": "altitude",
+          "type": "real",
+          "unit": "ft",
+          "min": -3281,
+          "max": 100000,
+          "unit_suffix": true
+        },
+        {
+          "name": "climb_rate",
+          "type": "real",
+          "unit": "ft/min",
+          "min": -5905.512,
+          "max": 5905.512,
+          "unit_suffix": true
+        },
+        {
+          "name": "speed",
+          "type": "real",
+          "unit": "mph",
+          "min": 0,
+          "max": 1150.003,
+          "unit_suffix": true
+        },
+        {
+          "name": "acceleration",
+          "type": "real",
+          "unit": "ft/s2",
+          "min": -328.084,
+          "max": 328.084,
+          "unit_suffix": true
+        },
+        {
+          "name": "turn_radius",
+          "type": "real",
+          "unit": "ft",
+          "min": 0,
+          "max": 328083.99,
+          "unit_suffix": true
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:ROUT:ADD:POIN \"Kansas City Intl\",39.2976,-94.7139,312,500,500,100,25",
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-1",
+      "notes": null,
+      "discrepancies": [
+        "D04"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:ADD:WAYPoint",
+      "kind": "set",
+      "aliases": [
+        "WAYP"
+      ],
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "maxlen": 80,
+          "notes": "Code from waypoint database"
+        },
+        {
+          "name": "climb_rate",
+          "type": "real",
+          "unit": "ft/min",
+          "min": -5905.512,
+          "max": 5905.512,
+          "unit_suffix": true
+        },
+        {
+          "name": "speed",
+          "type": "real",
+          "unit": "mph",
+          "min": 0,
+          "max": 1150.003,
+          "unit_suffix": true
+        },
+        {
+          "name": "acceleration",
+          "type": "real",
+          "unit": "ft/s2",
+          "min": -328.084,
+          "max": 328.084,
+          "unit_suffix": true
+        },
+        {
+          "name": "turn_radius",
+          "type": "real",
+          "unit": "ft",
+          "min": 0,
+          "max": 328083.99,
+          "unit_suffix": true
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:ROUT:ADD:WAYP \"SFO\",500,500,100,5000",
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-3",
+      "notes": null,
+      "discrepancies": [
+        "D04"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:DELete",
+      "kind": "set",
+      "aliases": [
+        "DEL"
+      ],
+      "params": [
+        {
+          "name": "row",
+          "type": "int",
+          "min": 1,
+          "max": 9999
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-4",
+      "notes": null,
+      "discrepancies": [
+        "D08"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:DISPlay?",
+      "kind": "query",
+      "aliases": [
+        "DISP?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "row",
+          "type": "int",
+          "min": 1,
+          "max": 9999
+        }
+      ],
+      "returns": {
+        "type": "csv",
+        "format": "row,name,lat,lon,alt,climb,speed,accel,turn",
+        "example": "\"1,Kansas City Intl,39.2976,-94.7139,312.7,5.08,44.704,9.8,3048\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-4",
+      "notes": null,
+      "discrepancies": [
+        "D04",
+        "D08"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:EDIT",
+      "kind": "set",
+      "aliases": [
+        "EDIT"
+      ],
+      "params": [
+        {
+          "name": "row",
+          "type": "int",
+          "min": 1,
+          "max": 10000
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "latitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -90.0,
+          "max": 90.0
+        },
+        {
+          "name": "longitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -180.0,
+          "max": 180.0
+        },
+        {
+          "name": "altitude",
+          "type": "real",
+          "unit": "ft",
+          "min": -3281,
+          "max": 100000,
+          "unit_suffix": true
+        },
+        {
+          "name": "climb_rate",
+          "type": "real",
+          "unit": "ft/min",
+          "min": -5905.512,
+          "max": 5905.512,
+          "unit_suffix": true
+        },
+        {
+          "name": "speed",
+          "type": "real",
+          "unit": "mph",
+          "min": 0,
+          "max": 1150.003,
+          "unit_suffix": true
+        },
+        {
+          "name": "acceleration",
+          "type": "real",
+          "unit": "ft/s2",
+          "min": -328.084,
+          "max": 328.084,
+          "unit_suffix": true
+        },
+        {
+          "name": "turn_radius",
+          "type": "real",
+          "unit": "ft",
+          "min": 0,
+          "max": 328083.99,
+          "unit_suffix": true
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-5",
+      "notes": "All parameters required.",
+      "discrepancies": [
+        "D04",
+        "D08"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:FILe?",
+      "kind": "query",
+      "aliases": [
+        "FIL?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:LIST?",
+      "kind": "query",
+      "aliases": [
+        "LIST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "csv_multiline",
+        "format": "row,name,lat,lon,alt,climb,speed,accel,turn"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-7",
+      "notes": null,
+      "discrepancies": [
+        "D04"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:LOAD",
+      "kind": "set",
+      "aliases": [
+        "LOAD"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:REMove",
+      "kind": "set",
+      "aliases": [
+        "REM"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-8",
+      "notes": "Destructive on a shared unit.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:SAVe",
+      "kind": "set",
+      "aliases": [
+        "SAV"
+      ],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-8",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:VALiDate",
+      "kind": "action",
+      "aliases": [
+        "VALD"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-8",
+      "notes": "Result read via GPS:STAT?. Validation uses the current motion model.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:CLeaR",
+      "kind": "action",
+      "aliases": [
+        "CLR"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:ROUT:LOOP",
+      "kind": "set",
+      "aliases": [
+        "LOOP"
+      ],
+      "params": [
+        {
+          "name": "loop",
+          "type": "enum",
+          "values": [
+            "ON",
+            "OFF"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "route",
+      "manual_page": "9-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CARRier",
+      "kind": "set",
+      "aliases": [
+        "CARR"
+      ],
+      "params": [
+        {
+          "name": "carrier",
+          "type": "enum",
+          "values": [
+            "L1/E1",
+            "L2",
+            "L2C",
+            "L5/E5",
+            "L1C"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CARR L2",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-1",
+      "notes": null,
+      "discrepancies": [
+        "D11"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CARRier?",
+      "kind": "query",
+      "aliases": [
+        "CARR?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "L1"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-1",
+      "notes": null,
+      "discrepancies": [
+        "D11"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SETup:CouplerCABle",
+      "kind": "set",
+      "aliases": [
+        "CCAB"
+      ],
+      "params": [
+        {
+          "name": "loss",
+          "type": "real",
+          "unit": "dB",
+          "min": 0.0,
+          "max": 12.0,
+          "step": 0.1
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CCAB 5.5",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-2",
+      "notes": "Values to 0.1 dB. Fractional part below 1 dB is compensated by raising output; integer part is subtracted from the maximum output level.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SETup:CouplerCABle?",
+      "kind": "query",
+      "aliases": [
+        "CCAB?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CaRrierGPs",
+      "kind": "set",
+      "aliases": [
+        "CRGP"
+      ],
+      "params": [
+        {
+          "name": "carrier",
+          "type": "enum",
+          "values": [
+            "L1",
+            "L1C",
+            "L2",
+            "L2C",
+            "L5"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CRGP L5",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-3",
+      "notes": null,
+      "discrepancies": [
+        "D11"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CaRrierGAl",
+      "kind": "set",
+      "aliases": [
+        "CRGA"
+      ],
+      "params": [
+        {
+          "name": "carrier",
+          "type": "enum",
+          "values": [
+            "E1",
+            "E5",
+            "E5a"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CRGA E5",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-3",
+      "notes": null,
+      "discrepancies": [
+        "D11"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CaRrierGG",
+      "kind": "set",
+      "aliases": [
+        "CRGG"
+      ],
+      "params": [
+        {
+          "name": "carrier",
+          "type": "enum",
+          "values": [
+            "L1/E1",
+            "L5/E5"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-4",
+      "notes": null,
+      "discrepancies": [
+        "D11"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CLOCk",
+      "kind": "set",
+      "aliases": [
+        "CLOC"
+      ],
+      "params": [
+        {
+          "name": "clock",
+          "type": "enum",
+          "values": [
+            "GPSRX",
+            "USER"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CLOC USER",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-4",
+      "notes": null,
+      "discrepancies": [
+        "D12"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CLOCk?",
+      "kind": "query",
+      "aliases": [
+        "CLOC?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "GPSRX",
+          "USER"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-4",
+      "notes": null,
+      "discrepancies": [
+        "D12"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CouplerLOSs",
+      "kind": "set",
+      "aliases": [
+        "CLOS"
+      ],
+      "params": [
+        {
+          "name": "loss",
+          "type": "real",
+          "unit": "dB",
+          "min": 0.0,
+          "max": 40.0,
+          "step": 0.1
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CLOS 12.2",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-5",
+      "notes": "Values to 0.1 dB. Fractional part below 1 dB is compensated by raising output; integer part is subtracted from the maximum output level.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CouplerLOSs?",
+      "kind": "query",
+      "aliases": [
+        "CLOS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CuRrentMotionModel",
+      "kind": "set",
+      "aliases": [
+        "CRMM"
+      ],
+      "params": [
+        {
+          "name": "model",
+          "type": "enum",
+          "values": [
+            "PEDESTRIAN",
+            "AUTOMOTIVE",
+            "MARINE",
+            "LOW_PERFORMANCE_AIRCRAFT",
+            "HIGH_PERFORMANCE_AIRCRAFT",
+            "CUSTOM",
+            "UNLIMITED"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CRMM PEDESTRIAN",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-5",
+      "notes": null,
+      "discrepancies": [
+        "D23"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CuRrentMotionModel?",
+      "kind": "query",
+      "aliases": [
+        "CRMM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-6",
+      "notes": null,
+      "discrepancies": [
+        "D23"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:DATe",
+      "kind": "set",
+      "aliases": [
+        "DAT"
+      ],
+      "params": [
+        {
+          "name": "date",
+          "type": "string",
+          "format": "mm/dd/yyyy"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:DATE \"03/12/2012\"",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-6",
+      "notes": "Used only when clock source is USER. Query returns a different format than the setter.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:DATe?",
+      "kind": "query",
+      "aliases": [
+        "DAT?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"Aug 22 2010\""
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:DigitalNOiSe",
+      "kind": "set",
+      "aliases": [
+        "DNOS"
+      ],
+      "params": [
+        {
+          "name": "state",
+          "type": "enum",
+          "values": [
+            "OFF",
+            "ON"
+          ],
+          "default": "OFF"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:DNOS OFF",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-7",
+      "notes": "ON only for direct connection. UI forces OFF with COUPLER and ON with DIRECT.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:DigitalNOiSe?",
+      "kind": "query",
+      "aliases": [
+        "DNOS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "OFF",
+          "ON"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:DirectCABle",
+      "kind": "set",
+      "aliases": [
+        "DCAB"
+      ],
+      "params": [
+        {
+          "name": "loss",
+          "type": "real",
+          "unit": "dB",
+          "min": 0.0,
+          "max": 12.0,
+          "step": 0.1,
+          "default": 0
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:DCAB 4.7",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-8",
+      "notes": "Values to 0.1 dB. Fractional part below 1 dB is compensated by raising output; integer part is subtracted from the maximum output level.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:DirectCABle?",
+      "kind": "query",
+      "aliases": [
+        "DCAB?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-8",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:ExtREF",
+      "kind": "set",
+      "aliases": [
+        "EREF"
+      ],
+      "params": [
+        {
+          "name": "state",
+          "type": "enum",
+          "values": [
+            "OFF",
+            "ON"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:EREF OFF",
+      "locked_while_running": null,
+      "category": "setup",
+      "manual_page": "10-8",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:ExtREF?",
+      "kind": "query",
+      "aliases": [
+        "EREF?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "OFF",
+          "ON"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:FADing",
+      "kind": "set",
+      "aliases": [
+        "FAD"
+      ],
+      "params": [
+        {
+          "name": "fading",
+          "type": "enum",
+          "values": [
+            "NONE",
+            "STATIC",
+            "PEDESTRIAN",
+            "VEHICLE",
+            "AIRCRAFT"
+          ],
+          "default": "NONE"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:FAD STATIC",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-9",
+      "notes": null,
+      "discrepancies": [
+        "D22"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:FADing?",
+      "kind": "query",
+      "aliases": [
+        "FAD?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-9",
+      "notes": null,
+      "discrepancies": [
+        "D22"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:GNSS",
+      "kind": "set",
+      "aliases": [
+        "GNSS"
+      ],
+      "params": [
+        {
+          "name": "gnss",
+          "type": "enum",
+          "values": [
+            "GPS",
+            "GALILEO",
+            "GAL+GPS"
+          ],
+          "default": "GPS"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:GNSS GAL+GPS",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-10",
+      "notes": "Query returns GPS, GAL or BOTH, not the setter tokens.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:GNSS?",
+      "kind": "query",
+      "aliases": [
+        "GNSS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "values": [
+          "GPS",
+          "GAL",
+          "BOTH"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-10",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:MaxLATeralacceleration",
+      "kind": "set",
+      "aliases": [
+        "MLAT"
+      ],
+      "params": [
+        {
+          "name": "acceleration",
+          "type": "real",
+          "unit_suffix": true,
+          "notes": "Max depends on motion model"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:MLAT 98.22",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-10",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:MaxLATeralacceleration?",
+      "kind": "query",
+      "aliases": [
+        "MLAT?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "unit",
+          "type": "unit",
+          "optional": true
+        }
+      ],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:MaxLONgitudinalacceleration",
+      "kind": "set",
+      "aliases": [
+        "MLON"
+      ],
+      "params": [
+        {
+          "name": "acceleration",
+          "type": "real",
+          "unit_suffix": true,
+          "notes": "Max depends on motion model"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:MLON 100.50",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:MaxLONgitudinalacceleration?",
+      "kind": "query",
+      "aliases": [
+        "MLON?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "unit",
+          "type": "unit",
+          "optional": true
+        }
+      ],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:MaxVELocity",
+      "kind": "set",
+      "aliases": [
+        "MVEL"
+      ],
+      "params": [
+        {
+          "name": "velocity",
+          "type": "real",
+          "unit_suffix": true,
+          "notes": "Max depends on motion model"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:MVEL 9.9",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-12",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:MaxVELocity?",
+      "kind": "query",
+      "aliases": [
+        "MVEL?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "unit",
+          "type": "unit",
+          "optional": true
+        }
+      ],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-12",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:PositionSouRCe",
+      "kind": "set",
+      "aliases": [
+        "PSRC"
+      ],
+      "params": [
+        {
+          "name": "source",
+          "type": "enum",
+          "values": [
+            "USER",
+            "GPS"
+          ],
+          "default": "USER"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:PSRC GPS",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-12",
+      "notes": null,
+      "discrepancies": [
+        "D06"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:PositionSouRCe?",
+      "kind": "query",
+      "aliases": [
+        "PSRC?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "USER",
+          "GPS"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-13",
+      "notes": null,
+      "discrepancies": [
+        "D06"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:PRNSignal",
+      "kind": "set",
+      "aliases": [
+        "PRNS"
+      ],
+      "params": [
+        {
+          "name": "prn_signal",
+          "type": "enum",
+          "values": [
+            "VARIABLE",
+            "FIXED"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:PRNS FIXED",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-13",
+      "notes": "FIXED: all SVs at RF level. VARIABLE: relative levels from geometry.",
+      "discrepancies": [
+        "D13"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:PRNSignal?",
+      "kind": "query",
+      "aliases": [
+        "PRNS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "VAR",
+          "FIX"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-13",
+      "notes": null,
+      "discrepancies": [
+        "D13"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:ReferenceSouRCe",
+      "kind": "set",
+      "aliases": [
+        "RSRC"
+      ],
+      "params": [
+        {
+          "name": "reference",
+          "type": "enum",
+          "values": [
+            "INTERNAL",
+            "INT",
+            "EXTERNAL",
+            "EXT"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:RSRC INTERNAL",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-14",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:ReferenceSouRCe?",
+      "kind": "query",
+      "aliases": [
+        "RSRC?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-14",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:RFLeVel",
+      "kind": "set",
+      "aliases": [
+        "RFLV"
+      ],
+      "params": [
+        {
+          "name": "level",
+          "type": "real",
+          "unit": "dBm",
+          "step": 1,
+          "range_by_port": {
+            "COUPLER": [
+              -130,
+              -68
+            ],
+            "DIRECT": [
+              -155,
+              -93
+            ]
+          },
+          "notes": "Range offset by the integer part of the entered losses."
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:RFLV -94",
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-15",
+      "notes": "Lock while running not stated; the UI field is editable during a run. Verify.",
+      "discrepancies": [
+        "D17"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:RFLeVel?",
+      "kind": "query",
+      "aliases": [
+        "RFLV?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "dBm"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-15",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:RFPoRt",
+      "kind": "set",
+      "aliases": [
+        "RFPR"
+      ],
+      "params": [
+        {
+          "name": "port",
+          "type": "enum",
+          "values": [
+            "DIRECT",
+            "COUPLER"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:PORT DIRECT",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-15",
+      "notes": null,
+      "discrepancies": [
+        "D05"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:RFPoRt?",
+      "kind": "query",
+      "aliases": [
+        "RFPR?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "DIRECT",
+          "COUPLER"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-16",
+      "notes": null,
+      "discrepancies": [
+        "D05"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:SBAS",
+      "kind": "set",
+      "aliases": [],
+      "params": [
+        {
+          "name": "status",
+          "type": "enum",
+          "values": [
+            "AUTO",
+            "OFF"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:SBAS AUTO",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-16",
+      "notes": "AUTO consumes one channel (5 or 11 GNSS SVs remain).",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:SBAS?",
+      "kind": "query",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "AUTO",
+          "OFF"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-16",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:SimulationTYPe",
+      "kind": "set",
+      "aliases": [
+        "STYP"
+      ],
+      "params": [
+        {
+          "name": "type",
+          "type": "enum",
+          "values": [
+            "STATIC",
+            "DYNAMIC",
+            "TRAJECTORY"
+          ],
+          "default": "STATIC"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:STYP DYNAMIC",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-17",
+      "notes": null,
+      "discrepancies": [
+        "D06"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:SimulationTYPe?",
+      "kind": "query",
+      "aliases": [
+        "STYP?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "STATIC",
+          "DYNAMIC",
+          "TRAJECTORY"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-17",
+      "notes": null,
+      "discrepancies": [
+        "D06"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:SplitterLOSs",
+      "kind": "set",
+      "aliases": [
+        "SLOS"
+      ],
+      "params": [
+        {
+          "name": "loss",
+          "type": "real",
+          "unit": "dB",
+          "min": 0.0,
+          "max": 10.0,
+          "step": 0.1
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:SLOS 12.2",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-18",
+      "notes": "Values to 0.1 dB. Fractional part below 1 dB is compensated by raising output; integer part is subtracted from the maximum output level.",
+      "discrepancies": [
+        "D14"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:SplitterLOSs?",
+      "kind": "query",
+      "aliases": [
+        "SLOS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-18",
+      "notes": null,
+      "discrepancies": [
+        "D14"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:TIMe",
+      "kind": "set",
+      "aliases": [
+        "TIM"
+      ],
+      "params": [
+        {
+          "name": "time",
+          "type": "string",
+          "format": "hh:mm:ss"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:TIM \"12:34:31\"",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-19",
+      "notes": "Used only when clock source is USER.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:TIMe?",
+      "kind": "query",
+      "aliases": [
+        "TIM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-19",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:TriggerSouRCe",
+      "kind": "set",
+      "aliases": [
+        "TSRC"
+      ],
+      "params": [
+        {
+          "name": "source",
+          "type": "enum",
+          "values": [
+            "AUTO",
+            "EXTERNAL"
+          ],
+          "default": "AUTO"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:TSRC EXTERNAL",
+      "locked_while_running": true,
+      "category": "setup",
+      "manual_page": "10-20",
+      "notes": "EXTERNAL: run starts on LVTTL rising edge on Aux pin 19 (3.3 V push-pull) after configuration completes.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:TriggerSouRCe?",
+      "kind": "query",
+      "aliases": [
+        "TSRC?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "AUTO",
+          "EXTERNAL"
+        ]
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-20",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:UNITs",
+      "kind": "set",
+      "aliases": [
+        "UNIT"
+      ],
+      "params": [
+        {
+          "name": "units",
+          "type": "enum",
+          "values": [
+            "IMPERIAL",
+            "SI",
+            "AERO/IMPERIAL",
+            "AERO/SI"
+          ]
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:UNIT SI",
+      "locked_while_running": null,
+      "category": "setup",
+      "manual_page": "10-21",
+      "notes": "Affects values returned through the remote interface.",
+      "discrepancies": [
+        "D04"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:UNITs?",
+      "kind": "query",
+      "aliases": [
+        "UNIT?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": false,
+      "category": "setup",
+      "manual_page": "10-21",
+      "notes": null,
+      "discrepancies": [
+        "D04"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:MotionModelDEfault",
+      "kind": "action",
+      "aliases": [
+        "MMDE"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "setup",
+      "manual_page": "10-21",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:APPLy",
+      "kind": "action",
+      "aliases": [
+        "APPL"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "channels",
+      "manual_page": "10-22",
+      "notes": "Applies channel allocation. Confirm via GPS:STAT?.",
+      "discrepancies": [
+        "D09"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:AVAILable?",
+      "kind": "query",
+      "aliases": [
+        "AVAL"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int",
+        "values": [
+          6,
+          12
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "channels",
+      "manual_page": "10-22",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:GNSS?",
+      "kind": "query",
+      "aliases": [
+        "GNSS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "channels",
+      "manual_page": "10-22",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:GNSS",
+      "kind": "set",
+      "aliases": [
+        "GNSS"
+      ],
+      "params": [
+        {
+          "name": "numchan",
+          "type": "int",
+          "min": 1,
+          "max": 11
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "channels",
+      "manual_page": "10-23",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:SBAS?",
+      "kind": "query",
+      "aliases": [
+        "SBAS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "channels",
+      "manual_page": "10-23",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:SBAS",
+      "kind": "set",
+      "aliases": [
+        "SBAS"
+      ],
+      "params": [
+        {
+          "name": "numchan",
+          "type": "int",
+          "min": 1,
+          "max": 4
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SET:CHAN:SBAS 6",
+      "locked_while_running": true,
+      "category": "channels",
+      "manual_page": "10-23",
+      "notes": null,
+      "discrepancies": [
+        "D09"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:DUAL:DEFault",
+      "kind": "action",
+      "aliases": [
+        "DEF"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "channels",
+      "manual_page": "10-24",
+      "notes": "Default 3 GPS, 3 Galileo, 0 SBAS per the remote manual; UI default differs for 12 ch.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:DUAL:GAL?",
+      "kind": "query",
+      "aliases": [
+        "GAL?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "channels",
+      "manual_page": "10-24",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:DUAL:GAL",
+      "kind": "set",
+      "aliases": [
+        "GAL"
+      ],
+      "params": [
+        {
+          "name": "numchan",
+          "type": "int",
+          "min": 1,
+          "max": 11
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "channels",
+      "manual_page": "10-24",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:DUAL:GPS?",
+      "kind": "query",
+      "aliases": [
+        "GPS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "channels",
+      "manual_page": "10-25",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:DUAL:GPS",
+      "kind": "set",
+      "aliases": [
+        "GPS"
+      ],
+      "params": [
+        {
+          "name": "numchan",
+          "type": "int",
+          "min": 1,
+          "max": 11
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "channels",
+      "manual_page": "10-25",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:DUAL:SBAS?",
+      "kind": "query",
+      "aliases": [
+        "SBAS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "channels",
+      "manual_page": "10-25",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SET:CHAN:DUAL:SBAS",
+      "kind": "set",
+      "aliases": [
+        "SBAS"
+      ],
+      "params": [
+        {
+          "name": "numchan",
+          "type": "int",
+          "min": 0,
+          "max": 2
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "channels",
+      "manual_page": "10-26",
+      "notes": null,
+      "discrepancies": [
+        "D09"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:ALTitude",
+      "kind": "set",
+      "aliases": [
+        "ALT"
+      ],
+      "params": [
+        {
+          "name": "altitude",
+          "type": "real",
+          "unit": "ft",
+          "min": -3281,
+          "max": 100000,
+          "unit_suffix": true
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SIM:ALT 500",
+      "locked_while_running": true,
+      "category": "simulation",
+      "manual_page": "11-1",
+      "notes": "Static mode with USER position source.",
+      "discrepancies": [
+        "D04"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:ALTitude?",
+      "kind": "query",
+      "aliases": [
+        "ALT?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "unit",
+          "type": "unit",
+          "optional": true
+        }
+      ],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-1",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:AltitudeRATe?",
+      "kind": "query",
+      "aliases": [
+        "ARAT?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "unit",
+          "type": "unit",
+          "optional": true
+        }
+      ],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:DATe?",
+      "kind": "query",
+      "aliases": [
+        "DAT?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "format": "mm/dd/yyyy"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:DistanceToGo?",
+      "kind": "query",
+      "aliases": [
+        "DTG?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:ElapsedTIMe?",
+      "kind": "query",
+      "aliases": [
+        "ETIM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "format": "hh:mm:ss"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:ExtREF?",
+      "kind": "query",
+      "aliases": [
+        "EREF?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:FROM?",
+      "kind": "query",
+      "aliases": [
+        "FROM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:HEADing?",
+      "kind": "query",
+      "aliases": [
+        "HEAD?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"180°\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-3",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:LATitude",
+      "kind": "set",
+      "aliases": [
+        "LAT"
+      ],
+      "params": [
+        {
+          "name": "latitude",
+          "type": "lat",
+          "notes": "Manual shows both decimal and DD,MM.MMMM,H forms"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SIM:LAT 45.3458",
+      "locked_while_running": true,
+      "category": "simulation",
+      "manual_page": "11-4",
+      "notes": null,
+      "discrepancies": [
+        "D07"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:LATitude?",
+      "kind": "query",
+      "aliases": [
+        "LAT?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "deg"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-4",
+      "notes": "Live position while running; last position when stopped in dynamic/trajectory.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:LONGitude",
+      "kind": "set",
+      "aliases": [
+        "LONG"
+      ],
+      "params": [
+        {
+          "name": "longitude",
+          "type": "lon",
+          "notes": "Manual shows both decimal and DDD,MM.MMMM,H forms"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SIM:LONG 105,45.8912,W",
+      "locked_while_running": true,
+      "category": "simulation",
+      "manual_page": "11-4",
+      "notes": null,
+      "discrepancies": [
+        "D07"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:LONGitude?",
+      "kind": "query",
+      "aliases": [
+        "LONG?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "real",
+        "unit": "deg"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIMU:SPeeD?",
+      "kind": "query",
+      "aliases": [
+        "SPD?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "unit",
+          "type": "unit",
+          "optional": true
+        }
+      ],
+      "returns": {
+        "type": "real"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-5",
+      "notes": null,
+      "discrepancies": [
+        "D20"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:TIMe?",
+      "kind": "query",
+      "aliases": [
+        "TIM?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "format": "hh:mm:ss"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:TO?",
+      "kind": "query",
+      "aliases": [
+        "TO?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-5",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:ToggleRUN",
+      "kind": "action",
+      "aliases": [
+        "TRUN"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-6",
+      "notes": "Toggle. Same command starts and stops. Never emit without checking TRUN? first.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:ToggleRUN?",
+      "kind": "query",
+      "aliases": [
+        "TRUN?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "values": [
+          "Running",
+          "Stopped"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GAL:ADVisory?",
+      "kind": "query",
+      "aliases": [
+        "ADV?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GAL:CARRier?",
+      "kind": "query",
+      "aliases": [
+        "CARR?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GAL:PRN?",
+      "kind": "query",
+      "aliases": [
+        "PRN?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "csv",
+        "example": "\"17, 19, 22, 27, 29, 30\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GAL:VisibleSVS?",
+      "kind": "query",
+      "aliases": [
+        "VSVS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-7",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GPS:ADVisory?",
+      "kind": "query",
+      "aliases": [
+        "ADV?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GPS:CARRier?",
+      "kind": "query",
+      "aliases": [
+        "CARR?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GPS:PRN?",
+      "kind": "query",
+      "aliases": [
+        "PRN?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "csv",
+        "example": "\"17, 19, 22, 27, 29, 30\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:GPS:VisibleSVS?",
+      "kind": "query",
+      "aliases": [
+        "VSVS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-9",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:SBAS:SBAS?",
+      "kind": "query",
+      "aliases": [
+        "SBAS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "enum",
+        "values": [
+          "OFF",
+          "AUTO"
+        ]
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:SBAS:VisibleSVS?",
+      "kind": "query",
+      "aliases": [
+        "VSVS?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "int"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SIM:SBAS:PRN?",
+      "kind": "query",
+      "aliases": [
+        "PRN?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "string",
+        "example": "\"135:LM RPS-1 (WAAS);138:LM RPS-2(WAAS)\""
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "simulation",
+      "manual_page": "11-11",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SVPR:GAL:LIST?",
+      "kind": "query",
+      "aliases": [
+        "LIST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "csv_multiline",
+        "format_header": "SV#,Elevation,Azimuth,Health,RFLevel,Doppler,Corr,Step,Select,Sim'd",
+        "example_row": "1,78.4365,80.7553,-155,0,0,0,0,3600,Good,ON,ON",
+        "notes": "Header lists 10 fields, example rows carry 12. Probable order: SV,El,Az,RFLevel,AmpOffset,Doppler,Corr,Step,Duration,Health,Select,Simd. Verify."
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "svprn",
+      "manual_page": "12-1",
+      "notes": null,
+      "discrepancies": [
+        "D03"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SVPR:GAL:SATellite?",
+      "kind": "query",
+      "aliases": [
+        "SAT?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "sv",
+          "type": "int",
+          "min": 1,
+          "max": 36
+        }
+      ],
+      "returns": {
+        "type": "csv_multiline",
+        "format_header": "SV#,Elevation,Azimuth,Health,RFLevel,Doppler,Corr,Step,Select,Sim'd",
+        "example_row": "1,78.4365,80.7553,-155,0,0,0,0,3600,Good,ON,ON",
+        "notes": "Header lists 10 fields, example rows carry 12. Probable order: SV,El,Az,RFLevel,AmpOffset,Doppler,Corr,Step,Duration,Health,Select,Simd. Verify."
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "svprn",
+      "manual_page": "12-2",
+      "notes": null,
+      "discrepancies": [
+        "D03"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SVPR:GAL:SATellite",
+      "kind": "set",
+      "aliases": [
+        "SAT"
+      ],
+      "params": [
+        {
+          "name": "sv",
+          "type": "int",
+          "min": 1,
+          "max": 36
+        },
+        {
+          "name": "select",
+          "type": "enum",
+          "values": [
+            "ON",
+            "OFF"
+          ]
+        },
+        {
+          "name": "health",
+          "type": "enum",
+          "values": [
+            "GOOD",
+            "BAD",
+            "CONNECTED",
+            "DISCONNECTED"
+          ]
+        },
+        {
+          "name": "doppler",
+          "type": "int",
+          "unit": "Hz",
+          "min": -5000,
+          "max": 5000,
+          "step": 1
+        },
+        {
+          "name": "incoherence",
+          "type": "real",
+          "unit": "m/s",
+          "min": -2.0,
+          "max": 2.0,
+          "step": 0.001,
+          "notes": "Code/carrier coherence; manual gives a 2 m/s range without sign convention"
+        },
+        {
+          "name": "amp_offset",
+          "type": "real",
+          "unit": "dB",
+          "min": -15.0,
+          "max": 15.0,
+          "step": 0.1
+        },
+        {
+          "name": "step_error",
+          "type": "real",
+          "unit": "m",
+          "min": -1000.0,
+          "max": 1000.0,
+          "step": 0.001,
+          "notes": "Range disputed, see D01"
+        },
+        {
+          "name": "duration",
+          "type": "int",
+          "unit": "s",
+          "default": 3600,
+          "optional": true,
+          "notes": "Present in signature, absent from the example"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SVPR:GAL:SAT 1,ON,GOOD,0,0,0,0",
+      "locked_while_running": false,
+      "category": "svprn",
+      "manual_page": "12-2",
+      "notes": "Runtime command: modifies an SV currently being simulated. All parameters must be included.",
+      "discrepancies": [
+        "D01",
+        "D02",
+        "D18"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SVPR:GPS:LIST?",
+      "kind": "query",
+      "aliases": [
+        "LIST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "csv_multiline",
+        "format_header": "SV#,Elevation,Azimuth,Health,RFLevel,Doppler,Corr,Step,Select,Sim'd",
+        "example_row": "1,78.4365,80.7553,-155,0,0,0,0,3600,Good,ON,ON",
+        "notes": "Header lists 10 fields, example rows carry 12. Probable order: SV,El,Az,RFLevel,AmpOffset,Doppler,Corr,Step,Duration,Health,Select,Simd. Verify."
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "svprn",
+      "manual_page": "12-4",
+      "notes": null,
+      "discrepancies": [
+        "D03"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SVPR:GPS:SATellite?",
+      "kind": "query",
+      "aliases": [
+        "SAT?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "sv",
+          "type": "int",
+          "min": 1,
+          "max": 32
+        }
+      ],
+      "returns": {
+        "type": "csv_multiline",
+        "format_header": "SV#,Elevation,Azimuth,Health,RFLevel,Doppler,Corr,Step,Select,Sim'd",
+        "example_row": "1,78.4365,80.7553,-155,0,0,0,0,3600,Good,ON,ON",
+        "notes": "Header lists 10 fields, example rows carry 12. Probable order: SV,El,Az,RFLevel,AmpOffset,Doppler,Corr,Step,Duration,Health,Select,Simd. Verify."
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "svprn",
+      "manual_page": "12-5",
+      "notes": null,
+      "discrepancies": [
+        "D03"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:SVPR:GPS:SATellite",
+      "kind": "set",
+      "aliases": [
+        "SAT"
+      ],
+      "params": [
+        {
+          "name": "sv",
+          "type": "int",
+          "min": 1,
+          "max": 32
+        },
+        {
+          "name": "select",
+          "type": "enum",
+          "values": [
+            "ON",
+            "OFF"
+          ]
+        },
+        {
+          "name": "health",
+          "type": "enum",
+          "values": [
+            "GOOD",
+            "BAD"
+          ]
+        },
+        {
+          "name": "doppler",
+          "type": "real",
+          "unit": "Hz",
+          "min": -5000,
+          "max": 5000,
+          "step": 1
+        },
+        {
+          "name": "incoherence",
+          "type": "real",
+          "unit": "m/s",
+          "min": -2.0,
+          "max": 2.0,
+          "step": 0.001,
+          "notes": "Code/carrier coherence; manual gives a 2 m/s range without sign convention"
+        },
+        {
+          "name": "amp_offset",
+          "type": "real",
+          "unit": "dB",
+          "min": -15.0,
+          "max": 15.0,
+          "step": 0.1
+        },
+        {
+          "name": "step_error",
+          "type": "real",
+          "unit": "m",
+          "min": -1000.0,
+          "max": 1000.0,
+          "step": 0.001,
+          "notes": "Range disputed, see D01"
+        },
+        {
+          "name": "duration",
+          "type": "int",
+          "unit": "s",
+          "default": 3600,
+          "optional": true,
+          "notes": "Present in signature, absent from the example"
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": "GPS:SVPR:GPS:SAT 1,ON,GOOD,0,0,0,0",
+      "locked_while_running": false,
+      "category": "svprn",
+      "manual_page": "12-5",
+      "notes": "Runtime command: modifies an SV currently being simulated. All parameters must be included.",
+      "discrepancies": [
+        "D01",
+        "D02",
+        "D18"
+      ],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:WAYP:CLeaR",
+      "kind": "action",
+      "aliases": [],
+      "params": [],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "waypoint",
+      "manual_page": "13-1",
+      "notes": "Clears all user waypoints. Destructive on a shared unit.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:WAYP:DELete",
+      "kind": "set",
+      "aliases": [
+        "DEL"
+      ],
+      "params": [
+        {
+          "name": "code",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "waypoint",
+      "manual_page": "13-1",
+      "notes": "Allow about 15 s.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:WAYP:DISPlay?",
+      "kind": "query",
+      "aliases": [
+        "DISP?"
+      ],
+      "params": [],
+      "query_params": [
+        {
+          "name": "code",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "returns": {
+        "type": "csv",
+        "format": "Code,ICAO,Name,City,State,Lat,Lon,Alt"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "waypoint",
+      "manual_page": "13-2",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:WAYP:EDIT",
+      "kind": "set",
+      "aliases": [
+        "EDIT"
+      ],
+      "params": [
+        {
+          "name": "code",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "icao",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "latitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -90.0,
+          "max": 90.0
+        },
+        {
+          "name": "longitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -180.0,
+          "max": 180.0
+        },
+        {
+          "name": "altitude",
+          "type": "real",
+          "unit": "ft",
+          "min": -3281,
+          "max": 100000,
+          "unit_suffix": true
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "waypoint",
+      "manual_page": "13-3",
+      "notes": "User waypoints only.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:WAYP:NEW",
+      "kind": "set",
+      "aliases": [
+        "NEW"
+      ],
+      "params": [
+        {
+          "name": "code",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "icao",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "maxlen": 80
+        },
+        {
+          "name": "latitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -90.0,
+          "max": 90.0
+        },
+        {
+          "name": "longitude",
+          "type": "real",
+          "unit": "deg",
+          "min": -180.0,
+          "max": 180.0
+        },
+        {
+          "name": "altitude",
+          "type": "real",
+          "unit": "ft",
+          "min": -3281,
+          "max": 100000,
+          "unit_suffix": true
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": null,
+      "category": "waypoint",
+      "manual_page": "13-4",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:WAYP:LIST?",
+      "kind": "query",
+      "aliases": [
+        "LIST?"
+      ],
+      "params": [],
+      "query_params": [],
+      "returns": {
+        "type": "csv_multiline",
+        "format": "Code,ICAO,Name,City,State,Lat,Lon,Alt"
+      },
+      "example": null,
+      "locked_while_running": null,
+      "category": "waypoint",
+      "manual_page": "13-6",
+      "notes": null,
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    },
+    {
+      "header": "GPS:WAYP:USE",
+      "kind": "set",
+      "aliases": [],
+      "params": [
+        {
+          "name": "code",
+          "type": "string",
+          "maxlen": 80
+        }
+      ],
+      "query_params": [],
+      "returns": null,
+      "example": null,
+      "locked_while_running": true,
+      "category": "waypoint",
+      "manual_page": "13-6",
+      "notes": "Static mode only.",
+      "discrepancies": [],
+      "emit_allowed": true,
+      "verified_on_hw": false
+    }
+  ]
+}

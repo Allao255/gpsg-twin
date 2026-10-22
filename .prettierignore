@@ -1,0 +1,12 @@
+dist/
+coverage/
+node_modules/
+refs/
+docs/
+model/
+sessions/
+runners/
+tools/
+*.md
+*.gen.ts
+package-lock.json

@@ -1,0 +1,152 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`emissor de cenário > cenário dinâmico completo: sem erro e com ordem canônica 1`] = `
+"# twin-scenario: rota_manual
+# twin-description: Rota de 3 pontos do exemplo do manual, com SV manipulado
+# gerado pelo gpsg-twin, scenario_version 1
+@errcheck on
+@mark rota_manual inicio
+@expect GPS:SIM:TRUN? Stopped
+@pause Se TRUN? nao retornou Stopped, outro usuario esta com a simulacao ativa: interromper (Ctrl+C).
+
+# backup do estado do usuário anterior
+GPS:FIL:SET:SAV "twin_bkp_rota_manual"
+GPS:FIL:ROUT:SAV "twin_bkp_rota_manual.rte"
+
+# D04: unidades SI em todo script gerado
+GPS:SET:UNIT SI
+@expect GPS:SET:UNIT? SI
+
+# arquivos do pendrive
+GPS:FIL:SET:IMP
+GPS:FIL:ALM:IMP
+GPS:FIL:SET:LOAD "twin_rota_manual.set"
+
+# setup
+GPS:SET:GNSS GALILEO
+GPS:SET:CRGA E5a
+GPS:SET:SBAS OFF
+GPS:SET:STYP DYNAMIC
+GPS:SET:PRNS FIXED
+GPS:SET:FAD NONE
+GPS:SET:PSRC USER
+GPS:SET:CLOC GPSRX
+GPS:SET:TSRC AUTO
+GPS:SET:EREF OFF
+GPS:SET:RSRC EXTERNAL
+
+# I/O
+GPS:SET:RFPR COUPLER
+GPS:SET:DNOS OFF
+GPS:SET:CLOS 21.5
+GPS:SET:CCAB 2.3
+GPS:SET:DCAB 0
+GPS:SET:SLOS 0
+
+# movimento
+GPS:SET:CRMM CUSTOM
+GPS:SET:MLAT 9.8
+GPS:SET:MLON 4.9
+GPS:SET:MVEL 89.41
+# twin-channels: gnss=11 (D09: não emitido)
+
+# almanaque
+GPS:FIL:ALM:LOAD "twin_w0574.alm"
+
+# waypoints de usuário
+GPS:WAYP:NEW "twin_wp1","","Kansas City Intl","","",39.2976,-94.7139,312
+
+# rota
+@pause ROUT:CLR apaga a rota em memoria (salva no backup). Enter para continuar.
+GPS:ROUT:CLR
+GPS:ROUT:ADD:POIN "Kansas City Intl",39.2976,-94.7139,312,5.08,44.704,9.8,100
+GPS:ROUT:ADD:WAYP "SFO",5.08,44.704,9.8,100
+GPS:ROUT:ADD:POIN "twin_p3",37.6499,-97.4331,406,5.08,44.704,9.8,100
+GPS:ROUT:LOOP ON
+GPS:ROUT:VALD
+GPS:STAT?
+
+# nível de RF
+GPS:SET:RFLV -115
+@pause Confirmar porta COUPLER e destino do sinal (carga, atenuador ou DUT em bancada). Nada irradiando. Enter para iniciar.
+
+@run
+@at 12.5
+GPS:SVPR:GPS:SAT 7,ON,BAD,0,0,0,0,3600
+@at 30
+GPS:SVPR:GAL:SAT 11,ON,DISCONNECTED,0,0,0,0,3600
+GPS:SVPR:GPS:SAT 5,OFF,GOOD,-50,0.5,-6,100,10
+@at 60
+GPS:SET:RFLV -120
+@at 120
+@stop
+@mark rota_manual fim
+
+# restauração do estado anterior, se necessário (executar manualmente):
+# GPS:FIL:SET:LOAD "twin_bkp_rota_manual"
+# GPS:FIL:ROUT:LOAD "twin_bkp_rota_manual.rte"
+"
+`;
+
+exports[`emissor de cenário > cenário padrão: sem diagnóstico, determinístico 1`] = `
+"# twin-scenario: cenario
+# gerado pelo gpsg-twin, scenario_version 1
+@errcheck on
+@mark cenario inicio
+@expect GPS:SIM:TRUN? Stopped
+@pause Se TRUN? nao retornou Stopped, outro usuario esta com a simulacao ativa: interromper (Ctrl+C).
+
+# backup do estado do usuário anterior
+GPS:FIL:SET:SAV "twin_bkp_cenario"
+GPS:FIL:ROUT:SAV "twin_bkp_cenario.rte"
+
+# D04: unidades SI em todo script gerado
+GPS:SET:UNIT SI
+@expect GPS:SET:UNIT? SI
+
+# setup
+GPS:SET:GNSS GPS
+GPS:SET:CARR L1/E1
+GPS:SET:SBAS OFF
+GPS:SET:STYP STATIC
+GPS:SET:PRNS FIXED
+GPS:SET:FAD NONE
+GPS:SET:PSRC USER
+GPS:SET:CLOC USER
+GPS:SET:DAT "04/14/2013"
+GPS:SET:TIM "11:11:11"
+GPS:SET:TSRC AUTO
+GPS:SET:EREF OFF
+GPS:SET:RSRC INTERNAL
+
+# I/O
+GPS:SET:RFPR DIRECT
+GPS:SET:DNOS ON
+GPS:SET:CLOS 0
+GPS:SET:CCAB 0
+GPS:SET:DCAB 0
+GPS:SET:SLOS 0
+
+# movimento
+GPS:SET:CRMM UNLIMITED
+
+# almanaque
+GPS:FIL:ALM:DEF
+
+# posição estática
+GPS:SIM:LAT 39.2976
+GPS:SIM:LONG -94.7139
+GPS:SIM:ALT 300
+
+# nível de RF
+GPS:SET:RFLV -120
+@pause Confirmar porta DIRECT e destino do sinal (carga, atenuador ou DUT em bancada). Nada irradiando. Enter para iniciar.
+
+@run
+@mark cenario fim
+
+# restauração do estado anterior, se necessário (executar manualmente):
+# GPS:FIL:SET:LOAD "twin_bkp_cenario"
+# GPS:FIL:ROUT:LOAD "twin_bkp_cenario.rte"
+"
+`;

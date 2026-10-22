@@ -1,0 +1,293 @@
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --text: #1c1f23;
+  --muted: #5d6670;
+  --border: #d9dde1;
+  --accent: #1f6feb;
+  --ok: #1a7f37;
+  --warn: #9a6700;
+  --danger: #cf222e;
+  --code-bg: #eef1f4;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1116;
+    --surface: #161b22;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --ok: #3fb950;
+    --warn: #d29922;
+    --danger: #f85149;
+    --code-bg: #1f2630;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+code,
+pre,
+textarea.script {
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 13px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.brand {
+  font-weight: 700;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.tab {
+  cursor: pointer;
+  font: inherit;
+  background: transparent;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.notice {
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.filters input[type='search'] {
+  flex: 1 1 280px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+select,
+button {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.count {
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.cmd {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  margin-bottom: 6px;
+}
+
+.cmd summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.cmd .short {
+  font-weight: 700;
+  min-width: 14ch;
+}
+
+.cmd .long {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.badge.ok {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.badge.warn {
+  color: var(--warn);
+  border-color: var(--warn);
+}
+
+.badge.danger {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.cmd-body {
+  padding: 4px 12px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.cmd-body dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+}
+
+.cmd-body dt {
+  color: var(--muted);
+}
+
+.cmd-body dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+table.params {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+table.params th,
+table.params td {
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  padding: 4px 6px;
+  vertical-align: top;
+}
+
+.disc li {
+  margin-bottom: 4px;
+}
+
+textarea.script,
+pre.script {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--code-bg);
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.checker .row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.diags {
+  list-style: none;
+  padding: 0;
+}
+
+.diags li {
+  padding: 2px 0;
+}
+
+.diags .ln {
+  color: var(--muted);
+  display: inline-block;
+  min-width: 4ch;
+}
+
+.sev-error {
+  color: var(--danger);
+}
+
+.sev-warning {
+  color: var(--warn);
+}
+
+.sev-info {
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cmd-body dl {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scroll-x {
+  overflow-x: auto;
+  max-width: 100%;
+}
