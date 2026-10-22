@@ -12,6 +12,7 @@ export default defineConfig({
         'src/mock/**/*.ts',
         'src/runner/**/*.ts',
         'src/replica/**/*.ts',
+        'src/analysis/**/*.ts',
       ],
       exclude: ['**/*.test.ts', '**/*.test-util.ts', '**/*.gen.ts', '**/index.ts'],
       reporter: ['text-summary', 'text', 'html'],

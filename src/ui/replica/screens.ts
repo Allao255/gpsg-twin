@@ -127,7 +127,7 @@ function fb(app: AppApi, id: string, cls = ''): HTMLElement {
   const lock = lockReason(f, sc, app.session.running);
   const err = app.fieldErrors.get(id);
   const v = displayValue(f, sc);
-  return actionBox(
+  const el = actionBox(
     f.label,
     v === '' ? '—' : v,
     () => {
@@ -135,6 +135,22 @@ function fb(app: AppApi, id: string, cls = ''): HTMLElement {
     },
     { unit: fieldUnit(f, sc), lock, cls: `${cls} ${err ? 'err' : ''}`, title: err },
   );
+  el.dataset.field = id;
+  return el;
+}
+
+/** Janela (e aba do Setup) onde o campo aparece, para levar a ele a partir do script ou da análise. */
+export function fieldLocation(id: string): { win: WindowId; setupTab?: string } {
+  if (id.startsWith('position.') || id === 'setup.rfLevel') return { win: 'simulation' };
+  if (id.startsWith('channels.')) return { win: 'setup', setupTab: 'Channels' };
+  if (
+    id.startsWith('io.') ||
+    ['setup.extRef', 'setup.referenceSource', 'setup.triggerSource'].includes(id)
+  )
+    return { win: 'setup', setupTab: 'I/O' };
+  if (id.startsWith('motion.') && id !== 'motion.model')
+    return { win: 'setup', setupTab: 'Motion' };
+  return { win: 'setup', setupTab: 'Simulation' };
 }
 
 function hms(t: number): string {

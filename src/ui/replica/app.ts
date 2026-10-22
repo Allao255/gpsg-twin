@@ -12,6 +12,7 @@ import { applyKnownCorrections } from '../../core/script/correct';
 import { formatScript } from '../../core/script/format';
 import { parseScript } from '../../core/script/parse';
 import { formatNumber } from '../../core/units';
+import type { Target } from '../../analysis/events';
 import { importFiles } from '../../replica/import';
 import {
   displayValue,
@@ -40,7 +41,15 @@ import { createEditor, type ScriptEditor } from './editor';
 import { exportPackageDialog, importReport, readInputFiles } from './files-view';
 import { button, confirmDialog, entryDialog, pickFiles, type AppApi } from './kit';
 import './replica.css';
-import { enumChooser, initialUi, windowBody, windowTitle, WINDOWS, type UiState } from './screens';
+import {
+  enumChooser,
+  fieldLocation,
+  initialUi,
+  windowBody,
+  windowTitle,
+  WINDOWS,
+  type UiState,
+} from './screens';
 
 const STORAGE_KEY = 'gpsg-twin.replica';
 
@@ -85,7 +94,22 @@ function saveStored(s: ReplicaSession): void {
   }
 }
 
-export function createReplicaApp(): HTMLElement {
+/** Acesso da aba Análise à réplica: estado corrente e navegação até a linha e o campo. */
+export interface ReplicaHandle {
+  session: () => ReplicaSession;
+  script: () => string;
+  act: (r: Result) => boolean;
+  /** Mostra a linha no editor e o alvo na réplica (campo, janela ou SV). */
+  reveal: (line: number | null, target: Target | null) => void;
+  /** Avisa a cada mudança do cenário ou do script. */
+  onChange: (cb: () => void) => void;
+}
+
+export function createReplicaApp(): { el: HTMLElement; handle: ReplicaHandle } {
+  const listeners: (() => void)[] = [];
+  const notify = (): void => {
+    for (const cb of listeners) cb();
+  };
   let session = loadStored();
   const ui: UiState = initialUi();
   let doc: ScriptDoc = parseScript('');
@@ -134,6 +158,7 @@ export function createReplicaApp(): HTMLElement {
     analyze(text);
     saveStored(session);
     redraw();
+    notify();
   };
 
   const act = (r: Result): boolean => {
@@ -369,6 +394,7 @@ export function createReplicaApp(): HTMLElement {
     analyze(text);
     saveStored(session);
     redraw();
+    notify();
   };
 
   const paste = pasteableView(() => ({
@@ -388,6 +414,7 @@ export function createReplicaApp(): HTMLElement {
           analyze(r.script);
           saveStored(session);
           redraw();
+          notify();
         } else commit(r.session);
         message(`Aberto: ${files.map((f) => f.name).join(', ')}`);
         if (inputs.length > 1 || r.diagnostics.length > 0) importReport(r.summary, r.diagnostics);
@@ -478,9 +505,46 @@ export function createReplicaApp(): HTMLElement {
       analyze(text);
       saveStored(session);
       redraw();
+      notify();
     }, 400);
   });
   analyze(initial);
   redraw();
-  return root;
+
+  const reveal = (line: number | null, target: Target | null): void => {
+    if (line !== null) editor?.revealLine(line);
+    ui.sub = null;
+    if (target?.kind === 'field') {
+      const loc = fieldLocation(target.id);
+      ui.win = loc.win;
+      if (loc.setupTab) ui.tab.setup = loc.setupTab;
+    } else if (target?.kind === 'window') ui.win = target.win;
+    else if (target?.kind === 'sv') {
+      ui.win = 'svprn';
+      ui.tab.svprn = target.constellation;
+    }
+    redraw();
+    const el =
+      target?.kind === 'field' ? device.querySelector(`[data-field="${target.id}"]`) : null;
+    (el ?? device).scrollIntoView({ block: 'center' });
+    if (el) {
+      el.classList.add('flash');
+      setTimeout(() => {
+        el.classList.remove('flash');
+      }, 1600);
+    }
+  };
+
+  return {
+    el: root,
+    handle: {
+      session: () => session,
+      script: () => editor?.getText() ?? sessionScript(session).text,
+      act,
+      reveal,
+      onChange: (cb) => {
+        listeners.push(cb);
+      },
+    },
+  };
 }

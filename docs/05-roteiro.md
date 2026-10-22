@@ -107,6 +107,17 @@ Especificação em `00-visao-geral.md`, seção "Aba Análise".
 
 Aceite: scripts do capítulo 14 do manual e S01 exibidos com linha do tempo, mapa e orçamento corretos; clicar em qualquer evento leva à linha do script e ao campo correspondente.
 
+Decisões tomadas na implementação (2026-10-22):
+
+- Aceite em `src/analysis/acceptance.test.ts` (capítulo 14 e S01: eventos ligados à linha e a um alvo existente na réplica, posição, rota, trajetória, orçamento, eixo) e conferido no navegador.
+- A Análise lê o script do editor e o cenário da réplica; não guarda estado próprio. Cobre a configuração e a primeira execução, como a réplica.
+- Mapa Leaflet com contorno Natural Earth 1:50m embutido (`world-atlas`) e grade adaptativa ao zoom; funciona sem rede e no HTML único. Mapa base OpenStreetMap opcional, desligado por padrão: ligado, envia as coordenadas visíveis ao servidor de tiles (confidencialidade).
+- O mapa mostra o que o tipo de simulação usa (posição, rota ou trajetória). Clique no mapa: posição estática ou ponto livre acrescentado à rota, pela réplica.
+- Checagens de rota (OP 3-21) por grande círculo numa esfera de raio médio: 4 raios de curva, `v²/a` com a aceleração lateral do modelo, velocidade e aceleração longitudinal máximas. Waypoint do banco fica fora (sem coordenadas).
+- D18 provisório na linha do tempo: a duração vale só para o Doppler; demais manipulações ficam até a próxima ação do SV.
+- Orçamento de nível em `src/core/scenario/budget.ts`, compartilhado com a folha de sessão.
+- Sem tabela separada de manipulações por SV: as faixas da linha do tempo e a tabela de SVs no instante cobrem o item.
+
 ## M6. Aba Análise, camada calculada
 
 - Parser Yuma; resolução de rollover de semana pela data de simulação.

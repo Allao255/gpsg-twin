@@ -19,6 +19,7 @@ src/core/                core TypeScript: parser SCPI, validação, script .scpi
 src/core/files/          formatos do pacote USB, log dos runners, ZIP, folha de sessão
 src/replica/             lógica da réplica da interface: campos, travas, sessão, rota, waypoints
 src/docs/                referência de comandos gerada do modelo
+src/analysis/            camada declarada da aba Análise: eventos, estado no instante, checagens de rota
 src/ui/                  site (abas Equipamento, Análise, Ajuda)
 src/mock/                mock TCP do instrumento (npm run mock)
 src/runner/              gerador do runner PowerShell colável
@@ -56,4 +57,4 @@ npm run test:integration  # runners Python e PowerShell contra o mock
 
 ## Estado
 
-M0 a M3 concluídos: base do projeto, core (modelo, parser, validação, emissor, cenário), referência de comandos gerada, mock do instrumento em Node, testes de integração dos runners, runner PowerShell colável gerado pelo site e réplica da interface sincronizada com o editor de script. M4 (pacote USB e caminho reverso) implementado, com aceite pendente da sessão de bancada. Próximo marco: M5 (aba Análise, camada declarada). Nenhum comando verificado em hardware. Plano em `docs/05-roteiro.md`.
+M0 a M3 concluídos: base do projeto, core (modelo, parser, validação, emissor, cenário), referência de comandos gerada, mock do instrumento em Node, testes de integração dos runners, runner PowerShell colável gerado pelo site e réplica da interface sincronizada com o editor de script. M4 (pacote USB e caminho reverso) implementado, com aceite pendente da sessão de bancada. M5 (aba Análise, camada declarada: linha do tempo, mapa, orçamento, checagens de rota) concluído. Próximo marco: M6 (satélites calculados a partir do almanaque). Nenhum comando verificado em hardware. Plano em `docs/05-roteiro.md`.

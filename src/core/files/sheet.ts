@@ -1,9 +1,8 @@
 // Folha de sessão (`.md`): checklist físico, conexões, perdas, nível de RF previsto, arquivos do
 // pendrive, ordem de operações e linha do tempo esperada. Impressa ou aberta ao lado do equipamento.
-import { d17LossForPort, d17ShiftedRange } from '../quirks';
+import { COUPLING_DB, levelBudget } from '../scenario/budget';
 import { backupName, sortedActions } from '../scenario/emit';
 import type { Scenario, TimedAction } from '../scenario/types';
-import { info } from '../model/load';
 import { formatNumber } from '../units';
 
 /** Ação temporizada em texto (tabela da linha do tempo da réplica e folha de sessão). */
@@ -17,9 +16,6 @@ export function describeAction(a: TimedAction): string {
   parts.push(`duração ${a.duration_s} s`);
   return parts.join(', ');
 }
-
-/** Acoplamento típico do acoplador em 1575,42 MHz (OP 7-3). */
-const COUPLING_DB = 21.5;
 
 export interface SheetFile {
   path: string;
@@ -75,24 +71,20 @@ export function sessionSheet(
     p('- Trigger externo conectado: o relógio só avança na borda de subida (TSRC EXTERNAL).');
   p('');
 
-  const port = info('GPS:SET:RFLeVel').params[0]?.range_by_port?.[s.rfPort];
-  const loss = d17LossForPort(s.rfPort, sc.io);
+  const b = levelBudget(sc);
   p('## Nível de RF previsto', '');
   p(
     `- RF Level programado: **${db(s.rfLevel_dBm)} dBm** por SV${s.prnSignal === 'FIXED' ? ' (PRN Signal FIXED: todos os SVs no mesmo nível)' : ' (PRN Signal VARIABLE: níveis relativos seguem a geometria)'}. Interpretação provisória D17.`,
   );
-  if (port) {
-    const [lo, hi] = d17ShiftedRange(port, s.rfPort, sc.io);
-    p(
-      `- Faixa da porta com as perdas (D17): ${lo} a ${hi} dBm (perda considerada ${db(loss)} dB).`,
-    );
-  }
   p(
-    `- Composto na saída: ${db(s.rfLevel_dBm + 10 * Math.log10(6))} dBm com 6 SVs, ${db(s.rfLevel_dBm + 10 * Math.log10(12))} dBm com 12 SVs (RF Level + 10 log10 N).`,
+    `- Faixa da porta com as perdas (D17): ${b.range_dBm[0]} a ${b.range_dBm[1]} dBm (perda considerada ${db(b.loss_dB)} dB).`,
   );
-  if (s.rfPort === 'COUPLER')
+  p(
+    `- Composto na saída: ${db(b.composite_dBm(6))} dBm com 6 SVs, ${db(b.composite_dBm(12))} dBm com 12 SVs (RF Level + 10 log10 N).`,
+  );
+  if (b.atAntenna_dBm !== null)
     p(
-      `- Na antena, pelo acoplador: RF Level - cabo do acoplador - ${COUPLING_DB} dB = ${db(s.rfLevel_dBm - sc.io.couplerCable_dB - COUPLING_DB)} dBm (acoplamento típico, OP 7-3).`,
+      `- Na antena, pelo acoplador: RF Level - cabo do acoplador - ${COUPLING_DB} dB = ${db(b.atAntenna_dBm)} dBm (acoplamento típico, OP 7-3).`,
     );
   p('- Faixa adequada para a maioria dos receptores: -115 a -120 dBm (OP 4-2).', '');
 

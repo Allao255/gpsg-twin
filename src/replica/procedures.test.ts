@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { scenarioFromScript } from '../core/scenario/from-script';
 import type { Scenario } from '../core/scenario/types';
 import { applyKnownCorrections } from '../core/script/correct';
+import { RP14_1, RP14_2, RP14_3, RP14_4 } from './rp14.test-util';
 import { parseScript } from '../core/script/parse';
 import { displayValue, FIELDS } from './fields';
 import { formToPoint, newRouteForm, routeRows } from './route-form';
@@ -27,44 +28,6 @@ import {
   type ReplicaSession,
   type Result,
 } from './session';
-
-// Capítulo 14 do manual remoto (14.1 a 14.4), com aspas retas.
-const RP14_1 = `GPS:SETUP:RFPORT DIRECT
-GPS:SET:RFLV -120
-GPS:SET:CARR L1/E1
-GPS:SET:CLOC USER
-GPS:SET:TIM "11:11:11"
-GPS:SET:DAT "04/14/2013"
-GPS:SET:PSRC "USER"
-GPS:SET:STYP STATIC
-GPS:SIM:LAT 4.444
-GPS:SIM:LONG 102.4533
-GPS:SIM:ALT 900
-GPS:SIM:TRUN
-`;
-const RP14_2 = `GPS:FILE:ALM:LOAD "Week648.alm"
-`;
-const RP14_3 = `GPS:SETUP:RFPORT DIRECT
-GPS:SET:RFLV -120
-GPS:SET:CARR L1/E1
-GPS:SET:CLOC USER
-GPS:SET:TIM "11:11:11"
-GPS:SET:DAT "04/14/2013"
-GPS:SET:PSRC "USER"
-GPS:SET:STYP DYNAMIC
-GPS:ROUT:ADD:WAYP "SFO",500,500,100,5000
-GPS:ROUT:ADD:WAYP "LAX",500,500,100,5000
-GPS:ROUT:ADD:WAYP "SAN",500,500,100,5000
-GPS:ROUT:SAV "California"
-GPS:SIM:TRUN
-`;
-const RP14_4 = `GPS:SETUP:RFPORT DIRECT
-GPS:SET:RFLV -120
-GPS:SET:CARR L1/E1
-GPS:SET:STYPE TRAJECTORY
-GPS:FILE:NMEA:LOAD "short.nme"
-GPS:SIM:TRUN
-`;
 
 function must(r: Result): ReplicaSession {
   if (!r.ok) throw new Error(r.error);

@@ -11,5 +11,6 @@ Uma página por tarefa, para quem opera o twin e o equipamento. Publicado na aba
 | [05-pacote-usb.md](05-pacote-usb.md) | Anexar almanaque e trajetória, exportar o pacote USB, abrir pacotes, arquivos do equipamento e logs | M4 |
 | [06-folha-de-bancada.md](06-folha-de-bancada.md) | Folha de uma página para a bancada: conexões, ordem, regras, recuperação | M4 |
 | [07-referencia-rapida.md](07-referencia-rapida.md) | Níveis, perdas, manipulações por SV, limites de movimento, conector Aux, arquivos | M4 |
+| [08-conferir-na-analise.md](08-conferir-na-analise.md) | Conferir na aba Análise: linha do tempo, estado no instante, mapa, checagens de rota | M5 |
 
-Páginas previstas (`docs/05-roteiro.md`, seção "Documentação de uso"): conferir na aba Análise (M5), executar na bancada com o runner, ler o log (relatório, M7).
+Páginas previstas (`docs/05-roteiro.md`, seção "Documentação de uso"): executar na bancada com o runner e ler o log (relatório, M7).

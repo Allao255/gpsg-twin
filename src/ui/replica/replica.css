@@ -644,3 +644,10 @@ main:has(.replica-app) {
   flex: 1 1 100%;
   overflow-wrap: anywhere;
 }
+
+/* Campo destacado ao vir de uma linha do script ou de um evento da análise. */
+.gpsg .fld.flash .box {
+  border-color: #ffe94d;
+  box-shadow: 0 0 0 3px #ffe94d;
+  transition: box-shadow 0.3s;
+}
