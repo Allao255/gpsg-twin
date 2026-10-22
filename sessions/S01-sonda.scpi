@@ -132,17 +132,23 @@ GPS:SET:PRNS?
 GPS:SET:PRNS FIXED
 
 # ---------------- C: rota ----------------
-@mark C1 D04 D08 rota de 3 pontos (exemplo do manual), unidades de entrada e de retorno
+@mark C1 D04 D08 rota de 3 pontos (coordenadas do exemplo do manual), valores validos em SI e em IMPERIAL
 GPS:SET:CRMM UNLIMITED
 GPS:ROUT:CLR
-GPS:ROUT:ADD:POIN "twin_p1",39.2976,-94.7139,312,500,500,100,25
-GPS:ROUT:ADD:POIN "twin_p2",38.4081,-96.0000,1869,500,500,100,25
-GPS:ROUT:ADD:POIN "twin_p3",37.6499,-97.4331,406,500,500,100,25
+GPS:ROUT:ADD:POIN "twin_p1",39.2976,-94.7139,312,5,50,9.8,100
+GPS:ROUT:ADD:POIN "twin_p2",38.4081,-96.0000,1869,5,50,9.8,100
+GPS:ROUT:ADD:POIN "twin_p3",37.6499,-97.4331,406,5,50,9.8,100
 GPS:ROUT:LIST?
 GPS:ROUT:DISP? 1
 GPS:ROUT:VALD
 GPS:STAT?
-GPS:ROUT:EDIT 3,"twin_p3",37.6499,-97.4331,406,500,400,100,25
+@mark C2 D04 sonda da unidade de subida: 500 so e valido como ft/min (em m/s o maximo e 30)
+GPS:ROUT:ADD:POIN "twin_p4",37.6499,-97.4331,406,500,50,9.8,100
+GPS:ROUT:LIST?
+GPS:ROUT:DEL 4
+GPS:ROUT:LIST?
+@mark C3 edicao e gravacao da rota de sonda
+GPS:ROUT:EDIT 3,"twin_p3",37.6499,-97.4331,406,5,40,9.8,100
 GPS:ROUT:DISP? 3
 GPS:ROUT:LOOP OFF
 GPS:ROUT:SAV "twin_probe.rte"
