@@ -220,7 +220,7 @@ describe('rota', () => {
   it('limite de 9999 pontos (D08)', () => {
     const s = newSession();
     s.scenario.route.points = Array.from({ length: 9999 }, () => wp('SFO'));
-    expect(error(routeInsert(s, wp('LAX')))).toMatch(/D08/);
+    expect(error(routeInsert(s, wp('LAX')))).toMatch(/9999 pontos/);
   });
 
   it('ponto livre validado pelo modelo', () => {

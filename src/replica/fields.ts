@@ -225,7 +225,7 @@ export const FIELDS: readonly FieldDef[] = [
           : {
               value: u.label,
               label: u.label,
-              disabled: `sem equivalente remoto (${u.dRefs.join(', ')})`,
+              disabled: 'sem equivalente remoto',
             },
       ),
     get: (s) => d11CarrierLabel(s.setup.gnss, s.setup.carrier),
@@ -264,7 +264,7 @@ export const FIELDS: readonly FieldDef[] = [
       ['VARIABLE', 'Variable'],
       ['TRAJ', 'Traj File'],
     ],
-    { TRAJ: 'só na UI, sem comando remoto (D13)' },
+    { TRAJ: 'só na UI, sem comando remoto' },
   ),
   enumField('setup.positionSource', 'Position Source', 'GPS:SET:PositionSouRCe', 'positionSource', [
     ['USER', 'User'],
@@ -280,7 +280,7 @@ export const FIELDS: readonly FieldDef[] = [
       ['USER', 'User setting'],
       ['INTERNAL', 'Internal'],
     ],
-    { INTERNAL: 'só na UI, sem comando remoto; usar User setting (D12)' },
+    { INTERNAL: 'só na UI, sem comando remoto; usar User setting' },
   ),
   {
     id: 'setup.date',

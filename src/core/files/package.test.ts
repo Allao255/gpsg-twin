@@ -78,7 +78,7 @@ describe('buildPackage', () => {
       'trajetória twin_t.nme anexada e não usada pelo cenário',
     );
     expect(text(p, 'rota_manual-folha.md')).toMatch(
-      /twin_rota_manual.rte` \| registro; não carregado pelo script\. D29/,
+      /twin_rota_manual.rte` \| registro; não carregado pelo script\. formato não verificado em bancada/,
     );
     expect(JSON.parse(text(p, 'rota_manual.json'))).toMatchObject({ name: 'rota_manual' });
   });

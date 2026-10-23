@@ -200,7 +200,7 @@ function simulationWindow(app: AppApi, ui: UiState): HTMLElement {
                 {
                   cls: 'wide',
                   title:
-                    'PRNs informados pelo operador ou importados de log (sem geometria até o M6)',
+                    'PRNs informados pelo operador ou importados de log (sem geometria calculada)',
                 },
               ),
               infoBox('Visible SVs', s.svs[cons].length ? String(s.svs[cons].length) : '—'),
@@ -287,7 +287,7 @@ function editPrns(app: AppApi, cons: Constellation): void {
   entryDialog({
     title: `SV PRN ${cons === 'GPS' ? 'GPS' : 'Galileo'}`,
     initial: app.session.svs[cons].map((x) => x.sv).join(', '),
-    hint: `PRNs em simulação, separados por vírgula (${cons === 'GPS' ? '1 a 32' : '1 a 36'}). Sem geometria até o M6.`,
+    hint: `PRNs em simulação, separados por vírgula (${cons === 'GPS' ? '1 a 32' : '1 a 36'}). Sem geometria calculada.`,
     onOk: (text) => {
       const r = setPrns(app.session, cons, text);
       return r.ok ? (app.act(r), null) : r.error;
@@ -358,11 +358,11 @@ function setupWindow(app: AppApi, ui: UiState): HTMLElement {
       ),
       row(
         button('Apply', () => {
-          app.message('D09: alocação de canais guardada no cenário, não emitida no script.');
+          app.message('Alocação de canais guardada no cenário, não emitida no script.');
         }),
       ),
       note(
-        'D09: alocação de canais guardada no cenário e não emitida na v1 (faixas e padrões divergentes).',
+        'Alocação de canais guardada no cenário e não emitida no script (faixas e padrões divergentes entre os manuais).',
       ),
     );
   } else if (tab === 'I/O') {
@@ -386,7 +386,7 @@ function setupWindow(app: AppApi, ui: UiState): HTMLElement {
           fb(app, 'setup.triggerSource'),
         ),
       ),
-      note('Splitter Loss não aparece na tela do equipamento; existe só no remoto (SLOS, D14).'),
+      note('Splitter Loss não aparece na tela do equipamento; existe só no remoto (SLOS).'),
     );
   } else {
     const bank = maxBankAngle(sc.motion);
@@ -407,9 +407,7 @@ function setupWindow(app: AppApi, ui: UiState): HTMLElement {
           }),
         ),
       ),
-      note(
-        'D27: limites de fábrica do settings XML (01-equipamento.md seção 4); edição só com Custom.',
-      ),
+      note('Limites de fábrica do settings XML; edição só com Custom.'),
     );
   }
   return h(
@@ -487,7 +485,7 @@ function svPrnWindow(app: AppApi, ui: UiState): HTMLElement {
         entryDialog({
           title: `Importar ${cons === 'GPS' ? 'GPS:SVPR:GPS:LIST?' : 'GPS:SVPR:GAL:LIST?'}`,
           initial: '',
-          hint: 'Colar a resposta do log (uma linha por SV; \\n aceito). Usados SV, elevação e azimute (D03).',
+          hint: 'Colar a resposta do log (uma linha por SV; \\n aceito). Usados SV, elevação e azimute.',
           multiline: true,
           onOk: (text) => {
             const r = importSvList(app.session, cons, text);
@@ -642,7 +640,7 @@ function svEditWindow(
     row(inp('Doppler Error', 'doppler', 'Hz'), inp('Step Error', 'step', q(sc, 'step'))),
     row(inp('Error Duration', 'duration', 's')),
     note(
-      'Select Replace (troca de SV) não tem comando remoto; não representado. Faixas: Doppler ±5 kHz, offset ±15 dB, step ±1000 m (D01), coerência ±2 m/s.',
+      'Select Replace (troca de SV) não tem comando remoto; não representado. Faixas: Doppler ±5 kHz, offset ±15 dB, step ±1000 m, coerência ±2 m/s.',
     ),
     row(
       button('Cancel', () => {
@@ -708,7 +706,7 @@ function routeWindow(app: AppApi, ui: UiState): HTMLElement {
           button('Validate', () => {
             app.message(
               sc.route.points.length >= 2
-                ? `${sc.route.points.length} pontos. O script emite GPS:ROUT:VALD e lê o resultado em GPS:STAT?; avisos do twin no M5.`
+                ? `${sc.route.points.length} pontos. O script emite GPS:ROUT:VALD e lê o resultado em GPS:STAT?; avisos do twin na aba Análise.`
                 : 'Rota com menos de 2 pontos.',
             );
           }),
@@ -1026,9 +1024,7 @@ function waypointWindow(app: AppApi, ui: UiState): HTMLElement {
           },
         },
       ),
-      note(
-        'Waypoints de usuário do cenário (GPS:WAYP:NEW). D28: Country é o parâmetro remoto state.',
-      ),
+      note('Waypoints de usuário do cenário (GPS:WAYP:NEW). Country é o parâmetro remoto state.'),
     ),
     group(
       'Waypoints',
@@ -1114,7 +1110,7 @@ function waypointEditWindow(
         formInput(f, 'name', 'Name'),
         formInput(f, 'city', 'City'),
       ),
-      row(formInput(f, 'state', 'Country (state, D28)')),
+      row(formInput(f, 'state', 'Country (state)')),
       row(formInput(f, 'lat', 'Latitude'), formInput(f, 'lon', 'Longitude')),
       row(formInput(f, 'alt', 'Altitude', q(sc, 'altitude'))),
     ),
@@ -1170,12 +1166,12 @@ function gpsRxWindow(app: AppApi): HTMLElement {
         button('Reload', () => {
           if (app.act(setAlmanac(app.session, { kind: 'equipment' }))) {
             app.message(
-              'Almanaque do receptor interno: cenário não fixado (D24). Para ensaio, carregar almanaque de arquivo.',
+              'Almanaque do receptor interno: cenário não fixado. Para ensaio, carregar almanaque de arquivo.',
             );
           }
         }),
         button('Record Trajectory', () => undefined, {
-          disabled: 'D15: forma de parar a gravação não descrita; não emitido',
+          disabled: 'forma de parar a gravação não descrita no manual; não emitido',
         }),
       ),
     ),
@@ -1258,7 +1254,7 @@ function fileWindow(app: AppApi, ui: UiState): HTMLElement {
           });
         }),
         button('Manage', () => undefined, {
-          disabled: 'D24: sem comando remoto para salvar almanaque',
+          disabled: 'sem comando remoto para salvar almanaque',
         }),
         button('GPS Rx', () => {
           app.act(setAlmanac(app.session, { kind: 'equipment' }));

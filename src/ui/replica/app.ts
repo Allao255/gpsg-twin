@@ -324,7 +324,6 @@ export function createReplicaApp(): { el: HTMLElement; handle: ReplicaHandle } {
               },
               h('span', { class: 'ln' }, d.line === undefined ? '' : `L${d.line}`),
               ` ${d.message}`,
-              d.dRefs ? ` [${d.dRefs.join(', ')}]` : '',
             ),
           )),
     );

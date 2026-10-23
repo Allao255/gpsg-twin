@@ -274,7 +274,7 @@ export function routeInsert(s: ReplicaSession, p: RoutePoint, index?: number): R
   const err = checkPoint(p, s);
   if (err) return fail(err);
   const n = s.scenario.route.points.length;
-  if (n >= 9999) return fail('rota com 9999 pontos (D08)');
+  if (n >= 9999) return fail('rota com 9999 pontos');
   const i = index ?? n;
   if (!Number.isInteger(i) || i < 0 || i > n) return fail('posição de inserção fora da lista');
   return ok(

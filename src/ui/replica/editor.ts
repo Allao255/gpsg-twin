@@ -191,7 +191,7 @@ export function createEditor(
           from,
           to: Math.max(from, to),
           severity: d.severity,
-          message: d.dRefs ? `${d.message} [${d.dRefs.join(', ')}]` : d.message,
+          message: d.message,
         });
       }
       view.dispatch(setDiagnostics(view.state, out));

@@ -53,7 +53,7 @@ describe('hoverAt', () => {
     expect(t).toMatch(/^GPS:SET:RFLV {2}\(GPS:SET:RFLEVEL\)/);
     expect(t).toMatch(/level \(real\): DIRECT -155\.\.-93; COUPLER -130\.\.-68, dBm/);
     expect(t).toMatch(/Na réplica: RF Level\./);
-    expect(t).toMatch(/Discrepâncias: D17/);
+    expect(t).toMatch(/manuais divergem/);
     expect(t).toMatch(/RP 10-15, não verificado em bancada/);
   });
 

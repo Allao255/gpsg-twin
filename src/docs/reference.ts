@@ -45,7 +45,7 @@ export interface ReferenceEntry {
 
 function rangeText(inf: CommandInfo, p: Param): string {
   const ov = rangeOverride(inf.header, p.name);
-  const ovText = ov ? ` (twin: ${ov.min ?? p.min ?? ''}..${ov.max ?? p.max ?? ''}, ${ov.dRefs.join(', ')})` : '';
+  const ovText = ov ? ` (twin: ${ov.min ?? p.min ?? ''}..${ov.max ?? p.max ?? ''})` : '';
   if (p.range_by_port) {
     const r = p.range_by_port;
     return `DIRECT ${r.DIRECT[0]}..${r.DIRECT[1]}; COUPLER ${r.COUPLER[0]}..${r.COUPLER[1]}`;
@@ -61,7 +61,7 @@ function rangeText(inf: CommandInfo, p: Param): string {
     const parts = [p.format ? `formato ${p.format}` : '', p.maxlen ? `até ${p.maxlen} caracteres` : ''];
     return parts.filter((x) => x !== '').join(', ');
   }
-  if (p.type === 'lat' || p.type === 'lon') return 'graus decimais com sinal (D07)';
+  if (p.type === 'lat' || p.type === 'lon') return 'graus decimais com sinal';
   if (p.type === 'unit') return 'unidade opcional';
   return '';
 }

@@ -48,7 +48,7 @@ export function waypointsToCsv(list: readonly UserWaypoint[]): WaypointsCsvResul
       diag(
         'file-unverified',
         'info',
-        `altitude dos waypoints em ${D30_WAYPOINT_CSV_ALT_UNIT} (D30, não verificado)`,
+        `altitude dos waypoints em ${D30_WAYPOINT_CSV_ALT_UNIT} (não verificado)`,
         { dRefs: ['D30'] },
       ),
     );

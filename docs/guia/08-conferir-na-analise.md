@@ -1,6 +1,6 @@
 # Conferir um script na aba Análise
 
-A aba Análise mostra o que o script da aba Equipamento pede, de uma vez: linha do tempo, estado em qualquer instante, nível de RF, mapa e checagens de rota. Tudo é lido do script e do cenário (camada declarada); satélites calculados a partir do almanaque ficam para o M6.
+A aba Análise mostra o que o script da aba Equipamento pede, de uma vez: linha do tempo, estado em qualquer instante, nível de RF, mapa e checagens de rota. Tudo é lido do script e do cenário (camada declarada); satélites calculados a partir do almanaque ainda não estão disponíveis.
 
 1. Carregar ou montar o script na aba Equipamento ("Abrir…", réplica ou editor).
 2. Abrir a aba Análise. O topo mostra o nome do cenário e quantos erros o script tem; os erros são vistos e corrigidos no editor.
@@ -9,7 +9,7 @@ A aba Análise mostra o que o script da aba Equipamento pede, de uma vez: linha 
 
 - Faixas: Execução (do `@run` ao `@stop`; tracejada sem `@stop`), RF Level (degraus com o valor) e uma faixa por SV manipulado.
 - Cores dos SVs: âmbar com manipulação em vigor (Doppler, coerência, offset, step), vermelho com saúde BAD ou DISCONNECTED, cinza com o SV desligado (Select OFF).
-- O erro de Doppler vale pela duração informada; os demais campos ficam até a próxima ação do mesmo SV (D18, provisório).
+- O erro de Doppler vale pela duração informada; os demais campos ficam até a próxima ação do mesmo SV (interpretação provisória: o manual é ambíguo).
 - Clicar ou arrastar na linha do tempo, ou digitar o instante no campo Cursor, move o cursor.
 - Cada marcador é uma linha do script em execução; marcador âmbar tem instante mínimo (depois de `@pause` ou `@input`). Clicar leva à aba Equipamento, seleciona a linha no editor e destaca o campo da réplica.
 - Ações por SV escritas com variável (`${PRN}`) não têm faixa: o SV só é conhecido na bancada.
@@ -17,7 +17,7 @@ A aba Análise mostra o que o script da aba Equipamento pede, de uma vez: linha 
 ## Estado no instante
 
 - Tipo de simulação, portadora, porta e RF Level vigente (com o instante da última mudança).
-- Faixa de RF Level da porta com as perdas (D17), composto na saída para 6 e 12 SVs e, na porta COUPLER, nível na antena pelo acoplador (21,5 dB típico).
+- Faixa de RF Level da porta com as perdas, composto na saída para 6 e 12 SVs e, na porta COUPLER, nível na antena pelo acoplador (21,5 dB típico).
 - Hora simulada no instante (Clock User), posição, rota ou trajetória e modelo de movimento.
 - Tabela dos SVs manipulados: Select, Health, Doppler em vigor, coerência, offset, step e nível por SV (RF Level mais offset).
 

@@ -54,4 +54,11 @@ describe('renderMarkdown', () => {
       expect(text, f).not.toMatch(/```|^#|\]\(|\*\*|^\s*\|/m);
     }
   });
+
+  it('o guia não cita marcos (Mn) nem IDs de discrepância (Dnn)', () => {
+    const dir = resolve(import.meta.dirname, '../../docs/guia');
+    for (const f of readdirSync(dir).filter((x) => x.endsWith('.md'))) {
+      expect(readFileSync(resolve(dir, f), 'utf8'), f).not.toMatch(/\b[MD]\d{1,2}\b/);
+    }
+  });
 });

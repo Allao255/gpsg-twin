@@ -80,18 +80,24 @@ describe('GNSS e portadora (D11)', () => {
     expect(s.setup.carrier).toEqual({ command: 'GPS:SET:CaRrierGAl', token: 'E5a' });
   });
 
-  it('L1 no P(y) aparece desabilitada com a referência', () => {
+  it('L1 no P(y) aparece desabilitada com o motivo', () => {
     const f = field('setup.carrier');
     const s = defaultScenario();
-    expect(f.options?.(s).find((o) => o.value === 'L1 no P(y)')?.disabled).toMatch(/D11/);
-    expect(error(f, s, 'L1 no P(y)')).toMatch(/D11/);
+    expect(f.options?.(s).find((o) => o.value === 'L1 no P(y)')?.disabled).toBe(
+      'sem equivalente remoto',
+    );
+    expect(error(f, s, 'L1 no P(y)')).toMatch(/sem equivalente remoto/);
     // set direto com opção sem equivalente remoto não altera a portadora.
     expect(applyField(f, s, 'L1 no P(y)').setup.carrier).toEqual(s.setup.carrier);
   });
 
   it('opções só da UI de Clock e PRN Signal', () => {
-    expect(error(field('setup.clock'), defaultScenario(), 'Internal')).toMatch(/D12/);
-    expect(error(field('setup.prnSignal'), defaultScenario(), 'Traj File')).toMatch(/D13/);
+    expect(error(field('setup.clock'), defaultScenario(), 'Internal')).toMatch(
+      /sem comando remoto/,
+    );
+    expect(error(field('setup.prnSignal'), defaultScenario(), 'Traj File')).toMatch(
+      /sem comando remoto/,
+    );
     expect(error(field('setup.prnSignal'), defaultScenario(), 'Nada')).toMatch(/inexistente/);
   });
 

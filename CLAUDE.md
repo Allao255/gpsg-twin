@@ -22,6 +22,7 @@ Os PDFs dos manuais ficam em `refs/` (ignorado pelo git). Se um detalhe não est
 - Arquivos criados no equipamento pelo twin usam prefixo `twin_`.
 - Nenhum dado de ensaio real no repositório: nomes de equipamentos sob teste, rotas de interesse, posições de laboratório, logs, resultados. Exemplos usam apenas coordenadas e nomes dos exemplos do manual. `scenarios/private/`, `golden/private/`, `logs/` e `refs/` são ignorados.
 - A UI reproduz layout e comportamento do equipamento; não copiar logotipo, ícones ou marca da VIAVI.
+- Texto visível ao operador (UI, guia em `docs/guia/`, referência de comandos, script, folha e pacote gerados, README) não cita marcos (`Mn`) nem IDs de discrepância (`Dnn`): descrever o efeito em palavras ("os manuais divergem", "não verificado em bancada", "ainda não disponível"). Os IDs ficam em comentários de código, no campo `dRefs` dos diagnósticos e nos docs internos (`docs/0x`).
 - Na aba Análise, separar a camada declarada (lida do código) da calculada (propagação do almanaque do cenário). Céu calculado só no modo Fixado; no modo Referência, sempre rotulado como ilustrativo com a data do almanaque; no modo Não fixado, sem céu.
 
 ## Estilo de código

@@ -31,9 +31,10 @@ describe('sessionSheet', () => {
     expect(t).toMatch(/^# Folha de sessão: cenario\n/);
     expect(t).toMatch(/Porta de RF: \*\*DIRECT\*\*/);
     expect(t).toMatch(/Nada ligado à porta COUPLER/);
-    expect(t).toMatch(/Faixa da porta com as perdas \(D17\): -155 a -93 dBm/);
+    expect(t).toMatch(/Faixa da porta com as perdas: -155 a -93 dBm/);
     expect(t).toMatch(/-112\.2 dBm com 6 SVs, -109\.2 dBm com 12 SVs/);
     expect(t).not.toMatch(/Pendrive/);
+    expect(t).not.toMatch(/\b[MD]\d{1,2}\b/);
     expect(t).not.toMatch(/## Arquivos do pacote/);
     expect(t).toMatch(/Sem `@stop`/);
     expect(t).toMatch(/GPS:FIL:SET:LOAD "twin_bkp_cenario"/);
@@ -66,9 +67,7 @@ describe('sessionSheet', () => {
     expect(t).toMatch(/Referência de 10 MHz externa/);
     expect(t).toMatch(/Saída de referência externa ligada/);
     expect(t).toMatch(/Trigger externo/);
-    expect(t).toMatch(
-      /Faixa da porta com as perdas \(D17\): -132 a -70 dBm \(perda considerada 2.5 dB\)/,
-    );
+    expect(t).toMatch(/Faixa da porta com as perdas: -132 a -70 dBm \(perda considerada 2.5 dB\)/);
     expect(t).toMatch(/Na antena, pelo acoplador: .* = -124 dBm/);
     expect(t).toMatch(/Pendrive FAT32/);
     expect(t).toMatch(

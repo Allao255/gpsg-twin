@@ -55,12 +55,7 @@ export async function readInputFiles(files: readonly File[]): Promise<InputFile[
 }
 
 function diagItem(d: Diagnostic): HTMLElement {
-  return h(
-    'li',
-    { class: `sev-${d.severity}` },
-    d.message,
-    d.dRefs ? ` [${d.dRefs.join(', ')}]` : '',
-  );
+  return h('li', { class: `sev-${d.severity}` }, d.message);
 }
 
 /** Resultado de uma importação: o que foi feito com cada arquivo e os diagnósticos. */
@@ -129,7 +124,7 @@ export function exportPackageDialog(app: AppApi, target: () => RunnerTarget): vo
       h(
         'p',
         { class: 'dlg-hint' },
-        'Descompactar na raiz do pendrive. Por padrão o script configura tudo por comandos; marcar abaixo para importar e carregar o arquivo no lugar dos comandos (formatos não verificados em bancada, D29 a D31).',
+        'Descompactar na raiz do pendrive. Por padrão o script configura tudo por comandos; marcar abaixo para importar e carregar o arquivo no lugar dos comandos (formatos não verificados em bancada).',
       ),
       check('viaRoute', 'Rota pelo pendrive (.rte)'),
       check('viaWaypoints', 'Waypoints pelo pendrive (.csv)'),

@@ -66,7 +66,7 @@ describe('routeFromXml', () => {
     const w =
       '<Waypoint Longitude="0" MaxAcceleration="0" MaxClimbRate="0" Name="P" Latitude="0" Altitude="0" TargetSpeed="0" TurningCircleRadius="0"/>';
     const r = routeFromXml(`<Route>${w.repeat(10000)}</Route>`);
-    expect(r.diagnostics.at(-1)?.message).toMatch(/D08/);
+    expect(r.diagnostics.at(-1)?.message).toMatch(/máximo 9999$/);
   });
 });
 

@@ -36,7 +36,8 @@ describe('emissor de cenário', () => {
     expect(idx('@pause ROUT:CLR')).toBe(idx('GPS:ROUT:CLR') - 1);
     expect(idx('@run')).toBeLessThan(idx('@at 12.5'));
     expect(r.text).not.toContain('GPS:SET:DAT');
-    expect(r.text).toContain('# twin-channels: gnss=11 (D09: não emitido)');
+    expect(r.text).toContain('# twin-channels: gnss=11 (não emitido)');
+    expect(r.text).not.toMatch(/\b[MD]\d{1,2}\b/);
   });
 
   it('ida e volta: cenários fixos', () => {

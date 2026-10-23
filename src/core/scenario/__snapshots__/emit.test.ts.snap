@@ -14,7 +14,7 @@ exports[`emissor de cenário > cenário dinâmico completo: sem erro e com ordem
 GPS:FIL:SET:SAV "twin_bkp_rota_manual"
 GPS:FIL:ROUT:SAV "twin_bkp_rota_manual.rte"
 
-# D04: unidades SI em todo script gerado
+# unidades SI em todo script gerado
 GPS:SET:UNIT SI
 @expect GPS:SET:UNIT? SI
 
@@ -49,7 +49,7 @@ GPS:SET:CRMM CUSTOM
 GPS:SET:MLAT 9.8
 GPS:SET:MLON 4.9
 GPS:SET:MVEL 89.41
-# twin-channels: gnss=11 (D09: não emitido)
+# twin-channels: gnss=11 (não emitido)
 
 # almanaque
 GPS:FIL:ALM:LOAD "twin_w0574.alm"
@@ -103,7 +103,7 @@ exports[`emissor de cenário > cenário padrão: sem diagnóstico, determinísti
 GPS:FIL:SET:SAV "twin_bkp_cenario"
 GPS:FIL:ROUT:SAV "twin_bkp_cenario.rte"
 
-# D04: unidades SI em todo script gerado
+# unidades SI em todo script gerado
 GPS:SET:UNIT SI
 @expect GPS:SET:UNIT? SI
 

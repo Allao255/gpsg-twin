@@ -14,10 +14,10 @@ O pacote reúne em um `.zip` tudo o que vai para a bancada: arquivos do equipame
 
 1. "Exportar pacote .zip…" abaixo da réplica.
 2. Conferir a lista de arquivos e os avisos:
-   - settings XML só é gerado quando todos os valores do cenário têm token documentado; o aviso lista os campos que faltam (D31). A configuração vai pelo script de qualquer forma.
+   - settings XML só é gerado quando todos os valores do cenário têm token documentado; o aviso lista os campos que faltam. A configuração vai pelo script de qualquer forma.
    - rota com waypoint do banco do equipamento não gera `.rte` (as coordenadas estão só no equipamento).
    - almanaque ou trajetória com prefixo `twin_` referenciados pelo cenário e não anexados precisam já estar no equipamento.
-3. Opcional: marcar "Rota pelo pendrive", "Waypoints pelo pendrive" ou "Settings pelo pendrive" para o script importar e carregar o arquivo no lugar dos comandos. Usar só depois de o formato ser confirmado em bancada (D29 a D31).
+3. Opcional: marcar "Rota pelo pendrive", "Waypoints pelo pendrive" ou "Settings pelo pendrive" para o script importar e carregar o arquivo no lugar dos comandos. Usar só depois de o formato ser confirmado em bancada.
 4. Endereço e porta do runner colável vêm dos campos "Runner PowerShell colável", abaixo do editor.
 5. "Baixar .zip". Descompactar na raiz do pendrive FAT32: a pasta `Instrument/` precisa ficar na raiz.
 
@@ -35,4 +35,4 @@ O pacote reúne em um `.zip` tudo o que vai para a bancada: arquivos do equipame
 | `.set`, `.rte`, `.csv` de waypoints | Settings, rota (substitui a rota corrente) ou waypoints (acrescentados; código repetido substituído) |
 | `.alm`, `.gdt`, `.nme` | Anexado ao pacote, como na janela File |
 
-Ao abrir mais de um arquivo, ou quando há avisos, um quadro lista o que foi feito com cada arquivo. Tokens de settings inferidos e não verificados aparecem com aviso D31.
+Ao abrir mais de um arquivo, ou quando há avisos, um quadro lista o que foi feito com cada arquivo. Tokens de settings inferidos e não verificados aparecem com aviso.

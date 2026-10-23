@@ -8,12 +8,12 @@ A aba Equipamento tem a réplica da interface do GPSG-1000 à esquerda e o scrip
 2. Escolher a janela pela barra lateral (Simulation, Setup, SV PRN, Route, Waypoint, GPS RX, File, Diagnostics), como no equipamento (OP capítulo 3).
 3. Clicar no campo a alterar:
    - Campos numéricos abrem o teclado com a faixa aceita. Valor fora da faixa é recusado com o motivo; o campo não muda.
-   - Seletores mostram as opções da tela. Opções que só existem na UI do equipamento aparecem desabilitadas com a discrepância (Clock Internal, D12; PRN Signal Traj File, D13; portadora L1 no P(y), D11).
+   - Seletores mostram as opções da tela. Opções que só existem na UI do equipamento aparecem desabilitadas, com o motivo (Clock Internal, PRN Signal Traj File, portadora L1 no P(y)).
    - Latitude e longitude aceitam graus decimais com sinal ou hemisfério (`39.2976 N`), graus e minutos (`39 17.856 N`) ou graus, minutos e segundos (`39 17 51.36 N`). Sinal só nos graus.
    - Data aceita `mm/dd/aaaa`, `aaaa-mm-dd` ou `Aug 14, 2013`; hora em `hh:mm:ss` UTC.
 4. Campo com cadeado está travado. O motivo aparece ao clicar: modo (latitude travada fora de Static, data e hora só com Clock User setting, limites de movimento só com Motion Model Custom) ou execução.
-5. Unidades e formato de lat/long do Setup mudam só a exibição. O script é sempre emitido em SI (D04); a escolha de exibição vai no metadado `# twin-display:` do script.
-6. Perdas do Setup I/O deslocam a faixa de RF Level da porta selecionada (D17). Trocar a porta força Digital Noise (Coupler: Off; Direct: On).
+5. Unidades e formato de lat/long do Setup mudam só a exibição. O script é sempre emitido em SI; a escolha de exibição vai no metadado `# twin-display:` do script.
+6. Perdas do Setup I/O deslocam a faixa de RF Level da porta selecionada. Trocar a porta força Digital Noise (Coupler: Off; Direct: On).
 
 ## Rota
 
@@ -26,7 +26,7 @@ A aba Equipamento tem a réplica da interface do GPSG-1000 à esquerda e o scrip
 
 ## Waypoints de usuário
 
-1. Waypoint, Add: código, ICAO, nome, cidade, Country (parâmetro remoto `state`, D28), latitude, longitude, altitude. Código repetido é recusado.
+1. Waypoint, Add: código, ICAO, nome, cidade, Country (parâmetro remoto `state`), latitude, longitude, altitude. Código repetido é recusado.
 2. Edit altera o waypoint selecionado; Delete remove; Defaults remove todos, com confirmação.
 3. Use copia latitude, longitude e altitude do waypoint para a posição estática. Travado com Simulation = Dynamic (OP 3-23).
 
@@ -51,7 +51,7 @@ A aba Equipamento tem a réplica da interface do GPSG-1000 à esquerda e o scrip
 1. O script pode ser editado diretamente. Após uma pausa na digitação, a réplica é recarregada a partir do texto.
 2. Erros e avisos aparecem sublinhados na linha, na lista de diagnósticos e no campo correspondente da réplica. Clicar num diagnóstico leva à linha.
 3. Linhas que o cenário não representa (comando que o cenário não guarda, segunda execução, linha com erro) são listadas no aviso acima do editor. Alterar a réplica depois disso reescreve o script a partir do cenário e perde essas linhas; o twin pede confirmação antes.
-4. "Aplicar correções conhecidas" troca grafias conhecidas do manual (D05, D06, D25) e `GPS:SIM:TRUN` por `@run`/`@stop`, e reescreve o script na forma canônica.
+4. "Aplicar correções conhecidas" troca grafias conhecidas do manual e `GPS:SIM:TRUN` por `@run`/`@stop`, e reescreve o script na forma canônica.
 
 ## Salvar e abrir
 

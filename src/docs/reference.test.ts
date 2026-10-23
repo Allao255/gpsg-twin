@@ -25,11 +25,11 @@ describe('referência de comandos', () => {
     expect(rflv.params[0]?.range).toBe('DIRECT -155..-93; COUPLER -130..-68');
     expect(rflv.discrepancies[0]?.id).toBe('D17');
     expect(rflv.discrepancies[0]?.provisional).toMatch(/Por SV/);
-    expect(get('GPS:ROUT:EDIT').params[0]?.range).toBe('1..10000 (twin: 1..9999, D08)');
+    expect(get('GPS:ROUT:EDIT').params[0]?.range).toBe('1..10000 (twin: 1..9999)');
     expect(get('GPS:FILe:KML:MaxVELocity').params[0]?.range).toBe('0..1118 mph; 0..1800 km/h');
     expect(get('GPS:SET:GNSS').params[0]?.range).toBe('GPS | GALILEO | GAL+GPS');
     expect(get('GPS:SET:DATe').params[0]?.range).toBe('formato mm/dd/yyyy');
-    expect(get('GPS:SIM:LATitude').params[0]?.range).toMatch(/D07/);
+    expect(get('GPS:SIM:LATitude').params[0]?.range).toBe('graus decimais com sinal');
     expect(get('GPS:SIM:ALTitude?').params[0]?.range).toBe('unidade opcional');
     expect(get('GPS:SET:MaxVELocity').params[0]?.unit).toBe('conforme modo de unidades');
     expect(get('GPS:SVPR:GPS:SATellite').params[7]?.optional).toBe(true);

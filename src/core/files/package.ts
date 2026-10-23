@@ -80,6 +80,8 @@ export function buildPackage(
   const run = structuredClone(sc);
   const files: (PackageFile & { sheet: SheetFile })[] = [];
   const base = `${TWIN_PREFIX}${sc.name}`;
+  // Rota, waypoints e settings: formatos só do manual (D29 a D31).
+  const UNVERIFIED = 'formato não verificado em bancada';
   const add = (path: string, text: string, loaded: boolean, note = ''): void => {
     files.push({ path, text, sheet: { path, loaded, note } });
   };
@@ -99,7 +101,7 @@ export function buildPackage(
     if (r.text !== null) {
       const name = `${base}.rte`;
       const via = opts.viaRoute && sc.setup.simulationType === 'DYNAMIC';
-      add(`${DIRS.route}/${name}`, r.text, via, 'D29');
+      add(`${DIRS.route}/${name}`, r.text, via, UNVERIFIED);
       if (via) {
         run.files.route = name;
         run.route.points = [];
@@ -112,7 +114,7 @@ export function buildPackage(
   if (sc.userWaypoints.length > 0) {
     const w = waypointsToCsv(sc.userWaypoints);
     diagnostics.push(...w.diagnostics);
-    add(`${DIRS.waypoints}/${base}.csv`, w.text, opts.viaWaypoints, 'D30');
+    add(`${DIRS.waypoints}/${base}.csv`, w.text, opts.viaWaypoints, UNVERIFIED);
     if (opts.viaWaypoints) {
       run.userWaypoints = [];
       withImport(run, 'WAYP');
@@ -124,7 +126,7 @@ export function buildPackage(
   diagnostics.push(...st.diagnostics);
   if (st.text !== null) {
     const name = `${base}.set`;
-    add(`${DIRS.settings}/${name}`, st.text, opts.viaSettings, 'D31');
+    add(`${DIRS.settings}/${name}`, st.text, opts.viaSettings, UNVERIFIED);
     if (opts.viaSettings) {
       run.files.settings = name;
       withImport(run, 'SET');

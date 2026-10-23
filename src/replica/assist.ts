@@ -93,7 +93,8 @@ export function commandDoc(inf: CommandInfo): string {
   if (inf.header === 'GPS:SIM:ToggleRUN')
     lines.push('Alternância: usar @run e @stop, que consultam o estado antes.');
   if (c.example) lines.push(`Exemplo: ${c.example}`);
-  if (c.discrepancies.length > 0) lines.push(`Discrepâncias: ${c.discrepancies.join(', ')}.`);
+  if (c.discrepancies.length > 0)
+    lines.push('Os manuais divergem neste comando; detalhes na referência de comandos.');
   if (c.notes) lines.push(`Nota: ${c.notes}`);
   return lines.join('\n');
 }

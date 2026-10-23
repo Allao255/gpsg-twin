@@ -288,7 +288,7 @@ export function analysisView(
         `${dv('setup.rfPort')}, ${fmt(at.rfLevel_dBm)} dBm${at.rfLevelSince_s !== null ? ` (desde ${fmt(at.rfLevelSince_s, 3)} s)` : ''}`,
       ],
       [
-        'Faixa da porta (D17)',
+        'Faixa da porta',
         `${b.range_dBm[0]} a ${b.range_dBm[1]} dBm${b.inRange ? '' : ', fora da faixa'}`,
       ],
       [
@@ -521,7 +521,7 @@ export function analysisView(
       h(
         'span',
         { class: 'muted' },
-        'Lido do script e do cenário da aba Equipamento. Satélites calculados pelo almanaque: M6.',
+        'Lido do script e do cenário da aba Equipamento. Satélites calculados pelo almanaque: ainda não disponíveis.',
       ),
       ...(errors > 0 ? [h('span', { class: 'badge warn' }, `${errors} erro(s) no script`)] : []),
     );

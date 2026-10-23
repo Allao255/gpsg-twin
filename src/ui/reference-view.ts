@@ -13,6 +13,20 @@ import { h } from './dom';
 
 const KIND_LABEL: Record<string, string> = { set: 'ajuste', query: 'consulta', action: 'ação' };
 
+/** Um selo por comando: divergência aberta prevalece sobre resolvida; o texto vai no title. */
+function discrepancyBadge(e: ReferenceEntry): HTMLElement | null {
+  if (e.discrepancies.length === 0) return null;
+  const open = e.discrepancies.some((d) => !d.resolved);
+  return h(
+    'span',
+    {
+      class: open ? 'badge warn' : 'badge',
+      title: e.discrepancies.map((d) => d.divergence).join('\n'),
+    },
+    open ? 'divergência entre manuais' : 'divergência resolvida',
+  );
+}
+
 function entryView(e: ReferenceEntry): HTMLElement {
   const badges = [
     h('span', { class: `badge kind-${e.kind}` }, KIND_LABEL[e.kind] ?? e.kind),
@@ -22,9 +36,7 @@ function entryView(e: ReferenceEntry): HTMLElement {
       : h('span', { class: 'badge muted' }, 'não verificado'),
     e.locked === true ? h('span', { class: 'badge warn' }, 'trava em execução') : null,
     !e.emitAllowed ? h('span', { class: 'badge danger' }, 'nunca emitido') : null,
-    ...e.discrepancies.map((d) =>
-      h('span', { class: d.resolved ? 'badge' : 'badge warn', title: d.divergence }, d.id),
-    ),
+    discrepancyBadge(e),
   ];
   return h(
     'details',
@@ -100,8 +112,7 @@ function entryView(e: ReferenceEntry): HTMLElement {
               h(
                 'li',
                 {},
-                h('strong', {}, d.id),
-                ` ${d.divergence}`,
+                d.divergence,
                 d.provisional ? h('em', {}, ` Tratamento provisório: ${d.provisional}`) : null,
               ),
             ),
@@ -206,7 +217,7 @@ export function referenceView(): HTMLElement {
       check('verificado em bancada', (v) => {
         filter.verifiedOnly = v;
       }),
-      check('com discrepância', (v) => {
+      check('com divergência entre manuais', (v) => {
         filter.withDiscrepancyOnly = v;
       }),
       count,

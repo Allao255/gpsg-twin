@@ -154,6 +154,6 @@ export function routeFromXml(text: string): RouteReadResult {
     points.push(p);
   });
   if (points.length > 9999)
-    diagnostics.push(diag('file-value', 'error', `${points.length} pontos; máximo 9999 (D08)`));
+    diagnostics.push(diag('file-value', 'error', `${points.length} pontos; máximo 9999`));
   return { points, diagnostics };
 }

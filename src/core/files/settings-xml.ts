@@ -420,7 +420,7 @@ export function settingsFromXml(text: string, base: Scenario): SettingsReadResul
           diag(
             'not-represented',
             'info',
-            `limites de ${name} diferentes dos de fábrica (D27); não representados no cenário`,
+            `limites de ${name} diferentes dos de fábrica; não representados no cenário`,
           ),
         );
       }
@@ -431,11 +431,10 @@ export function settingsFromXml(text: string, base: Scenario): SettingsReadResul
   const ch = child(r.root, 'ChannelsSetup');
   if (ch) {
     for (const [a, k] of CHANNEL_ATTRS) sc.channels[k] = numAttr(ch, a);
-    warn(
-      'ChannelsSetup: mapeamento para a alocação de canais inferido (D09, D31)',
-      'file-unverified',
-      ['D09', ...D31_DREFS],
-    );
+    warn('ChannelsSetup: mapeamento para a alocação de canais inferido', 'file-unverified', [
+      'D09',
+      ...D31_DREFS,
+    ]);
   }
   const loss = io && child(io, 'LossValues');
   if (loss) {

@@ -156,7 +156,7 @@ export function emitLines(sc: Scenario): string[] {
   L.push(c('GPS:FILe:ROUT:SAVe', `${backupName(sc)}.rte`));
 
   blank();
-  comment('D04: unidades SI em todo script gerado');
+  comment('unidades SI em todo script gerado');
   L.push(c('GPS:SET:UNITs', D04_FORCED_UNITS));
   L.push(`@expect ${c('GPS:SET:UNITs?')} ${D04_FORCED_UNITS}`);
 
@@ -206,7 +206,7 @@ export function emitLines(sc: Scenario): string[] {
   if (chSet.length > 0) {
     // D09: alocação de canais não emitida; guardada como metadado para a ida e volta.
     comment(
-      `${META_CHANNELS} ${chSet.map(([k, v]) => `${k}=${String(v)}`).join(' ')} (D09: não emitido)`,
+      `${META_CHANNELS} ${chSet.map(([k, v]) => `${k}=${String(v)}`).join(' ')} (não emitido)`,
     );
   }
 
@@ -214,7 +214,7 @@ export function emitLines(sc: Scenario): string[] {
   comment('almanaque');
   if (sc.files.almanac.kind === 'file') L.push(c('GPS:FILe:ALM:LOAD', sc.files.almanac.name));
   else if (sc.files.almanac.kind === 'default') L.push(c('GPS:FILe:ALM:DEFault'));
-  else comment('D24: almanaque não fixado, usa o que estiver carregado no equipamento');
+  else comment('almanaque não fixado, usa o que estiver carregado no equipamento');
 
   if (sc.userWaypoints.length > 0) {
     blank();

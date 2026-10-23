@@ -139,10 +139,10 @@ describe('procedimento 4.1.2: simulação estática básica', () => {
   // Passos 10 e 11: RUN e STOP.
   const final = must(stop(must(run(s))));
 
-  it('Internal aparece desabilitado com a referência D12', () => {
+  it('Internal aparece desabilitado com o motivo', () => {
     const r = setField(final, 'setup.clock', 'Internal');
     expect(r.ok).toBe(false);
-    expect(!r.ok && r.error).toMatch(/D12/);
+    expect(!r.ok && r.error).toMatch(/sem comando remoto/);
   });
 
   // 14.2 antes de 14.1: a carga do almanaque é feita antes de iniciar a simulação (RP 14-1).

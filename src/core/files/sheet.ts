@@ -74,10 +74,10 @@ export function sessionSheet(
   const b = levelBudget(sc);
   p('## Nível de RF previsto', '');
   p(
-    `- RF Level programado: **${db(s.rfLevel_dBm)} dBm** por SV${s.prnSignal === 'FIXED' ? ' (PRN Signal FIXED: todos os SVs no mesmo nível)' : ' (PRN Signal VARIABLE: níveis relativos seguem a geometria)'}. Interpretação provisória D17.`,
+    `- RF Level programado: **${db(s.rfLevel_dBm)} dBm** por SV${s.prnSignal === 'FIXED' ? ' (PRN Signal FIXED: todos os SVs no mesmo nível)' : ' (PRN Signal VARIABLE: níveis relativos seguem a geometria)'}. Interpretação provisória: os manuais não deixam claro se o nível é por SV ou composto.`,
   );
   p(
-    `- Faixa da porta com as perdas (D17): ${b.range_dBm[0]} a ${b.range_dBm[1]} dBm (perda considerada ${db(b.loss_dB)} dB).`,
+    `- Faixa da porta com as perdas: ${b.range_dBm[0]} a ${b.range_dBm[1]} dBm (perda considerada ${db(b.loss_dB)} dB).`,
   );
   p(
     `- Composto na saída: ${db(b.composite_dBm(6))} dBm com 6 SVs, ${db(b.composite_dBm(12))} dBm com 12 SVs (RF Level + 10 log10 N).`,
