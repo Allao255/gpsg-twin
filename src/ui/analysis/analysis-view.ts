@@ -135,6 +135,27 @@ export function analysisView(
     render();
   }
 
+  // Clique e arraste do cursor. O SVG da linha do tempo é recriado a cada render, então a captura
+  // do ponteiro fica no contêiner, que permanece no documento. Marcadores tratam o próprio clique.
+  let tlEnd = 1;
+  const pick = (ev: PointerEvent): void => {
+    const tl = lanes.querySelector('svg.tl');
+    if (!tl) return;
+    const r = tl.getBoundingClientRect();
+    const px = ((ev.clientX - r.left) / r.width) * W;
+    if (px < LEFT - 4) return;
+    setCursor(Math.max(0, Math.min(tlEnd, ((px - LEFT) / (W - LEFT - 10)) * tlEnd)));
+  };
+  lanes.addEventListener('pointerdown', (ev) => {
+    const target = ev.target as Element;
+    if (!target.closest('svg.tl') || target.closest('.tl-ev')) return;
+    lanes.setPointerCapture(ev.pointerId);
+    pick(ev);
+  });
+  lanes.addEventListener('pointermove', (ev) => {
+    if (lanes.hasPointerCapture(ev.pointerId)) pick(ev);
+  });
+
   function timelineSvg(sc: Scenario, events: AnalysisEvent[], end: number): SVGSVGElement {
     const svs = actionSvs(sc);
     const rows = ['Execução', 'RF Level', ...svs.map((x) => `${x.constellation} ${x.sv}`)];
@@ -261,19 +282,6 @@ export function analysisView(
     }
     // Cursor.
     root.append(svg('line', { x1: x(t), x2: x(t), y1: AXIS - 6, y2: H, class: 'tl-cursor' }));
-    const pick = (ev: PointerEvent): void => {
-      const r = root.getBoundingClientRect();
-      const px = ((ev.clientX - r.left) / r.width) * W;
-      if (px < LEFT - 4) return;
-      setCursor(Math.max(0, Math.min(end, ((px - LEFT) / (W - LEFT - 10)) * end)));
-    };
-    root.addEventListener('pointerdown', (ev) => {
-      pick(ev);
-      root.setPointerCapture(ev.pointerId);
-    });
-    root.addEventListener('pointermove', (ev) => {
-      if (root.hasPointerCapture(ev.pointerId)) pick(ev);
-    });
     return root;
   }
 
@@ -513,6 +521,7 @@ export function analysisView(
     const doc = parseScript(replica.script());
     const events = analysisEvents(doc);
     const end = timelineEnd(sc);
+    tlEnd = end;
     if (t > end) t = end;
     const errors = doc.diagnostics.filter((d) => d.severity === 'error').length;
     head.replaceChildren(
