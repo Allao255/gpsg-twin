@@ -37,6 +37,10 @@ import {
 import { h } from '../dom';
 import { downloadText } from '../download';
 import { pasteableView } from '../pasteable-view';
+
+// Runner PowerShell colável fora da interface por enquanto (o fluxo atual é pendrive e painel).
+// Voltar a true reexibe o gerador abaixo do editor e o bloco no pacote USB.
+const SHOW_RUNNER = false;
 import { createEditor, type ScriptEditor } from './editor';
 import { exportPackageDialog, importReport, readInputFiles } from './files-view';
 import { button, confirmDialog, entryDialog, pickFiles, type AppApi } from './kit';
@@ -442,7 +446,7 @@ export function createReplicaApp(): { el: HTMLElement; handle: ReplicaHandle } {
       );
     }),
     button('Exportar pacote .zip…', () => {
-      exportPackageDialog(api, paste.target);
+      exportPackageDialog(api, SHOW_RUNNER ? paste.target : null);
     }),
     button('Baixar cenário .json', () => {
       downloadText(
@@ -490,7 +494,7 @@ export function createReplicaApp(): { el: HTMLElement; handle: ReplicaHandle } {
       h('h3', {}, 'Diagnósticos'),
       diagList,
       actionsBox,
-      paste.el,
+      SHOW_RUNNER ? paste.el : null,
     ),
   );
 

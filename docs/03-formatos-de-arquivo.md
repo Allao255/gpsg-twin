@@ -43,7 +43,7 @@ Instrument/almanacs/twin_<nome>.alm         almanaque anexado pelo operador
 Instrument/Nmea/twin_<nome>.gdt | .nme      trajetória anexada pelo operador
 <cenário>.scpi                              script de sessão
 <cenário>.json                              cenário (referência para reabrir no twin)
-<cenário>-colavel.ps1                       runner colável com o script embutido
+<cenário>-colavel.ps1                       runner colável com o script embutido (fora do pacote enquanto o gerador está oculto no site)
 <cenário>-folha.md                          folha de sessão
 ```
 

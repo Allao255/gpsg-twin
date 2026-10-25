@@ -128,7 +128,7 @@ Caminho reverso (`src/core/files/session-log.ts`): o log vira um script `.scpi` 
 ## 7. Execução no PC da empresa
 
 - PowerShell: `runners/gpsg-run.ps1`. Usa apenas `System.Net.Sockets.TcpClient`, presente em qualquer Windows.
-- Se a política de execução bloquear scripts (`Get-ExecutionPolicy`), há duas saídas sem pedir exceção: `powershell -ExecutionPolicy Bypass -File gpsg-run.ps1 ...` (bloqueado se a política vier por GPO) ou colar o conteúdo da função no console interativo, que não é afetado pela política de scripts. A versão colável, com o script embutido, é gerada pelo site (aba Equipamento, "Baixar bloco colável") ou por `npm run pasteable -- --script <arquivo> --address <ip>`. O script não pode ter linha começando com `'@`, que encerraria a here-string.
+- Se a política de execução bloquear scripts (`Get-ExecutionPolicy`), há duas saídas sem pedir exceção: `powershell -ExecutionPolicy Bypass -File gpsg-run.ps1 ...` (bloqueado se a política vier por GPO) ou colar o conteúdo da função no console interativo, que não é afetado pela política de scripts. A versão colável, com o script embutido, é gerada pelo site (aba Equipamento, "Baixar bloco colável") ou por `npm run pasteable -- --script <arquivo> --address <ip> --out <arquivo.ps1>` (com `>` no lugar de `--out`, o cabeçalho do npm entra no arquivo). O script não pode ter linha começando com `'@`, que encerraria a here-string.
 - Python: `runners/gpsg_run.py`, mesma semântica, para máquinas que tenham Python.
 - Sem PC ou sem rede até o equipamento: usar somente o pacote USB para configuração e operar a execução pela tela.
 

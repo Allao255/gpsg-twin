@@ -59,7 +59,7 @@ Mock e runners:
 npm run mock -- --port 5025
 python runners/gpsg_run.py --script sessions/S01-sonda.scpi
 pwsh runners/gpsg-run.ps1 -Script sessions/S01-sonda.scpi
-npm run pasteable -- --script sessions/S01-sonda.scpi --address <ip>
+npm run pasteable -- --script sessions/S01-sonda.scpi --address <ip> --out S01-colavel.ps1
 ```
 
 Teste rápido de um runner contra o mock (pausas e entrada do PRN alimentadas por stdin):

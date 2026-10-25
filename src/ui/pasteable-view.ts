@@ -48,7 +48,7 @@ export function pasteableView(current: () => { name: string; text: string }): Pa
     h(
       'p',
       { class: 'muted' },
-      'Para quando a política de execução bloqueia arquivos .ps1: o bloco é colado no console, que não é afetado por ela.',
+      'O site não se conecta ao equipamento (o navegador não abre a conexão TCP da porta SCPI); quem envia os comandos é o runner, no PC ligado à rede do equipamento. Este bloco é o runner com o script embutido, para colar no console do PowerShell do Windows (não no console do navegador) quando a política de execução bloqueia arquivos .ps1.',
     ),
     h(
       'div',

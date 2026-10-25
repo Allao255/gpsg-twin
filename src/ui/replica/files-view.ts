@@ -82,13 +82,16 @@ export interface RunnerTarget {
 }
 
 /** Diálogo de exportação do pacote USB: opções, lista de arquivos, avisos e download. */
-export function exportPackageDialog(app: AppApi, target: () => RunnerTarget): void {
+export function exportPackageDialog(app: AppApi, target: (() => RunnerTarget) | null): void {
   const opts: PackageOptions = { ...DEFAULT_PACKAGE_OPTIONS };
   const list = h('div', { class: 'report' });
-  const pasteable = (script: string, scriptName: string): string => {
-    const t = target();
-    return makePasteable(runnerPs1, { scriptName, script, address: t.address, port: t.port });
-  };
+  // Sem alvo do runner, o pacote sai sem o bloco colável.
+  const pasteable = target
+    ? (script: string, scriptName: string): string => {
+        const t = target();
+        return makePasteable(runnerPs1, { scriptName, script, address: t.address, port: t.port });
+      }
+    : null;
   const build = (): ReturnType<typeof buildPackage> =>
     buildPackage(app.session.scenario, app.session.attachments, { ...opts, pasteable });
   const refresh = (): void => {
