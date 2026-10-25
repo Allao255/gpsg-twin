@@ -1,6 +1,6 @@
-# Referência rápida do GPSG-1000
+# Referência rápida (técnica)
 
-Resumo de `docs/01-equipamento.md` para consulta durante a preparação. Itens com `Dnn` têm divergência entre manuais (aba Ajuda, referência de comandos).
+Tabelas do equipamento para consulta técnica durante a preparação. Referências ao manual no formato `OP x-y` (manual de operação). Para o uso do dia a dia, as páginas anteriores bastam.
 
 ## Níveis e perdas
 

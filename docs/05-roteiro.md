@@ -72,7 +72,7 @@ Decisões tomadas na implementação (2026-10-22):
 - Arquivos criados no equipamento recebem o prefixo `twin_` (`ROUT:SAV`).
 - SV PRN sem geometria: PRNs informados pelo operador ou importados de uma resposta `SVPR:LIST?` de log (SV, elevação e azimute; D03). A camada calculada fica no M6.
 - O verificador provisório do M1 foi substituído pelo editor CodeMirror 6 com diagnósticos na linha e no campo. O cenário corrente fica salvo no `localStorage` do navegador; arquivos versionáveis são o `.scpi` e o `.json` baixados.
-- Pendentes da seção "Documentação de uso" resolvidos depois do M4 (2026-10-22): `docs/guia/` publicado na aba Ajuda (Markdown convertido no build, sem dependência), referência rápida em `docs/guia/07-referencia-rapida.md`, sugestões e dica ao passar o mouse no editor tiradas do modelo.
+- Pendentes da seção "Documentação de uso" resolvidos depois do M4 (2026-10-22): `docs/guia/` publicado na aba Ajuda (Markdown convertido no build, sem dependência), referência rápida em `docs/guia/08-referencia-rapida.md`, sugestões e dica ao passar o mouse no editor tiradas do modelo.
 
 ## M4. Pacote USB e caminho reverso
 
@@ -93,7 +93,7 @@ Decisões tomadas na implementação (2026-10-22):
 - Logs CSV dos runners voltam como script: comandos aceitos, rejeitados comentados, `@run`/`@stop` e `@at` com os instantes reais. Integração: o log de cada runner contra o mock reconstrói a configuração e a sequência de ações do cenário emitido.
 - ZIP próprio, sem dependência: escrita sem compressão e determinística; leitura de deflate pelo `DecompressionStream` do navegador.
 - Anexos (almanaque e trajetória) ficam na sessão da réplica e no `localStorage` quando cabem; o pacote `.zip` é o registro versionável.
-- A folha de sessão do pacote cobre conexões, perdas, nível previsto (D17), arquivos, ordem de operações e linha do tempo. A folha de bancada genérica está em `docs/guia/06-folha-de-bancada.md`.
+- A folha de sessão do pacote cobre conexões, perdas, nível previsto (D17), arquivos, ordem de operações e linha do tempo. As regras de bancada e a recuperação estão em `docs/guia/09-avancado.md`; o fluxo por pendrive e painel, em `docs/guia/04-levar-ao-equipamento.md`.
 
 ## M5. Aba Análise, camada declarada
 

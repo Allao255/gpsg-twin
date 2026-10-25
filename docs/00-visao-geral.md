@@ -147,6 +147,6 @@ Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 imp
   - `replica/`: réplica das janelas do capítulo 3 do manual de operação, teclado e seletores, editor de script CodeMirror 6 sincronizado com a réplica, linha do tempo das ações em execução, cenário salvo no navegador, exportação do pacote USB e abertura de pacotes, arquivos do equipamento e logs (`files-view.ts`).
   - `pasteable-view.ts`: gerador do runner colável, abaixo do editor. Oculto por enquanto (`SHOW_RUNNER` em `replica/app.ts`): sem ele na interface e sem o bloco no pacote USB; continua disponível por `npm run pasteable`.
 - Builds: `dist/site/` (Pages) e `dist/gpsg-twin.html` (autocontido, abre por `file://`). CI em `.github/workflows/ci.yml`.
-- `docs/`: esta documentação. `docs/guia/`: guia de uso.
+- `docs/`: esta documentação. `docs/guia/`: guia de uso para usuário geral (primeiros passos, rota, Análise, pendrive e painel, glossário), com a parte técnica em `08-referencia-rapida.md` e `09-avancado.md`.
 - `runners/`: runner PowerShell e runner Python do formato `.scpi`.
 - `sessions/S01-sonda.scpi`: script da primeira sessão de bancada.

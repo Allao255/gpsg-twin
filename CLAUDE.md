@@ -35,6 +35,7 @@ Os PDFs dos manuais ficam em `refs/` (ignorado pelo git). Se um detalhe não est
 ## Estilo de documentação
 
 - Português, registro técnico de engenheiro para engenheiro: direto, impessoal, sem tom de conversa, sem explicar o óbvio, sem omitir o que é preciso para executar.
+- Exceção: o guia de uso (`docs/guia/`) é para usuário geral, inclusive pessoas mais velhas e sem formação técnica. Linguagem simples, frases curtas, passo a passo numerado, "você", nomes de botões e campos exatamente como aparecem na tela, termos técnicos explicados ou remetidos ao glossário (`07-glossario.md`). Conteúdo técnico vai para `08-referencia-rapida.md` e `09-avancado.md`.
 - Sem travessão (—). Usar vírgula, dois pontos, parênteses ou frase nova.
 - Fórmulas em bloco de código em texto legível, não em LaTeX.
 - Referenciar manual por `OP x-y` (operação), `RP x-y` (remoto), `DS` (datasheet).

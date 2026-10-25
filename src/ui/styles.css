@@ -323,7 +323,8 @@ pre.script {
   background: none;
   border: 1px solid transparent;
   border-radius: 6px;
-  padding: 6px 8px;
+  padding: 8px 10px;
+  font-size: 1rem;
   color: var(--text);
   cursor: pointer;
 }
@@ -337,9 +338,19 @@ pre.script {
   border-color: var(--accent);
 }
 
+/* Texto do guia maior e mais espaçado: leitura confortável para qualquer usuário. */
 .md {
   max-width: 820px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.md h2 {
+  margin-top: 1.6em;
+}
+
+.md li {
+  margin: 4px 0;
 }
 
 .md h1 {
@@ -372,7 +383,7 @@ pre.script {
 .md th,
 .md td {
   border: 1px solid var(--border);
-  padding: 4px 8px;
+  padding: 6px 10px;
   text-align: left;
   vertical-align: top;
 }
