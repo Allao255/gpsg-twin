@@ -117,6 +117,7 @@ Decisões tomadas na implementação (2026-10-22):
 - D18 provisório na linha do tempo: a duração vale só para o Doppler; demais manipulações ficam até a próxima ação do SV.
 - Orçamento de nível em `src/core/scenario/budget.ts`, compartilhado com a folha de sessão.
 - Sem tabela separada de manipulações por SV: as faixas da linha do tempo e a tabela de SVs no instante cobrem o item.
+- Posição estimada na rota (2026-10-26, `src/analysis/route-progress.ts`): pedida para ver o receptor andar ao mover o cursor. Baixa fidelidade e rotulada como aproximada: grande círculo entre pontos, velocidade constante no trecho igual à `speed_mps` do ponto de saída (escolhida em vez da média dos dois pontos por ser a leitura direta da tabela de rota; semântica de `TargetSpeed` não verificada), altitude linear, sem raio de curva, aceleração nem razão de subida. Loop ON inclui o trecho de fechamento (também com dois pontos) e repete; Loop OFF para no último ponto, não verificado em bancada. Após o `@stop`, posição congelada. Sem estimativa para rota por arquivo, waypoint do banco sem coordenadas e velocidade zero. Em Dynamic sem `@stop`, `timelineEnd` cobre uma volta. Marcador do mapa movido sem redesenhar a rota. Não substitui a cinemática de alta fidelidade, que segue fora do escopo; o M6 usa a mesma interpolação para o ponto de cálculo do céu.
 
 ## M6. Aba Análise, camada calculada
 

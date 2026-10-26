@@ -28,7 +28,7 @@ Escopo:
 |---|---|
 | Réplica das telas e dos controles, com as mesmas faixas, unidades e travas | Geração de sinal |
 | Geração de SCPI e do pacote USB a partir da réplica | Resposta do receptor sob teste |
-| Leitura de SCPI, logs e arquivos exportados para a réplica | Cinemática de rota de alta fidelidade (o caminho exato percorrido pelo equipamento) |
+| Leitura de SCPI, logs e arquivos exportados para a réplica | Cinemática de rota de alta fidelidade (o caminho exato percorrido pelo equipamento; a Análise mostra só uma estimativa em linha reta) |
 | Linha do tempo de comandos em execução (ações por SV com horário) | Modelo de multipercurso e fading |
 | Aba Análise com satélites calculados a partir do almanaque do cenário | |
 
@@ -41,6 +41,7 @@ Mostra o que o código pede e o céu que resulta dele. A interface distingue o q
 - Linha do tempo: cada comando com horário relativo ao `@run`, descrição do modelo, parâmetros e unidades; ao clicar, destaca a linha no script e o campo na aba Equipamento.
 - Estado em qualquer instante do cursor da linha do tempo: modo, portadora, porta, nível, perdas, relógio, posição ou rota.
 - Rota e trajetória no mapa: pontos com nome, velocidade, raio de curva e razão de subida; segmentos entre pontos; avisos de pontos mais próximos que 4 raios de curva e de velocidade ou aceleração acima do modelo de movimento.
+- Posição estimada na rota (Dynamic) no instante do cursor, com velocidade, rumo e trecho. Estimativa de baixa fidelidade, rotulada como aproximada: grande círculo entre pontos, velocidade constante no trecho igual à do ponto de saída, altitude interpolada linearmente, sem raio de curva, aceleração nem razão de subida. Loop ON fecha no primeiro ponto e repete; Loop OFF para no último ponto (não verificado em bancada). Sem estimativa para rota por arquivo, waypoint do banco sem coordenadas ou velocidade zero. A cinemática de alta fidelidade continua fora do escopo.
 - Manipulações por SV ao longo do tempo: seleção, saúde, Doppler, coerência, offset de amplitude, step error, com duração.
 - Orçamento de nível: RF Level programado, perdas inseridas, acoplamento e cabo, nível por SV e composto previsto na entrada do receptor, faixa permitida pela porta.
 
@@ -125,7 +126,7 @@ GitHub Pages publica o site como público mesmo a partir de repositório privado
 
 ## Estado atual do repositório
 
-Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 implementado (2026-10-22), com aceite pendente da sessão de bancada. M5 concluído (2026-10-22). M6 não iniciado.
+Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 implementado (2026-10-22), com aceite pendente da sessão de bancada. M5 concluído (2026-10-22), com a posição estimada na rota acrescentada em 2026-10-26. M6 não iniciado.
 
 - `model/commands.json`: 233 comandos transcritos do manual remoto, com faixas, aliases, travas e referências de página. Nenhum verificado em hardware. `model/commands.schema.json` valida o modelo no início dos testes e gera os tipos TypeScript (`npm run gen`).
 - `src/core/`: core puro em TypeScript (M1).
@@ -136,14 +137,14 @@ Marcos M0, M1 e M2 concluídos (2026-10-21) e M3 concluído (2026-10-22). M4 imp
   - `script/correct.ts`: correções de grafias conhecidas do manual (D05, D06, D25) e `TRUN` trocado por `@run`/`@stop`.
   - `quirks.ts`: tratamentos provisórios de `04-discrepancias.md`, por ID.
   - `files/`: formatos do pacote USB (M4): rota `.rte`, settings `.set`, waypoints `.csv`, trajetórias GDT e NMEA, almanaque Yuma, XML e ZIP mínimos, log dos runners para script, montagem do pacote e folha de sessão.
-- `src/analysis/`: camada declarada da aba Análise (M5): eventos do script com alvo na réplica, estado no instante, checagens de rota.
+- `src/analysis/`: camada declarada da aba Análise (M5): eventos do script com alvo na réplica, estado no instante, checagens de rota, posição estimada na rota em linha reta (`route-progress.ts`, baixa fidelidade; o eixo da linha do tempo cobre uma volta da rota).
 - `src/replica/`: lógica pura da réplica (M3): catálogo de campos ligado ao modelo (travas, faixas, validação), unidades e formatos de exibição, sessão (RUN/STOP, instante Elapsed, ações por SV, rota, waypoints, arquivos), formulários de rota e waypoint, anexos do pacote e importação de arquivos (`import.ts`). Aceite do M3 em `procedures.test.ts`.
 - `src/docs/`: referência de comandos gerada do modelo e de `04-discrepancias.md`.
 - `src/mock/`: instrumento simulado (`npm run mock`), TCP na porta 5025, usando o core (M2). Ver `02-interface-remota.md` seção 7.1.
 - `src/runner/`: gerador do runner PowerShell colável, usado pelo site e por `npm run pasteable`.
 - `test/integration/`: runners Python e PowerShell contra o mock com S01 e com scripts emitidos pelo twin, incluindo a reconstrução do cenário pelo log (`npm run test:integration`).
 - `src/ui/`: shell com as abas Equipamento, Análise e Ajuda (guia de uso e referência de comandos com busca e filtros).
-  - `analysis/`: linha do tempo com cursor e faixas por SV, estado no instante, orçamento, mapa Leaflet com contorno embutido, checagens de rota e eventos ligados ao script e à réplica.
+  - `analysis/`: linha do tempo com cursor e faixas por SV, estado no instante (com a posição estimada na rota), orçamento, mapa Leaflet com contorno embutido e marcador do receptor que acompanha o cursor, checagens de rota e eventos ligados ao script e à réplica.
   - `replica/`: réplica das janelas do capítulo 3 do manual de operação, teclado e seletores, editor de script CodeMirror 6 sincronizado com a réplica, linha do tempo das ações em execução, cenário salvo no navegador, exportação do pacote USB e abertura de pacotes, arquivos do equipamento e logs (`files-view.ts`).
   - `pasteable-view.ts`: gerador do runner colável, abaixo do editor. Oculto por enquanto (`SHOW_RUNNER` em `replica/app.ts`): sem ele na interface e sem o bloco no pacote USB; continua disponível por `npm run pasteable`.
 - Builds: `dist/site/` (Pages) e `dist/gpsg-twin.html` (autocontido, abre por `file://`). CI em `.github/workflows/ci.yml`.

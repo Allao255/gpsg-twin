@@ -18,9 +18,17 @@ export interface MapData {
   trajectory: TrackPoint[] | null;
 }
 
+export interface ReceiverMark {
+  lat_rad: number;
+  lon_rad: number;
+  label: string;
+}
+
 export interface MapView {
   el: HTMLElement;
   update: (d: MapData) => void;
+  /** Move o marcador do receptor (posição estimada no instante do cursor); null remove. */
+  setReceiver: (r: ReceiverMark | null) => void;
   /** Recalcula o tamanho (o mapa é criado com a aba oculta). */
   resize: () => void;
 }
@@ -132,8 +140,32 @@ export function createMap(
     if (content) L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
   });
 
+  // Marcador do receptor: um só, movido a cada cursor, fora da camada de dados.
+  const receiver = L.circleMarker([0, 0], {
+    radius: 8,
+    color: '#9a6700',
+    fillColor: '#f2a900',
+    fillOpacity: 1,
+    weight: 2,
+    interactive: false,
+  }).bindTooltip('', { permanent: true, direction: 'bottom', offset: [0, 8] });
+  const setReceiver = (r: ReceiverMark | null): void => {
+    if (!r) {
+      receiver.remove();
+      return;
+    }
+    receiver.setLatLng(ll(r.lat_rad, r.lon_rad)).setTooltipContent(r.label);
+    if (!map.hasLayer(receiver)) receiver.addTo(map);
+    receiver.bringToFront();
+  };
+
   let fitted = '';
+  let drawn: { key: string; trajectory: TrackPoint[] | null } | null = null;
   const update = (d: MapData): void => {
+    // Mover o cursor não muda os dados: redesenhar só quando mudam (preserva popups e desempenho).
+    const dataKey = JSON.stringify({ position: d.position, route: d.route });
+    if (drawn && drawn.key === dataKey && drawn.trajectory === d.trajectory) return;
+    drawn = { key: dataKey, trajectory: d.trajectory };
     data.clearLayers();
     const bounds: L.LatLngTuple[] = [];
     if (d.trajectory && d.trajectory.length > 0) {
@@ -187,6 +219,7 @@ export function createMap(
       else map.fitBounds(L.latLngBounds(bounds), { padding: [30, 30], maxZoom: 14 });
     }
     drawGrid();
+    if (map.hasLayer(receiver)) receiver.bringToFront();
   };
 
   const el = h(
@@ -203,6 +236,7 @@ export function createMap(
   return {
     el,
     update,
+    setReceiver,
     resize: () => {
       map.invalidateSize();
     },

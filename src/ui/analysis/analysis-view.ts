@@ -3,6 +3,7 @@
 // posição, rota e trajetória, checagens de rota e eventos ligados ao script e à réplica.
 import { analysisEvents, type AnalysisEvent, type Target } from '../../analysis/events';
 import { checkRoute, type RouteCheck } from '../../analysis/route-checks';
+import { routeEstimate, type RouteEstimate } from '../../analysis/route-progress';
 import { actionSvs, stateAt, timelineEnd, type StateAt } from '../../analysis/state';
 import { describeAction } from '../../core/files/sheet';
 import { parseTrajectory, type TrackPoint } from '../../core/files/trajectory';
@@ -10,6 +11,7 @@ import { levelBudget } from '../../core/scenario/budget';
 import { sortedActions } from '../../core/scenario/emit';
 import type { RoutePoint, Scenario } from '../../core/scenario/types';
 import { parseScript } from '../../core/script/parse';
+import { radToDeg } from '../../core/geo';
 import { formatNumber } from '../../core/units';
 import { formatDate, formatTime } from '../../replica/datetime';
 import { displayValue, field, fieldUnit } from '../../replica/fields';
@@ -37,6 +39,34 @@ function svg<K extends keyof SVGElementTagNameMap>(
 }
 
 const fmt = (x: number, d = 1): string => formatNumber(x, d);
+
+const APPROX = 'aproximado: linha reta entre pontos, sem curvas nem aceleração';
+
+/** Linhas da posição estimada na rota (Dynamic), para a tabela do estado no instante. */
+function estimateRows(sc: Scenario, e: RouteEstimate): [string, string][] {
+  if (!e.ok) return [['Posição estimada', `sem estimativa: ${e.reason}`]];
+  const ll = sc.display.latLonFormat;
+  const leg = `${e.leg + 1} de ${e.legs}, ${e.from} para ${e.to}${e.loop ? `, volta ${e.lap}` : ''}`;
+  return [
+    [
+      'Posição estimada',
+      `${formatLatLon(e.lat_rad, 'lat', ll)}, ${formatLatLon(e.lon_rad, 'lon', ll)}, ${fmt(e.alt_m)} m`,
+    ],
+    [
+      'Velocidade',
+      e.speed_mps > 0
+        ? `${fmt(e.speed_mps, 2)} m/s, rumo ${fmt(radToDeg(e.course_rad), 0)}°`
+        : e.stopped
+          ? '0 (simulação parada)'
+          : '0 (fim da rota)',
+    ],
+    [
+      'Trecho',
+      e.finished ? `fim da rota, parado em ${e.to} (sem loop; não verificado em bancada)` : leg,
+    ],
+    ['Estimativa', APPROX],
+  ];
+}
 
 function niceStep(end: number): number {
   for (const s of [1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600])
@@ -285,7 +315,7 @@ export function analysisView(
     return root;
   }
 
-  function stateView(s: ReplicaSession, at: StateAt): HTMLElement {
+  function stateView(s: ReplicaSession, at: StateAt, est: RouteEstimate): HTMLElement {
     const sc = s.scenario;
     const dv = (id: string): string => displayValue(field(id), sc);
     const b = levelBudget(sc, at.rfLevel_dBm);
@@ -319,14 +349,15 @@ export function analysisView(
         'Posição',
         `${dv('position.lat')}, ${dv('position.lon')}, ${dv('position.alt')} ${fieldUnit(field('position.alt'), sc)}`,
       ]);
-    else if (sc.setup.simulationType === 'DYNAMIC')
+    else if (sc.setup.simulationType === 'DYNAMIC') {
       rows.push([
         'Rota',
         sc.files.route
           ? `arquivo ${sc.files.route}`
           : `${sc.route.points.length} pontos${sc.route.loop === 'ON' ? ', em loop' : ''}`,
       ]);
-    else rows.push(['Trajetória', sc.files.nmea ?? 'sem arquivo']);
+      rows.push(...estimateRows(sc, est));
+    } else rows.push(['Trajetória', sc.files.nmea ?? 'sem arquivo']);
     rows.push(['Modelo de movimento', dv('motion.model')]);
     const svRows = at.svs.map((v) =>
       h(
@@ -549,7 +580,8 @@ export function analysisView(
       h('div', { class: 'an-tl-scroll' }, timelineSvg(sc, events, end)),
     );
     const at = stateAt(sc, t);
-    statePanel.replaceChildren(stateView(s, at));
+    const est = routeEstimate(sc, t);
+    statePanel.replaceChildren(stateView(s, at, est));
     const rc = checkRoute(sc);
     const rv = routeView(sc, rc);
     routePanel.replaceChildren(...(rv ? [rv] : []));
@@ -590,6 +622,15 @@ export function analysisView(
           : null,
       trajectory: sc.setup.simulationType === 'TRAJECTORY' ? track : null,
     });
+    map.setReceiver(
+      est.ok
+        ? {
+            lat_rad: est.lat_rad,
+            lon_rad: est.lon_rad,
+            label: `Receptor em ${fmt(t, 0)} s (aproximado)`,
+          }
+        : null,
+    );
   }
 
   replica.onChange(render);

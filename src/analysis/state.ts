@@ -4,6 +4,7 @@
 import { sortedActions } from '../core/scenario/emit';
 import type { Scenario, SvAction } from '../core/scenario/types';
 import { SV_DEFAULT, svStateAt, type Constellation, type SvEdit } from '../replica/session';
+import { routePlan } from './route-progress';
 
 export interface SvAt {
   constellation: Constellation;
@@ -80,7 +81,8 @@ export function stateAt(sc: Scenario, t_s: number): StateAt {
 
 /**
  * Fim do eixo da linha do tempo, com 5% de folga e no mínimo 60 s: o @stop, ou sem ele a última
- * ação mais a duração do Doppler (limitada a 600 s).
+ * ação mais a duração do Doppler (limitada a 600 s) e, em Dynamic, a duração estimada de uma volta
+ * da rota.
  */
 export function timelineEnd(sc: Scenario): number {
   const last = Math.max(0, ...sc.actions.map((a) => a.t_s));
@@ -92,6 +94,7 @@ export function timelineEnd(sc: Scenario): number {
           ...sc.actions.map((a) =>
             a.type === 'sv' && a.doppler_Hz !== 0 ? a.t_s + Math.min(a.duration_s, 600) : a.t_s,
           ),
+          routePlan(sc)?.lap_s ?? 0,
         );
   return Math.max(60, end * 1.05);
 }
